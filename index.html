@@ -2,25 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CICH | Smart Home Organization Solutions</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="CICH Magic Smart Hanger - Space-saving rotatable hanger organizer. Eco-friendly, 9-hole design for maximum closet organization.">
+    <meta name="keywords" content="smart hanger, space saver, closet organizer, rotatable hanger, eco-friendly">
+    <meta name="author" content="CICH">
+    <title>CICH - Magic Smart Hanger | Space Saving Closet Organizer</title>
+    
+    <!-- Square Payment SDK -->
+    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    
     <style>
-        :root {
-            --primary-black: #0a0a0a;
-            --secondary-black: #1a1a1a;
-            --accent-red: #e63946;
-            --light-red: #ff6b6b;
-            --pure-white: #ffffff;
-            --off-white: #f8f9fa;
-            --gray: #2d3436;
-            --light-gray: #636e72;
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --radius: 12px;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -28,210 +19,632 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--primary-black);
-            color: var(--pure-white);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
 
-        header {
-            background-color: var(--secondary-black);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--accent-red);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
-
-        .header-container {
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            flex-wrap: wrap;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 800;
-            font-size: 28px;
-            color: var(--pure-white);
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .logo span {
-            color: var(--accent-red);
-        }
-
-        .logo i {
-            font-size: 24px;
-            color: var(--accent-red);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav a {
-            color: var(--pure-white);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        nav a:hover {
-            color: var(--accent-red);
-            background-color: rgba(230, 57, 70, 0.1);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            font-size: 14px;
+            display: block;
+            color: #666;
+            background: none;
+            -webkit-text-fill-color: #666;
         }
 
         .cart-icon {
             position: relative;
             cursor: pointer;
-            font-size: 22px;
-            color: var(--pure-white);
-            transition: var(--transition);
-        }
-
-        .cart-icon:hover {
-            color: var(--accent-red);
+            font-size: 28px;
         }
 
         .cart-count {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: var(--accent-red);
-            color: var(--pure-white);
-            font-size: 12px;
-            width: 20px;
-            height: 20px;
+            top: -10px;
+            right: -10px;
+            background: #764ba2;
+            color: white;
             border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: bold;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--pure-white);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .hero {
-            padding: 180px 0 100px;
-            background: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.7)), url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .hero h1 span {
-            color: var(--accent-red);
-        }
-
-        .hero p {
-            font-size: 20px;
-            max-width: 700px;
-            margin: 0 auto 40px;
-            color: var(--off-white);
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: var(--accent-red);
-            color: var(--pure-white);
-            padding: 18px 40px;
-            font-size: 18px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: var(--radius);
-            text-decoration: none;
-            transition: var(--transition);
-            border: 2px solid var(--accent-red);
-            box-shadow: var(--shadow);
-        }
-
-        .cta-button:hover {
-            background-color: transparent;
-            color: var(--accent-red);
-            transform: translateY(-5px);
-        }
-
-        .featured-product {
-            padding: 100px 0;
-            background-color: var(--secondary-black);
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-            font-size: 36px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            position: relative;
-        }
-
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 4px;
-            background-color: var(--accent-red);
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .product-detail-container {
+        /* Main Product Section */
+        .product-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 80px;
+            gap: 40px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
         }
 
         .product-gallery {
-            background-color: var(--primary-black);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
+            background: #f8f9fa;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        .main-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .thumbnail.active {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118,75,162,0.2);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 40px;
+        }
+
+        .category {
+            color: #764ba2;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 20px;
+        }
+
+        .rating-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .popular-badge {
+            background: #ff9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+
+        .price small {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #764ba2;
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(118,75,162,0.3);
+        }
+
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 24px;
+            color: #666;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .testimonial-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .testimonial-text {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .testimonial-stars {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+        }
+
+        .footer a {
+            color: #764ba2;
+            text-decoration: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .close-modal {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #764ba2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                CICH
+                <span>Smart Home Organization</span>
+            </div>
+            <div class="cart-icon" onclick="showCartModal()">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+
+        <!-- Product Section -->
+        <div class="product-container">
+            <div class="product-gallery">
+                <div style="position: relative;">
+                    <div class="badge">🌿 Eco-Friendly</div>
+                    <img id="mainImage" class="main-image" src="https://placehold.co/600x500/e9ecef/764ba2?text=Magic+Smart+Hanger" alt="Magic Smart Hanger">
+                </div>
+                <div class="thumbnail-container">
+                    <img class="thumbnail active" src="https://placehold.co/100x100/e9ecef/764ba2?text=View+1" onclick="changeImage(this.src, 0)">
+                    <img class="thumbnail" src="https://placehold.co/100x100/dee2e6/764ba2?text=Rotating" onclick="changeImage(this.src, 1)">
+                    <img class="thumbnail" src="https://placehold.co/100x100/ced4da/764ba2?text=9+Holes" onclick="changeImage(this.src, 2)">
+                    <img class="thumbnail" src="https://placehold.co/100x100/e9ecef/764ba2?text=Space+Saver" onclick="changeImage(this.src, 3)">
+                </div>
+            </div>
+            
+            <div class="product-info">
+                <div class="category">✨ BEST SELLER</div>
+                <h1>RTS Multi-Function 9-Hole Rotatable Magic Smart Hanger</h1>
+                
+                <div class="rating">
+                    <div class="stars">★★★★★</div>
+                    <span class="rating-count">(128 reviews)</span>
+                    <span class="popular-badge">#20 Most Popular</span>
+                </div>
+                
+                <div class="price">
+                    $12.99 <small>USD</small>
+                </div>
+                
+                <div class="description">
+                    Transform your closet organization with our innovative 9-hole rotatable magic smart hanger. 
+                    Save up to 70% more space while keeping your clothes wrinkle-free and easily accessible. 
+                    Made from durable, eco-friendly materials.
+                </div>
+                
+                <ul class="features">
+                    <li>9-Hole Rotatable Design - 360° easy access</li>
+                    <li>Space Saver - Holds up to 9 garments vertically</li>
+                    <li>Eco-Friendly - BPA-free recycled materials</li>
+                    <li>Balcony Bag Friendly - Perfect for seasonal storage</li>
+                    <li>Easy Hook System - No assembly required</li>
+                    <li>Heavy Duty - Supports up to 22 lbs</li>
+                </ul>
+                
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                    <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="99">
+                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                </div>
+                
+                <button class="buy-btn" onclick="initiateCheckout()">
+                    🛍️ Buy Now - Free Shipping
+                </button>
+                
+                <div class="payment-icons">
+                    <span>💳 Visa</span>
+                    <span>💳 Mastercard</span>
+                    <span>🍎 Apple Pay</span>
+                    <span>📱 Google Pay</span>
+                    <span>💵 Cash App</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"This hanger completely transformed my tiny closet! I can now fit twice as many clothes. Highly recommend!"</p>
+                    <p class="testimonial-author">- Sarah M.</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"The rotating feature is genius. No more digging through piles of clothes to find what I need."</p>
+                    <p class="testimonial-author">- David K.</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Eco-friendly and durable. I've bought 5 more for my family. Best closet investment ever!"</p>
+                    <p class="testimonial-author">- Jessica R.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 CICH - Smart Home Organization | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            <p style="margin-top: 10px; font-size: 12px;">Secure payments powered by Square</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Cart</h3>
+            <p id="modalMessage"></p>
+            <button class="close-modal" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let currentQuantity = 1;
+        let productImages = [
+            'https://placehold.co/600x500/e9ecef/764ba2?text=Magic+Smart+Hanger',
+            'https://placehold.co/600x500/dee2e6/764ba2?text=Rotating+Design',
+            'https://placehold.co/600x500/ced4da/764ba2?text=9+Hole+System',
+            'https://placehold.co/600x500/e9ecef/764ba2?text=Space+Saving'
+        ];
+
+        function changeImage(src, index) {
+            document.getElementById('mainImage').src = src;
+            let thumbs = document.querySelectorAll('.thumbnail');
+            thumbs.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function changeQuantity(delta) {
+            let input = document.getElementById('quantity');
+            let newVal = parseInt(input.value) + delta;
+            if (newVal >= 1 && newVal <= 99) {
+                input.value = newVal;
+                currentQuantity = newVal;
+            }
+        }
+
+        function updateCartDisplay() {
+            document.getElementById('cartCount').innerText = cart.length;
+        }
+
+        function showCartModal() {
+            if (cart.length === 0) {
+                document.getElementById('modalTitle').innerText = 'Your Cart';
+                document.getElementById('modalMessage').innerHTML = 'Your cart is empty. Add some Magic Smart Hangers!';
+            } else {
+                document.getElementById('modalTitle').innerText = `Cart (${cart.length} items)`;
+                document.getElementById('modalMessage').innerHTML = `${cart.length} x Magic Smart Hanger<br>Total: $${(cart.length * 12.99).toFixed(2)}`;
+            }
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        async function initiateCheckout() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const amount = quantity * 12.99;
+            
+            // Show loading state
+            const buyBtn = document.querySelector('.buy-btn');
+            const originalText = buyBtn.innerHTML;
+            buyBtn.innerHTML = '⏳ Processing...';
+            buyBtn.disabled = true;
+            
+            try {
+                // Initialize Square payment
+                const payments = Square.payments('sandbox', 'YOUR_SQUARE_APPLICATION_ID');
+                const card = await payments.card();
+                await card.attach('#card-container');
+                
+                // Create payment
+                const result = await card.tokenize();
+                if (result.status === 'OK') {
+                    // Send to your backend for processing
+                    const response = await fetch('/process-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            token: result.token,
+                            amount: amount,
+                            product: 'Magic Smart Hanger',
+                            quantity: quantity
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        showSuccessModal(quantity);
+                        addToCart(quantity);
+                    } else {
+                        alert('Payment failed: ' + data.error);
+                    }
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('Payment error: ' + error.message);
+            } finally {
+                buyBtn.innerHTML = originalText;
+                buyBtn.disabled = false;
+            }
+        }
+        
+        function addToCart(quantity) {
+            for(let i = 0; i < quantity; i++) {
+                cart.push({
+                    id: Date.now() + i,
+                    name: 'Magic Smart Hanger',
+                    price: 12.99
+                });
+            }
+            updateCartDisplay();
+        }
+        
+        function showSuccessModal(quantity) {
+            document.getElementById('modalTitle').innerText = '🎉 Order Received!';
+            document.getElementById('modalMessage').innerHTML = `
+                Thank you for your order!<br><br>
+                You purchased ${quantity} Magic Smart Hanger(s).<br>
+                Total: $${(quantity * 12.99).toFixed(2)}<br><br>
+                A confirmation email will be sent shortly.<br>
+                Your order will ship within 24 hours.
+            `;
+            document.getElementById('modal').style.display = 'flex';
+            
+            // Reset quantity
+            document.getElementById('quantity').value = 1;
+        }
+        
+        // Auto-increment quantity on input change
+        document.getElementById('quantity').addEventListener('change', function(e) {
+            currentQuantity = parseInt(e.target.value) || 1;
+        });
+        
+        // Add to cart function
+        window.addToCartHandler = function() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            addToCart(quantity);
+            showCartModal();
+        };
+    </script>
+</body>
+</html>
