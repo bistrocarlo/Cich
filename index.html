@@ -5,14 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="CICH Magic Smart Hanger - Transform your closet with our premium 9-hole rotatable space-saving hanger. Eco-friendly, durable, and stylish.">
     <meta name="keywords" content="smart hanger, space saver, closet organizer, rotatable hanger, eco-friendly, CICH">
-    <meta name="author" content="CICH">
-    <meta property="og:title" content="CICH - Magic Smart Hanger">
-    <meta property="og:description" content="Save 70% closet space with our innovative rotatable hanger">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630">
     <title>CICH | Magic Smart Hanger - Premium Space Saving Organizer</title>
-    
-    <!-- Square Payment SDK -->
-    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,12 +24,10 @@
             overflow-x: hidden;
         }
 
-        /* Smooth Scroll */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -50,18 +41,13 @@
             border-radius: 5px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff0000;
-        }
-
-        /* Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 40px;
         }
 
-        /* Header - Premium Black */
+        /* Header */
         .header {
             background: #000000;
             border-bottom: 2px solid #cc0000;
@@ -69,8 +55,8 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
             background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
         }
 
         .header-content {
@@ -84,34 +70,19 @@
         .logo {
             font-size: 36px;
             font-weight: 800;
-            letter-spacing: -1px;
             background: linear-gradient(135deg, #ffffff 0%, #cc0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #cc0000, transparent);
         }
 
         .logo span {
             font-size: 12px;
             display: block;
             color: #888;
-            background: none;
             -webkit-text-fill-color: #888;
-            letter-spacing: 2px;
         }
 
-        /* Navigation */
         .nav-links {
             display: flex;
             gap: 30px;
@@ -123,26 +94,11 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
-            position: relative;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
             color: #cc0000;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #cc0000;
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::before {
-            width: 100%;
         }
 
         .cart-icon {
@@ -171,19 +127,12 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
 
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 100%);
             padding: 60px 0;
-            border-bottom: 1px solid #cc0000;
         }
 
         .hero-grid {
@@ -202,7 +151,6 @@
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 20px;
-            border: 1px solid rgba(204, 0, 0, 0.3);
         }
 
         .hero h1 {
@@ -213,7 +161,6 @@
             background: linear-gradient(135deg, #ffffff 0%, #cc0000 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .hero p {
@@ -229,10 +176,6 @@
             margin-top: 30px;
         }
 
-        .stat {
-            text-align: center;
-        }
-
         .stat-number {
             font-size: 32px;
             font-weight: 800;
@@ -242,7 +185,6 @@
         .stat-label {
             font-size: 12px;
             color: #888;
-            text-transform: uppercase;
         }
 
         /* Product Section */
@@ -261,7 +203,6 @@
             border: 1px solid #1a1a1a;
         }
 
-        /* Product Gallery */
         .product-gallery {
             padding: 40px;
             background: linear-gradient(135deg, #0a0a0a 0%, #0a0000 100%);
@@ -272,17 +213,12 @@
             margin-bottom: 20px;
             border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
         }
 
         .main-image {
             width: 100%;
             border-radius: 20px;
             transition: transform 0.5s;
-        }
-
-        .main-image:hover {
-            transform: scale(1.05);
         }
 
         .badge {
@@ -307,7 +243,6 @@
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 12px;
-            font-weight: bold;
             backdrop-filter: blur(5px);
         }
 
@@ -333,7 +268,6 @@
             transform: scale(1.05);
         }
 
-        /* Product Info */
         .product-info {
             padding: 40px;
         }
@@ -351,7 +285,6 @@
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 15px;
-            line-height: 1.3;
         }
 
         .rating {
@@ -365,21 +298,11 @@
         .stars {
             color: #ffc107;
             font-size: 18px;
-            letter-spacing: 2px;
         }
 
         .rating-count {
             color: #888;
             font-size: 14px;
-        }
-
-        .popular-badge {
-            background: rgba(204, 0, 0, 0.2);
-            color: #cc0000;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: bold;
         }
 
         .price {
@@ -392,22 +315,12 @@
         .price small {
             font-size: 16px;
             color: #666;
-            font-weight: normal;
         }
 
         .original-price {
             text-decoration: line-through;
             color: #666;
             font-size: 18px;
-            margin-left: 10px;
-        }
-
-        .savings {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4CAF50;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 12px;
             margin-left: 10px;
         }
 
@@ -436,10 +349,8 @@
 
         .features li i {
             color: #cc0000;
-            font-size: 16px;
         }
 
-        /* Quantity Selector */
         .quantity-section {
             margin-bottom: 25px;
         }
@@ -473,7 +384,6 @@
         .quantity-btn:hover {
             background: #cc0000;
             border-color: #cc0000;
-            transform: scale(1.05);
         }
 
         .quantity-input {
@@ -488,7 +398,6 @@
             font-weight: 600;
         }
 
-        /* Buy Button */
         .buy-btn {
             width: 100%;
             padding: 18px;
@@ -505,28 +414,17 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .buy-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .buy-btn:hover::before {
-            left: 100%;
         }
 
         .buy-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(204, 0, 0, 0.4);
+        }
+
+        .buy-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .payment-icons {
@@ -544,11 +442,6 @@
             transition: color 0.3s;
         }
 
-        .payment-icons i:hover {
-            color: #cc0000;
-        }
-
-        /* Trust Badges */
         .trust-badges {
             display: flex;
             justify-content: space-around;
@@ -615,13 +508,11 @@
         .testimonial-card:hover {
             transform: translateY(-5px);
             border-color: #cc0000;
-            box-shadow: 0 10px 30px rgba(204, 0, 0, 0.1);
         }
 
         .testimonial-stars {
             color: #ffc107;
             margin-bottom: 15px;
-            font-size: 16px;
         }
 
         .testimonial-text {
@@ -634,68 +525,6 @@
         .testimonial-author {
             font-weight: 700;
             color: #cc0000;
-            margin-bottom: 5px;
-        }
-
-        .testimonial-title {
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* FAQ Section */
-        .faq-section {
-            padding: 80px 0;
-            background: #000000;
-        }
-
-        .faq-grid {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: #0a0a0a;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #1a1a1a;
-        }
-
-        .faq-question {
-            padding: 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .faq-question:hover {
-            background: #1a1a1a;
-        }
-
-        .faq-question i {
-            color: #cc0000;
-            transition: transform 0.3s;
-        }
-
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            color: #aaa;
-            line-height: 1.6;
-        }
-
-        .faq-item.active .faq-answer {
-            padding: 0 20px 20px 20px;
-            max-height: 200px;
-        }
-
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
         }
 
         /* Footer */
@@ -721,32 +550,10 @@
             color: #888;
             text-decoration: none;
             line-height: 1.8;
-            transition: color 0.3s;
         }
 
         .footer-col a:hover {
             color: #cc0000;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: #1a1a1a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .social-links a:hover {
-            background: #cc0000;
-            transform: translateY(-3px);
         }
 
         .copyright {
@@ -754,7 +561,6 @@
             padding-top: 30px;
             border-top: 1px solid #1a1a1a;
             color: #666;
-            font-size: 14px;
         }
 
         /* Modal */
@@ -780,18 +586,6 @@
             width: 90%;
             text-align: center;
             border: 1px solid #cc0000;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
 
         .modal-content h3 {
@@ -806,7 +600,7 @@
             line-height: 1.6;
         }
 
-        .close-modal {
+        .close-modal, .checkout-btn {
             background: #cc0000;
             color: white;
             border: none;
@@ -816,20 +610,20 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            margin: 5px;
         }
 
-        .close-modal:hover {
+        .close-modal:hover, .checkout-btn:hover {
             transform: scale(1.05);
             background: #ff0000;
         }
 
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
             background: #0a0a0a;
-            border-left: 4px solid #cc0000;
+            border-left: 4px solid #4CAF50;
             padding: 15px 25px;
             border-radius: 10px;
             display: none;
@@ -837,7 +631,6 @@
             gap: 15px;
             z-index: 1500;
             animation: slideInRight 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
 
         @keyframes slideInRight {
@@ -851,68 +644,19 @@
             }
         }
 
-        .toast i {
-            color: #4CAF50;
-            font-size: 20px;
-        }
-
-        /* Responsive */
         @media (max-width: 968px) {
             .container {
                 padding: 0 20px;
             }
-            
             .hero-grid, .product-container {
                 grid-template-columns: 1fr;
-                gap: 30px;
             }
-            
             .hero h1 {
                 font-size: 36px;
             }
-            
-            .section-title {
-                font-size: 32px;
-            }
-            
             .features {
                 grid-template-columns: 1fr;
             }
-            
-            .header-content {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-stats {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .trust-badges {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .testimonial-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Loading Animation */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
         }
     </style>
 </head>
@@ -926,10 +670,9 @@
                     <span>SMART HOME ORGANIZATION</span>
                 </div>
                 <div class="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#product">Product</a>
-                    <a href="#reviews">Reviews</a>
-                    <a href="#faq">FAQ</a>
+                    <a onclick="scrollToSection('home')">Home</a>
+                    <a onclick="scrollToSection('product')">Product</a>
+                    <a onclick="scrollToSection('reviews')">Reviews</a>
                     <div class="cart-icon" onclick="showCartModal()">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
@@ -996,20 +739,17 @@
                     <div class="rating">
                         <div class="stars">★★★★★</div>
                         <span class="rating-count">(2,847 verified reviews)</span>
-                        <span class="popular-badge">#20 Most Popular</span>
                     </div>
                     
                     <div class="price">
                         $12.99 <small>USD</small>
                         <span class="original-price">$24.99</span>
-                        <span class="savings">Save 48%</span>
                     </div>
                     
                     <div class="description">
                         Revolutionize your closet organization with our innovative 9-hole rotatable magic smart hanger. 
-                        Engineered for maximum efficiency, this space-saving solution holds up to 9 garments vertically, 
-                        giving you 360° access to your entire wardrobe. Made from premium, eco-friendly materials that 
-                        are built to last.
+                        Holds up to 9 garments vertically with 360° access to your entire wardrobe. Made from premium, 
+                        eco-friendly materials that are built to last.
                     </div>
                     
                     <ul class="features">
@@ -1017,15 +757,13 @@
                         <li><i class="fas fa-check-circle"></i> Space Saver - Holds 9 Garments Vertically</li>
                         <li><i class="fas fa-check-circle"></i> Eco-Friendly - BPA-Free Recycled Materials</li>
                         <li><i class="fas fa-check-circle"></i> Heavy Duty - Supports up to 22 lbs</li>
-                        <li><i class="fas fa-check-circle"></i> Easy Hook System - No Assembly Required</li>
-                        <li><i class="fas fa-check-circle"></i> Wrinkle-Free - Prevents Clothing Damage</li>
                     </ul>
                     
                     <div class="quantity-section">
                         <label class="quantity-label">Quantity</label>
                         <div class="quantity-selector">
                             <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
-                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="99" readonly>
+                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="99">
                             <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
                         </div>
                     </div>
@@ -1048,20 +786,14 @@
                             <i class="fas fa-undo-alt"></i>
                             <p>30-Day Returns</p>
                         </div>
-                        <div class="trust-item">
-                            <i class="fas fa-headset"></i>
-                            <p>24/7 Support</p>
-                        </div>
                     </div>
                     
                     <div class="payment-icons">
                         <i class="fab fa-cc-visa"></i>
                         <i class="fab fa-cc-mastercard"></i>
                         <i class="fab fa-cc-amex"></i>
-                        <i class="fab fa-cc-discover"></i>
                         <i class="fab fa-apple-pay"></i>
                         <i class="fab fa-google-pay"></i>
-                        <i class="fas fa-mobile-alt"></i>
                     </div>
                 </div>
             </div>
@@ -1075,66 +807,18 @@
             <div class="testimonial-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"This hanger is a game-changer! My tiny apartment closet now holds twice as many clothes. The rotating feature is brilliant - I can see everything at once."</p>
+                    <p class="testimonial-text">"This hanger is a game-changer! My tiny apartment closet now holds twice as many clothes. The rotating feature is brilliant!"</p>
                     <p class="testimonial-author">Sarah Martinez</p>
-                    <p class="testimonial-title">Verified Buyer</p>
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Finally, a solution that actually works! The quality is exceptional, and it's eco-friendly too. I've already ordered 5 more for my family."</p>
+                    <p class="testimonial-text">"Finally, a solution that actually works! The quality is exceptional, and it's eco-friendly too. Highly recommend!"</p>
                     <p class="testimonial-author">David Chen</p>
-                    <p class="testimonial-title">Verified Buyer</p>
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Worth every penny. My closet has never been so organized. The 9-hole design is perfect for seasonal rotation. Highly recommend!"</p>
+                    <p class="testimonial-text">"Worth every penny. My closet has never been so organized. The 9-hole design is perfect for seasonal rotation."</p>
                     <p class="testimonial-author">Jessica Williams</p>
-                    <p class="testimonial-title">Verified Buyer</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq-section" id="faq">
-        <div class="container">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        How many clothes can it hold?
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        The Magic Smart Hanger can hold up to 9 garments at once, saving up to 70% of closet space compared to traditional hangers.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        Is it really eco-friendly?
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Yes! Our hangers are made from BPA-free, recycled materials that are 100% eco-friendly and built to last for years.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        What's your return policy?
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        We offer a 30-day money-back guarantee. If you're not completely satisfied, return it for a full refund - no questions asked.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        How long does shipping take?
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Free worldwide shipping: 5-7 business days for US, 7-14 days for international orders. Express shipping available at checkout.
-                    </div>
                 </div>
             </div>
         </div>
@@ -1150,4 +834,285 @@
                 </div>
                 <div class="footer-col">
                     <h4>Quick Links</h4>
-                    <p><a href="#home
+                    <p><a onclick="scrollToSection('home')">Home</a></p>
+                    <p><a onclick="scrollToSection('product')">Product</a></p>
+                    <p><a onclick="scrollToSection('reviews')">Reviews</a></p>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>Email: support@cich.com</p>
+                    <p>24/7 Customer Support</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2024 CICH - Smart Home Organization. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-shopping-cart"></i> Complete Your Order</h3>
+            <div id="checkoutDetails"></div>
+            <button class="checkout-btn" onclick="processOrder()">
+                <i class="fas fa-check-circle"></i> Confirm Order
+            </button>
+            <button class="close-modal" onclick="closeCheckoutModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-check-circle"></i> Order Confirmed!</h3>
+            <div id="successDetails"></div>
+            <button class="close-modal" onclick="closeSuccessModal()">Continue Shopping</button>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <div id="cartDetails"></div>
+            <button class="checkout-btn" onclick="checkoutFromCart()">Proceed to Checkout</button>
+            <button class="close-modal" onclick="closeCartModal()">Continue Shopping</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Product data
+        const PRODUCT = {
+            name: 'Magic Smart Hanger',
+            price: 12.99,
+            sku: 'CICH-MSH-001'
+        };
+
+        // Cart array
+        let cart = [];
+        let currentQuantity = 1;
+
+        // Image gallery
+        let productImages = [
+            'https://placehold.co/600x500/0a0a0a/cc0000?text=Magic+Smart+Hanger+Main',
+            'https://placehold.co/600x500/1a1a1a/cc0000?text=Rotating+Design',
+            'https://placehold.co/600x500/0a0a0a/cc0000?text=9+Hole+System',
+            'https://placehold.co/600x500/1a1a1a/cc0000?text=Space+Saving'
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up quantity input listener
+            const quantityInput = document.getElementById('quantity');
+            if (quantityInput) {
+                quantityInput.addEventListener('change', function(e) {
+                    let val = parseInt(e.target.value);
+                    if (isNaN(val) || val < 1) val = 1;
+                    if (val > 99) val = 99;
+                    currentQuantity = val;
+                    quantityInput.value = val;
+                });
+            }
+            updateCartDisplay();
+        });
+
+        // Change quantity
+        function changeQuantity(delta) {
+            let input = document.getElementById('quantity');
+            let newVal = parseInt(input.value) + delta;
+            if (newVal >= 1 && newVal <= 99) {
+                input.value = newVal;
+                currentQuantity = newVal;
+                showToast(`Quantity updated to ${newVal}`);
+            }
+        }
+
+        // Change image
+        function changeImage(index) {
+            document.getElementById('mainImage').src = productImages[index];
+            let thumbs = document.querySelectorAll('.thumbnail');
+            thumbs.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        // Scroll to section
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = message;
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.innerText = totalItems;
+        }
+
+        // Add to cart
+        function addToCart(quantity) {
+            const existingItem = cart.find(item => item.sku === PRODUCT.sku);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    name: PRODUCT.name,
+                    price: PRODUCT.price,
+                    sku: PRODUCT.sku,
+                    quantity: quantity
+                });
+            }
+            updateCartDisplay();
+            showToast(`Added ${quantity} item(s) to cart`);
+        }
+
+        // Initiate checkout
+        function initiateCheckout() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            if (isNaN(quantity) || quantity < 1) {
+                showToast('Please enter a valid quantity');
+                return;
+            }
+            
+            const total = (quantity * PRODUCT.price).toFixed(2);
+            const checkoutDetails = document.getElementById('checkoutDetails');
+            checkoutDetails.innerHTML = `
+                <p style="margin-bottom: 20px;"><strong>${PRODUCT.name}</strong></p>
+                <p>Quantity: ${quantity}</p>
+                <p>Price: $${PRODUCT.price} each</p>
+                <p style="font-size: 24px; margin-top: 20px;"><strong>Total: $${total}</strong></p>
+                <p style="margin-top: 20px; color: #888;">Free worldwide shipping included</p>
+            `;
+            
+            // Store checkout data
+            window.checkoutData = { quantity, total };
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        // Process order
+        function processOrder() {
+            const quantity = window.checkoutData.quantity;
+            addToCart(quantity);
+            closeCheckoutModal();
+            
+            // Show success
+            const total = (quantity * PRODUCT.price).toFixed(2);
+            document.getElementById('successDetails').innerHTML = `
+                <p><i class="fas fa-check-circle" style="color: #4CAF50; font-size: 48px; margin-bottom: 20px;"></i></p>
+                <p>Thank you for your order!</p>
+                <p>You purchased ${quantity} x ${PRODUCT.name}</p>
+                <p style="font-size: 20px; margin-top: 15px;"><strong>Total: $${total}</strong></p>
+                <p style="margin-top: 15px;">Order #: CICH-${Date.now()}</p>
+                <p style="margin-top: 10px;">Confirmation sent to your email</p>
+            `;
+            document.getElementById('successModal').style.display = 'flex';
+            
+            // Reset quantity
+            document.getElementById('quantity').value = 1;
+            currentQuantity = 1;
+        }
+
+        // Show cart modal
+        function showCartModal() {
+            if (cart.length === 0) {
+                document.getElementById('cartDetails').innerHTML = `
+                    <p><i class="fas fa-shopping-cart" style="font-size: 48px; color: #666;"></i></p>
+                    <p>Your cart is empty</p>
+                    <p style="color: #888;">Add some Magic Smart Hangers to get started!</p>
+                `;
+            } else {
+                let cartHtml = '';
+                let cartTotal = 0;
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    cartTotal += itemTotal;
+                    cartHtml += `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #1a1a1a;">
+                            <div style="text-align: left;">
+                                <strong>${item.name}</strong>
+                                <p style="color: #888;">Quantity: ${item.quantity}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <strong>$${itemTotal.toFixed(2)}</strong>
+                                <br>
+                                <button onclick="removeFromCart('${item.sku}')" style="background: none; border: none; color: #cc0000; cursor: pointer; margin-top: 5px;">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                cartHtml += `
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #cc0000;">
+                        <p style="font-size: 24px;"><strong>Total: $${cartTotal.toFixed(2)}</strong></p>
+                    </div>
+                `;
+                document.getElementById('cartDetails').innerHTML = cartHtml;
+            }
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        // Remove from cart
+        function removeFromCart(sku) {
+            cart = cart.filter(item => item.sku !== sku);
+            updateCartDisplay();
+            showCartModal(); // Refresh cart modal
+            showToast('Item removed from cart');
+        }
+
+        // Checkout from cart
+        function checkoutFromCart() {
+            if (cart.length === 0) {
+                showToast('Your cart is empty');
+                return;
+            }
+            
+            const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            closeCartModal();
+            
+            document.getElementById('checkoutDetails').innerHTML = `
+                <p><strong>Cart Summary</strong></p>
+                <p>Total Items: ${totalItems}</p>
+                <p style="font-size: 24px; margin-top: 20px;"><strong>Total: $${cartTotal}</strong></p>
+                <p style="margin-top: 20px; color: #888;">Free worldwide shipping included</p>
+            `;
+            
+            window.checkoutData = { quantity: totalItems, total: cartTotal, fromCart: true };
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        // Close modals
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+            // Clear cart if this was a cart checkout
+            if (window.checkoutData && window.checkoutData.fromCart) {
+                cart = [];
+                updateCartDisplay();
+            }
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
