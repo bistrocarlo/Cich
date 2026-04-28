@@ -3,130 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Guest Collector - Laura & Daniel's Wedding</title>
+    <title>Admin - Invitation Code Manager</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f5e6d3; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; padding: 20px; }
         .container { max-width: 1400px; margin: 0 auto; }
-        header { background: linear-gradient(135deg, #8b5a2b, #c49a6c); color: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; }
+        header { background: linear-gradient(135deg, #16213e, #0f3460); color: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .stat-number { font-size: 2.5rem; font-weight: bold; color: #8b5a2b; }
-        .section { background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .section h2 { color: #5a2d1c; margin-bottom: 20px; border-left: 4px solid #c49a6c; padding-left: 15px; }
-        .guest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 15px; margin-top: 20px; }
-        .guest-card { background: #faf7f2; border-radius: 15px; padding: 15px; border-left: 5px solid #c49a6c; }
-        .guest-card.pending { border-left-color: #f39c12; }
-        .guest-card.received { border-left-color: #27ae60; }
-        .guest-name { font-weight: bold; font-size: 1.1rem; }
-        .guest-phone { color: #666; font-size: 0.85rem; margin: 5px 0; }
-        .guest-status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; margin-top: 8px; }
-        .status-pending { background: #f39c12; color: white; }
-        .status-received { background: #27ae60; color: white; }
-        .btn-send { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; margin: 5px 5px 0 0; }
-        .btn-copy { background: #95a5a6; }
-        .btn-export { background: #27ae60; color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; margin-right: 10px; }
-        .btn-refresh { background: #3498db; }
-        .party-options { display: flex; gap: 15px; flex-wrap: wrap; margin: 15px 0; }
-        .party-option { background: #f0e6d8; padding: 10px 15px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-        .party-option.selected { background: #c49a6c; color: white; }
-        .sms-preview { background: #e8f4f8; padding: 20px; border-radius: 15px; margin-top: 20px; }
-        .sms-template { font-family: monospace; background: white; padding: 15px; border-radius: 10px; margin: 10px 0; white-space: pre-wrap; }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: bold; color: #0f3460; }
+        .section { background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; }
+        .section h2 { margin-bottom: 20px; color: #0f3460; }
+        .code-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
+        .code-card { background: #f8f9fa; border-radius: 12px; padding: 15px; border-left: 4px solid #27ae60; }
+        .code { font-family: monospace; font-size: 1.3rem; font-weight: bold; color: #0f3460; }
+        .btn { background: #0f3460; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin: 5px; }
+        .btn-green { background: #27ae60; }
+        .btn-red { background: #e74c3c; }
+        .btn-blue { background: #3498db; }
+        input, select, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin: 5px; }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #faf7f2; }
-        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filter-bar input, .filter-bar select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; flex: 1; }
-        @media (max-width: 700px) { .guest-grid { grid-template-columns: 1fr; } }
+        th { background: #f8f9fa; }
+        .status-attending { background: #27ae60; color: white; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .status-declined { background: #e74c3c; color: white; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .status-pending { background: #f39c12; color: white; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+        .login-container { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📱 SMS Address Collection System</h1>
-            <p>Laura & Daniel's Wedding | October 3, 2026 | Fior Parkville</p>
-        </header>
+    <div id="loginPage" class="login-container" style="display: none;">
+        <h2>🔐 Admin Login</h2>
+        <input type="password" id="adminPassword" placeholder="Enter admin password" style="width:100%; margin:15px 0;">
+        <button id="loginBtn" class="btn" style="width:100%;">Login</button>
+    </div>
 
-        <div class="stats" id="statsContainer"></div>
+    <div id="adminPanel" style="display: none;">
+        <div class="container">
+            <header>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>📋 Invitation Code Manager</h1>
+                    <button id="logoutBtn" class="btn btn-red">Logout</button>
+                </div>
+                <p>Laura & Daniel's Wedding - October 3, 2026</p>
+            </header>
 
-        <!-- Add New Guest Section -->
-        <div class="section">
-            <h2>➕ Add Guest to SMS List</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                <input type="text" id="newGuestName" placeholder="Full Name (e.g., John Smith)">
-                <input type="tel" id="newGuestPhone" placeholder="Phone Number (e.g., +614XXXXXXXX)">
-                <select id="guestPartyType">
-                    <option value="single">👤 Single Person</option>
-                    <option value="couple">💑 Husband & Wife / Partners</option>
-                    <option value="family">👨‍👩‍👧‍👦 Family (Parents + Children)</option>
-                    <option value="extended">👥 Extended Family (Multiple households)</option>
-                </select>
-                <button id="addGuestBtn" style="background:#8b5a2b; color:white; border:none; border-radius:10px;">➕ Add Guest</button>
+            <div class="stats" id="statsContainer"></div>
+
+            <div class="section">
+                <h2>➕ Generate Invitation Codes</h2>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <input type="text" id="guestNameInput" placeholder="Guest/Party Name" style="flex:2;">
+                    <input type="text" id="manualCode" placeholder="Custom code (e.g., LD001)" style="flex:1;">
+                    <select id="partyTypeSelect">
+                        <option value="single">👤 Single</option>
+                        <option value="couple">💑 Couple</option>
+                        <option value="family">👨‍👩‍👧‍👦 Family</option>
+                        <option value="extended">👥 Extended Family</option>
+                    </select>
+                    <button id="generateBtn" class="btn btn-green">Generate Code</button>
+                </div>
+                <div id="generatedMsg" style="margin-top: 15px; display: none; background: #d4edda; padding: 15px; border-radius: 10px;"></div>
             </div>
-        </div>
 
-        <!-- SMS Templates by Party Type -->
-        <div class="section">
-            <h2>📨 Select SMS Template & Send</h2>
-            <div class="party-options" id="partyOptions">
-                <div class="party-option" data-type="single">👤 Single Person</div>
-                <div class="party-option" data-type="couple">💑 Couple (Husband & Wife/Partners)</div>
-                <div class="party-option" data-type="family">👨‍👩‍👧‍👦 Family (Parents + Children)</div>
-                <div class="party-option" data-type="extended">👥 Extended Family</div>
+            <div class="section">
+                <h2>🎟️ All Invitation Codes</h2>
+                <div class="filter-bar">
+                    <input type="text" id="searchCodes" placeholder="Search by name or code...">
+                    <select id="rsvpFilterCodes">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="attending">Attending</option>
+                        <option value="declined">Declined</option>
+                    </select>
+                    <button id="exportCodesBtn" class="btn btn-blue">📄 Export All Codes</button>
+                    <button id="refreshBtn" class="btn">🔄 Refresh</button>
+                </div>
+                <div id="codesGrid" class="code-grid"></div>
             </div>
-            
-            <div class="sms-preview">
-                <strong>📝 SMS Preview:</strong>
-                <div class="sms-template" id="smsPreview">Select a party type above</div>
-                <button id="copySmsBtn" class="btn-send btn-copy">📋 Copy SMS</button>
-                <button id="sendSelectedSmsBtn" class="btn-send">📱 Send to Selected Guest</button>
-                <button id="sendAllPendingBtn" class="btn-send" style="background:#27ae60;">📱 Send to All Pending Guests</button>
-            </div>
-        </div>
 
-        <!-- Guest List -->
-        <div class="section">
-            <h2>📋 Guest List & SMS Status</h2>
-            <div class="filter-bar">
-                <input type="text" id="searchGuest" placeholder="Search by name or phone...">
-                <select id="filterStatus">
-                    <option value="all">All Guests</option>
-                    <option value="pending">Pending Reply</option>
-                    <option value="received">Reply Received</option>
-                </select>
-                <select id="filterPartyType">
-                    <option value="all">All Party Types</option>
-                    <option value="single">Single</option>
-                    <option value="couple">Couple</option>
-                    <option value="family">Family</option>
-                    <option value="extended">Extended Family</option>
-                </select>
-                <button id="exportCsvBtn" class="btn-export">📄 Export Addresses CSV</button>
-                <button id="refreshBtn" class="btn-export btn-refresh">🔄 Refresh</button>
-            </div>
-            
-            <div id="guestGrid" class="guest-grid"></div>
-        </div>
-
-        <!-- Collected Responses Table -->
-        <div class="section">
-            <h2>📊 Collected Guest Information</h2>
-            <div style="overflow-x: auto;">
-                <table id="responsesTable">
-                    <thead>
-                        <tr><th>Name</th><th>Phone</th><th>Party Type</th><th>Full Name (Verified)</th><th>Address</th><th>Family/Partner Names</th><th>Total People</th><th>Received</th></tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <tr><td colspan="8" style="text-align:center;">Loading...</td></tr>
-                    </tbody>
-                </table>
+            <div class="section">
+                <h2>📊 Guest Responses</h2>
+                <div class="filter-bar">
+                    <input type="text" id="searchResponses" placeholder="Search by name...">
+                    <button id="exportResponsesBtn" class="btn btn-green">📄 Export Addresses (CSV)</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table id="responsesTable">
+                        <thead>
+                            <tr><th>Code</th><th>Guest Name</th><th>Full Name (Verified)</th><th>Address</th><th>Party Type</th><th>Total People</th><th>Status</th><th>Submitted</th></tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr><td colspan="8" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAH0rBpJUh3sRpBlQgrymQM1RLBDBiAPmE",
@@ -139,320 +118,180 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const GUESTS_COLLECTION = "sms_guests";
-        const RESPONSES_COLLECTION = "guest_responses";
+        const ADMIN_PASSWORD = "LauraDaniel2026";
 
-        let allGuests = [];
-        let currentSelectedPartyType = "single";
+        let allCodes = [];
+        let allResponses = [];
 
-        // SMS Templates per party type
-        const smsTemplates = {
-            single: `💍 Laura & Daniel's Wedding - Oct 3, 2026 at Fior Parkville
+        function checkAuth() { return sessionStorage.getItem("adminAuth") === "true"; }
 
-Dear {NAME},
+        document.getElementById("loginBtn")?.addEventListener("click", () => {
+            if (document.getElementById("adminPassword").value === ADMIN_PASSWORD) {
+                sessionStorage.setItem("adminAuth", "true");
+                showAdminPanel();
+            } else { alert("Wrong password"); }
+        });
 
-We would be honored to have you celebrate with us! Please reply with:
+        document.getElementById("logoutBtn")?.addEventListener("click", () => {
+            sessionStorage.removeItem("adminAuth");
+            showLoginPage();
+        });
 
-1. Your FULL NAME (as you want on invitation)
-2. Your POSTAL ADDRESS (for official invitation)
-
-Reply format: John Smith | 123 Main St, Melbourne VIC 3000
-
-Thank you! ❤️ - Laura & Daniel`,
-
-            couple: `💍 Laura & Daniel's Wedding - Oct 3, 2026 at Fior Parkville
-
-Dear {NAME},
-
-We would be honored to have you and your partner celebrate with us! Please reply with:
-
-1. Both FULL NAMES (Husband & Wife / Partners)
-2. Your POSTAL ADDRESS
-
-Reply format: John & Jane Smith | 123 Main St, Melbourne VIC 3000
-
-Thank you! ❤️ - Laura & Daniel`,
-
-            family: `💍 Laura & Daniel's Wedding - Oct 3, 2026 at Fior Parkville
-
-Dear {NAME} Family,
-
-We would be honored to have your whole family celebrate with us! Please reply with:
-
-1. Parent/Guardian NAMES
-2. Your POSTAL ADDRESS
-3. Names of CHILDREN attending (with ages if under 18)
-
-Reply format: John & Jane Smith | 123 Main St, Melbourne | Children: Emma(12), Tom(8)
-
-Thank you! ❤️ - Laura & Daniel`,
-
-            extended: `💍 Laura & Daniel's Wedding - Oct 3, 2026 at Fior Parkville
-
-Dear {NAME} Family,
-
-We would be honored to have your extended family celebrate with us! Please reply with:
-
-1. ALL family member NAMES (each person)
-2. Your POSTAL ADDRESS
-
-Reply format: John Smith, Jane Smith, Michael Smith, Sarah Smith | 123 Main St, Melbourne
-
-Thank you! ❤️ - Laura & Daniel`
-        };
-
-        // Update SMS preview when party type changes
-        function updateSmsPreview() {
-            const selectedGuest = document.getElementById("guestSelect")?.value;
-            let guestName = "Guest";
-            if (selectedGuest && selectedGuest !== "all") {
-                const guest = allGuests.find(g => g.id === selectedGuest);
-                if (guest) guestName = guest.name.split(' ')[0];
-            }
-            const template = smsTemplates[currentSelectedPartyType];
-            const preview = template.replace("{NAME}", guestName);
-            document.getElementById("smsPreview").innerText = preview;
+        function showLoginPage() {
+            document.getElementById("loginPage").style.display = "block";
+            document.getElementById("adminPanel").style.display = "none";
         }
 
-        // Load guests from Firebase
-        async function loadGuests() {
-            const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
-            allGuests = [];
-            snapshot.forEach(doc => allGuests.push({ id: doc.id, ...doc.data() }));
+        function showAdminPanel() {
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+            loadData();
+        }
+
+        async function loadData() {
+            const codesSnap = await getDocs(collection(db, "invite_codes"));
+            allCodes = codesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
             
-            // Load responses to enrich guest data
-            const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
-            const responses = {};
-            responsesSnap.forEach(doc => {
-                const data = doc.data();
-                responses[data.phoneNumber] = data;
-            });
+            const responsesSnap = await getDocs(collection(db, "rsvp_responses"));
+            allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
             
-            allGuests.forEach(guest => {
-                const response = responses[guest.phone];
-                if (response) {
-                    guest.responseData = response;
-                    guest.status = "received";
-                } else {
-                    guest.status = "pending";
-                }
-            });
-            
-            renderGuestGrid();
-            renderResponsesTable();
+            renderCodes();
+            renderResponses();
             updateStats();
         }
 
-        // Render guest cards
-        function renderGuestGrid() {
-            const search = document.getElementById("searchGuest")?.value.toLowerCase() || "";
-            const filterStatus = document.getElementById("filterStatus")?.value || "all";
-            const filterType = document.getElementById("filterPartyType")?.value || "all";
+        function renderCodes() {
+            const search = document.getElementById("searchCodes")?.value.toLowerCase() || "";
+            const filter = document.getElementById("rsvpFilterCodes")?.value || "all";
             
-            let filtered = allGuests.filter(g => 
-                (g.name?.toLowerCase().includes(search) || g.phone?.includes(search)) &&
-                (filterStatus === "all" || g.status === filterStatus) &&
-                (filterType === "all" || g.partyType === filterType)
+            let filtered = allCodes.filter(c => 
+                c.name?.toLowerCase().includes(search) || c.code?.toLowerCase().includes(search)
             );
             
-            const container = document.getElementById("guestGrid");
+            const container = document.getElementById("codesGrid");
             if (filtered.length === 0) {
-                container.innerHTML = "<p style='text-align:center; padding:40px;'>No guests found. Add guests above.</p>";
+                container.innerHTML = "<p>No codes generated yet.</p>";
                 return;
             }
             
-            container.innerHTML = filtered.map(guest => `
-                <div class="guest-card ${guest.status}">
-                    <div class="guest-name">${escapeHtml(guest.name)}</div>
-                    <div class="guest-phone">📞 ${guest.phone}</div>
-                    <div>👥 ${getPartyTypeIcon(guest.partyType)} ${getPartyTypeName(guest.partyType)}</div>
-                    <div><span class="guest-status status-${guest.status}">${guest.status === 'pending' ? '⏳ Pending Reply' : '✅ Reply Received'}</span></div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn-send" onclick="copySmsForGuest('${guest.id}')">📋 Copy SMS</button>
-                        <button class="btn-send" onclick="markAsReplied('${guest.id}')">✅ Mark Replied</button>
-                    </div>
-                    ${guest.responseData ? `
-                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 0.85rem;">
-                            📮 ${escapeHtml(guest.responseData.address?.substring(0, 50))}...
+            container.innerHTML = filtered.map(code => {
+                const response = allResponses.find(r => r.inviteCode === code.code);
+                const status = response?.status || "pending";
+                return `
+                    <div class="code-card">
+                        <div class="code">🎟️ ${code.code}</div>
+                        <div><strong>${escapeHtml(code.name)}</strong></div>
+                        <div>👥 ${code.partyType || "single"}</div>
+                        <div><span class="status-${status}">${getStatusText(status)}</span></div>
+                        <div style="margin-top: 10px;">
+                            <button class="btn" onclick="copyCode('${code.code}')">📋 Copy Code</button>
                         </div>
-                    ` : ''}
-                </div>
-            `).join("");
+                    </div>
+                `;
+            }).join("");
         }
 
-        // Render responses table
-        async function renderResponsesTable() {
-            const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
-            const responses = [];
-            responsesSnap.forEach(doc => responses.push({ id: doc.id, ...doc.data() }));
+        function renderResponses() {
+            const search = document.getElementById("searchResponses")?.value.toLowerCase() || "";
+            let filtered = allResponses.filter(r => 
+                r.fullName?.toLowerCase().includes(search) || r.guestOriginalName?.toLowerCase().includes(search)
+            );
             
             const tbody = document.getElementById("tableBody");
-            if (responses.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No responses yet. Send SMS to guests!</td></tr>';
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No responses yet. Guests need to enter their codes.</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = responses.map(r => `
+            tbody.innerHTML = filtered.map(r => `
                 <tr>
-                    <td><strong>${escapeHtml(r.fullName || '-')}</strong></td>
-                    <td>${escapeHtml(r.phoneNumber)}</td>
-                    <td>${getPartyTypeIcon(r.partyType)} ${getPartyTypeName(r.partyType)}</td>
-                    <td>${escapeHtml(r.verifiedNames || '-')}</td>
-                    <td style="max-width: 250px;">${escapeHtml(r.address || '-')}</td>
-                    <td style="max-width: 200px;">${escapeHtml(r.familyMembers || r.partnerNames || '-')}</td>
+                    <td><strong>${escapeHtml(r.inviteCode)}</strong></td>
+                    <td>${escapeHtml(r.guestOriginalName)}</td>
+                    <td>${escapeHtml(r.fullName)}</td>
+                    <td style="max-width: 250px;">${escapeHtml(r.address?.substring(0, 60))}${r.address?.length > 60 ? '...' : ''}</td>
+                    <td>${r.partyType}</td>
                     <td>${r.totalPeople || 1}</td>
-                    <td>${new Date(r.receivedAt).toLocaleDateString()}</td>
+                    <td><span class="status-${r.status}">${r.status === 'attending' ? '✅ Attending' : '❌ Declined'}</span></td>
+                    <td>${new Date(r.submittedAt).toLocaleDateString()}</td>
                 </tr>
             `).join("");
         }
 
         function updateStats() {
-            const total = allGuests.length;
-            const pending = allGuests.filter(g => g.status === "pending").length;
-            const received = allGuests.filter(g => g.status === "received").length;
-            
-            let totalPeople = 0;
-            allGuests.forEach(g => {
-                if (g.responseData) totalPeople += g.responseData.totalPeople || 1;
-            });
+            const total = allCodes.length;
+            const responded = allResponses.length;
+            const attending = allResponses.filter(r => r.status === "attending").length;
+            const totalPeople = allResponses.reduce((sum, r) => sum + (r.totalPeople || 0), 0);
+            const pending = total - responded;
             
             document.getElementById("statsContainer").innerHTML = `
-                <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
-                <div class="stat-card"><div class="stat-number">${pending}</div><div>Awaiting Reply</div></div>
-                <div class="stat-card"><div class="stat-number">${received}</div><div>Replies Received</div></div>
-                <div class="stat-card"><div class="stat-number">${totalPeople}</div><div>Total Guests Attending</div></div>
+                <div class="stat-card"><div class="stat-number">${total}</div><div>Invitations Sent</div></div>
+                <div class="stat-card"><div class="stat-number">${responded}</div><div>Responses Received</div></div>
+                <div class="stat-card"><div class="stat-number">${attending}</div><div>Attending</div></div>
+                <div class="stat-card"><div class="stat-number">${totalPeople}</div><div>Total Guests</div></div>
+                <div class="stat-card"><div class="stat-number">${pending}</div><div>Awaiting Response</div></div>
             `;
         }
 
-        // Export CSV for invitation supplier
-        function exportCSV() {
-            const withAddress = allGuests.filter(g => g.responseData?.address);
-            if (withAddress.length === 0) {
-                alert("No addresses collected yet.");
-                return;
-            }
+        document.getElementById("generateBtn")?.addEventListener("click", async () => {
+            const name = document.getElementById("guestNameInput").value.trim();
+            let code = document.getElementById("manualCode").value.trim().toUpperCase();
+            const partyType = document.getElementById("partyTypeSelect").value;
             
-            let csv = [["Full Name", "Postal Address", "Party Type", "Family/Partner Names", "Total People", "Phone"]];
-            withAddress.forEach(g => {
-                csv.push([
-                    g.responseData.fullName || g.name,
-                    g.responseData.address || '',
-                    getPartyTypeName(g.partyType),
-                    g.responseData.familyMembers || g.responseData.partnerNames || '',
-                    g.responseData.totalPeople || 1,
-                    g.phone
-                ]);
-            });
+            if (!name) { alert("Enter guest name"); return; }
+            if (!code) { code = name.substring(0, 3).toUpperCase() + Math.floor(Math.random() * 1000); }
             
-            const csvContent = csv.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-            const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `wedding_addresses_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Add new guest
-        document.getElementById("addGuestBtn")?.addEventListener("click", async () => {
-            const name = document.getElementById("newGuestName").value.trim();
-            const phone = document.getElementById("newGuestPhone").value.trim();
-            const partyType = document.getElementById("guestPartyType").value;
-            
-            if (!name || !phone) {
-                alert("Please enter both name and phone number");
-                return;
-            }
-            
-            await addDoc(collection(db, GUESTS_COLLECTION), {
+            await addDoc(collection(db, "invite_codes"), {
+                code: code,
                 name: name,
-                phone: phone,
+                displayName: name,
                 partyType: partyType,
-                status: "pending",
                 createdAt: new Date().toISOString()
             });
             
-            document.getElementById("newGuestName").value = "";
-            document.getElementById("newGuestPhone").value = "";
-            loadGuests();
+            document.getElementById("generatedMsg").style.display = "block";
+            document.getElementById("generatedMsg").innerHTML = `✅ Code <strong>${code}</strong> generated for ${name}<br>📋 Share this code with the guest.`;
+            document.getElementById("guestNameInput").value = "";
+            document.getElementById("manualCode").value = "";
+            loadData();
         });
 
-        // Party type selection
-        document.querySelectorAll(".party-option").forEach(opt => {
-            opt.addEventListener("click", () => {
-                document.querySelectorAll(".party-option").forEach(o => o.classList.remove("selected"));
-                opt.classList.add("selected");
-                currentSelectedPartyType = opt.dataset.type;
-                updateSmsPreview();
+        document.getElementById("exportResponsesBtn")?.addEventListener("click", () => {
+            const withAddress = allResponses.filter(r => r.address);
+            if (withAddress.length === 0) { alert("No addresses yet"); return; }
+            let csv = [["Invite Code", "Original Guest", "Verified Name", "Address", "Party Type", "Family/Partner", "Total People", "Status"]];
+            withAddress.forEach(r => {
+                let familyInfo = "";
+                if (r.partnerName) familyInfo = r.partnerName;
+                if (r.familyMembers) familyInfo = r.familyMembers.join("; ");
+                if (r.extendedNames) familyInfo = r.extendedNames;
+                csv.push([r.inviteCode, r.guestOriginalName, r.fullName, r.address, r.partyType, familyInfo, r.totalPeople, r.status]);
             });
-        });
-        
-        document.querySelector(".party-option").classList.add("selected");
-        updateSmsPreview();
-
-        // Copy SMS
-        document.getElementById("copySmsBtn")?.addEventListener("click", () => {
-            const smsText = document.getElementById("smsPreview").innerText;
-            navigator.clipboard.writeText(smsText);
-            alert("SMS template copied! You can now paste into your messaging app.");
+            const blob = new Blob(["\uFEFF" + csv.map(row => row.map(c => `"${c}"`).join(",")).join("\n")], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `wedding_rsvp_addresses_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
         });
 
-        // Global functions for buttons
-        window.copySmsForGuest = (guestId) => {
-            const guest = allGuests.find(g => g.id === guestId);
-            if (guest) {
-                currentSelectedPartyType = guest.partyType;
-                const template = smsTemplates[currentSelectedPartyType];
-                const smsText = template.replace("{NAME}", guest.name.split(' ')[0]);
-                navigator.clipboard.writeText(smsText);
-                alert(`SMS for ${guest.name} copied!`);
-            }
-        };
+        window.copyCode = (code) => { navigator.clipboard.writeText(code); alert(`Code ${code} copied!`); };
         
-        window.markAsReplied = async (guestId) => {
-            const guest = allGuests.find(g => g.id === guestId);
-            const reply = prompt(`Enter ${guest.name}'s reply (Format: Name | Address | Family/Partner names):`, 
-                `${guest.name} | 123 Main St, Melbourne | `);
-            if (reply) {
-                const parts = reply.split('|').map(p => p.trim());
-                await addDoc(collection(db, RESPONSES_COLLECTION), {
-                    phoneNumber: guest.phone,
-                    fullName: parts[0] || guest.name,
-                    address: parts[1] || "",
-                    familyMembers: parts[2] || "",
-                    partyType: guest.partyType,
-                    totalPeople: guest.partyType === "single" ? 1 : (guest.partyType === "couple" ? 2 : 4),
-                    receivedAt: new Date().toISOString()
-                });
-                loadGuests();
-            }
-        };
-
-        document.getElementById("exportCsvBtn")?.addEventListener("click", exportCSV);
-        document.getElementById("refreshBtn")?.addEventListener("click", loadGuests);
-        
-        // Filter listeners
-        document.getElementById("searchGuest")?.addEventListener("input", () => renderGuestGrid());
-        document.getElementById("filterStatus")?.addEventListener("change", () => renderGuestGrid());
-        document.getElementById("filterPartyType")?.addEventListener("change", () => renderGuestGrid());
-
-        function getPartyTypeIcon(type) {
-            const icons = { single: "👤", couple: "💑", family: "👨‍👩‍👧‍👦", extended: "👥" };
-            return icons[type] || "👤";
+        function getStatusText(status) {
+            if (status === "attending") return "✅ Attending";
+            if (status === "declined") return "❌ Declined";
+            return "⏳ Pending";
         }
         
-        function getPartyTypeName(type) {
-            const names = { single: "Single", couple: "Couple", family: "Family", extended: "Extended Family" };
-            return names[type] || type;
-        }
+        function escapeHtml(str) { if (!str) return ""; return str.replace(/[&<>]/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;" }[m])); }
         
-        function escapeHtml(str) {
-            if (!str) return "";
-            return str.replace(/[&<>]/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;" }[m]));
-        }
+        document.getElementById("searchCodes")?.addEventListener("input", () => renderCodes());
+        document.getElementById("rsvpFilterCodes")?.addEventListener("change", () => renderCodes());
+        document.getElementById("searchResponses")?.addEventListener("input", () => renderResponses());
+        document.getElementById("refreshBtn")?.addEventListener("click", () => loadData());
         
-        loadGuests();
+        if (checkAuth()) showAdminPanel(); else showLoginPage();
     </script>
 </body>
 </html>
