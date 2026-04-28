@@ -3,32 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Laura & Daniel's Wedding - Please Confirm Your Address</title>
+    <title>Laura & Daniel's Wedding - Confirm Your Address</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c0 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
-        .container {
-            max-width: 550px;
-            margin: 0 auto;
-        }
-
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Guest Form Styles */
+        .container { max-width: 550px; margin: 0 auto; }
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        
+        /* Guest Form */
         .form-card {
             background: white;
             border-radius: 32px;
@@ -36,33 +23,17 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-
         .form-header {
             background: linear-gradient(135deg, #8b5a2b, #c49a6c);
             color: white;
             padding: 35px 25px;
             text-align: center;
         }
-
-        .form-header h1 {
-            font-size: 1.8rem;
-            font-family: 'Georgia', serif;
-        }
-
-        .form-header p {
-            margin-top: 10px;
-            opacity: 0.9;
-        }
-
-        .form-body {
-            padding: 30px 25px;
-        }
-
-        .code-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
+        .form-header h1 { font-size: 1.8rem; font-family: 'Georgia', serif; }
+        .form-header p { margin-top: 10px; opacity: 0.9; }
+        .form-body { padding: 30px 25px; }
+        
+        .code-section { text-align: center; margin-bottom: 25px; }
         .code-section input {
             width: 100%;
             padding: 18px;
@@ -74,24 +45,10 @@
             border-radius: 16px;
             background: #faf7f2;
         }
-
-        .code-section input:focus {
-            outline: none;
-            border-color: #c49a6c;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #5a2d1c;
-            font-size: 0.9rem;
-        }
-
+        .code-section input:focus { outline: none; border-color: #c49a6c; }
+        
+        .form-group { margin-bottom: 22px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #5a2d1c; }
         input, textarea {
             width: 100%;
             padding: 14px 16px;
@@ -100,17 +57,9 @@
             font-size: 1rem;
             font-family: inherit;
         }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #c49a6c;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
+        input:focus, textarea:focus { outline: none; border-color: #c49a6c; }
+        textarea { resize: vertical; min-height: 100px; }
+        
         button {
             width: 100%;
             background: linear-gradient(135deg, #8b5a2b, #c49a6c);
@@ -121,279 +70,53 @@
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
             margin-top: 10px;
         }
-
-        button:hover {
-            transform: scale(1.01);
-        }
-
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .info-message {
-            background: #d1ecf1;
-            color: #0c5460;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .back-link a {
-            color: #8b5a2b;
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-
-        .footer {
-            text-align: center;
-            color: #7a4a2e;
-            font-size: 0.75rem;
-            padding: 20px;
-        }
-
-        /* Admin Styles */
-        .admin-header {
-            background: linear-gradient(135deg, #8b5a2b, #c49a6c);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #8b5a2b;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            background: #eee1d4;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #5a2d1c;
-        }
-
-        .tab-btn.active {
-            background: #8b5a2b;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .guest-table-container {
-            overflow-x: auto;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        th {
-            background: #faf7f2;
-            position: sticky;
-            top: 0;
-            color: #5a2d1c;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .status-pending {
-            background: #f39c12;
-            color: white;
-        }
-
-        .status-sent {
-            background: #3498db;
-            color: white;
-        }
-
-        .status-replied {
-            background: #27ae60;
-            color: white;
-        }
-
-        .filter-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-bar input, .filter-bar select {
-            flex: 1;
-            min-width: 150px;
-            padding: 10px;
-            border: 2px solid #e8d5c0;
-            border-radius: 10px;
-        }
-
-        .btn-sm {
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            margin: 2px;
-            width: auto;
-            display: inline-block;
-        }
-
-        .btn-green {
-            background: #27ae60;
-        }
-
-        .btn-blue {
-            background: #3498db;
-        }
-
-        .btn-red {
-            background: #e74c3c;
-        }
-
-        .add-guest-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-            align-items: end;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-content textarea {
-            width: 100%;
-            height: 180px;
-            margin: 15px 0;
-        }
-
-        .edit-modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 450px;
-            width: 90%;
-        }
-
-        .edit-modal-content input {
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 12px;
-        }
-
-        .sms-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn-sms-direct {
-            background: #25D366;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        hr {
-            margin: 15px 0;
-        }
+        .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; display: none; }
+        .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #8b5a2b; text-decoration: none; }
+        .footer { text-align: center; color: #7a4a2e; font-size: 0.75rem; padding: 20px; }
+        
+        /* Admin */
+        .admin-header { background: linear-gradient(135deg, #8b5a2b, #c49a6c); color: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; text-align: center; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #8b5a2b; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: #eee1d4; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; color: #5a2d1c; }
+        .tab-btn.active { background: #8b5a2b; color: white; }
+        .tab-content { display: none; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .tab-content.active { display: block; }
+        .guest-table-container { overflow-x: auto; max-height: 500px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #faf7f2; position: sticky; top: 0; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+        .status-pending { background: #f39c12; color: white; }
+        .status-sent { background: #3498db; color: white; }
+        .status-replied { background: #27ae60; color: white; }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-bar input, .filter-bar select { flex: 1; min-width: 150px; padding: 10px; border: 2px solid #e8d5c0; border-radius: 10px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; margin: 2px; width: auto; display: inline-block; }
+        .btn-green { background: #27ae60; }
+        .btn-blue { background: #3498db; }
+        .btn-red { background: #e74c3c; }
+        .add-guest-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; align-items: end; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 500px; width: 90%; }
+        .modal-content textarea { width: 100%; height: 180px; margin: 15px 0; }
+        .edit-modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 450px; width: 90%; }
+        .edit-modal-content input { width: 100%; margin-bottom: 15px; padding: 12px; }
+        .sms-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-sms-direct { background: #25D366; }
+        .action-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        hr { margin: 15px 0; }
     </style>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">Loading...</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -408,12 +131,11 @@
             appId: "1:363458517473:web:7eac683bc98623cb281aa0"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const firebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(firebaseApp);
         const GUESTS_COLLECTION = "wedding_guests";
         const RESPONSES_COLLECTION = "guest_responses";
 
-        // Complete guest list
         const preloadedGuests = [
             "Gianni Laverde", "Anthony Diaco", "Michael La verde", "Michael Ferraro", "Joe Ferraro",
             "Gina Patti", "Frank Cammaroto", "Cosimo Patti", "Frank Andronaco", "Domenic Chila",
@@ -425,24 +147,19 @@
             "John Macedonio and Wife", "Patti and Vanessa Barbaro", "Tony and Sharron Corso", "Jake and Judy Venuto",
             "Nella and Toni", "Alex and Anka and family", "Daniele and Tony", "Marcello and Kylie and Family",
             "Ramsay and Family", "Ralph Martino and Theresa", "Carmine and Romina", "Lamir and Fran",
-            "Crystal's family", "Melissa Cerra and Luca and Natalia", "Laura's friends about 50",
-            "Paco Paola and Francisco", "Carlos and Gloria", "Celine Marco Matias", "Dominic Natalie Trentadue",
-            "Melinda and Peter Gamos with Nico", "Frank and Teresa Taverna", "Charlie and Nadia Bevilaqua",
-            "Melissa's parents baldo Angela", "Natoli family", "Ubaldo and Angela", "Frank Barbaro",
-            "Kristina", "Stretch", "John and Rose Schiaccitano", "Teresa and Anthony Raso",
-            "Peter and Giovanna", "Alex Calenda and partner"
+            "Crystal's family", "Melissa Cerra and Luca and Natalia", "Paco Paola and Francisco", "Carlos and Gloria",
+            "Celine Marco Matias", "Dominic Natalie Trentadue", "Melinda and Peter Gamos with Nico",
+            "Frank and Teresa Taverna", "Charlie and Nadia Bevilaqua", "Melissa's parents baldo Angela",
+            "Natoli family", "Ubaldo and Angela", "Frank Barbaro", "Kristina", "Stretch", "John and Rose Schiaccitano",
+            "Teresa and Anthony Raso", "Peter and Giovanna", "Alex Calenda and partner"
         ];
 
         let allGuests = [];
         let allResponses = [];
 
-        // Check if we're in admin mode
-        const urlParams = new URLSearchParams(window.location.search);
-        const isAdmin = urlParams.get('admin') === 'true';
-
         function generateCode(name) {
-            var prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
-            var random = Math.floor(Math.random() * 900) + 100;
+            let prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
+            let random = Math.floor(Math.random() * 900) + 100;
             return prefix + random;
         }
 
@@ -461,10 +178,33 @@
             return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
         }
 
-        // ============ GUEST FACING FORM ============
+        // Seed guests if empty
+        async function seedGuests() {
+            try {
+                const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
+                if (snapshot.empty) {
+                    for (let name of preloadedGuests) {
+                        let code = generateCode(name);
+                        await addDoc(collection(db, GUESTS_COLLECTION), {
+                            name: name,
+                            code: code,
+                            phone: "",
+                            status: "pending",
+                            smsSent: false,
+                            replied: false,
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+                    console.log("Seeded " + preloadedGuests.length + " guests");
+                }
+            } catch (e) {
+                console.error("Seed error:", e);
+            }
+        }
+
+        // ============ GUEST FORM ============
         function renderGuestForm() {
-            const appDiv = document.getElementById("app");
-            appDiv.innerHTML = `
+            document.getElementById("app").innerHTML = `
                 <div class="container">
                     <div class="form-card">
                         <div class="form-header">
@@ -478,7 +218,7 @@
 
                             <div id="codeEntrySection">
                                 <div class="code-section">
-                                    <input type="text" id="inviteCode" placeholder="Enter your invitation code" maxlength="10" autocomplete="off">
+                                    <input type="text" id="inviteCode" placeholder="Enter your invitation code" maxlength="10">
                                 </div>
                                 <button id="verifyCodeBtn">Verify My Code</button>
                                 <p style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #7a4a2e;">
@@ -490,19 +230,14 @@
                                 <div id="guestWelcome" style="background: #f0e6d8; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
                                     <strong id="welcomeName"></strong>
                                 </div>
-
                                 <div class="form-group">
                                     <label>Your Full Name (please check spelling)</label>
                                     <input type="text" id="fullName" placeholder="e.g., John Michael Smith">
-                                    <small style="color:#7a4a2e;">This is exactly how it will appear on your invitation</small>
                                 </div>
-
                                 <div class="form-group">
                                     <label>Your Postal Address</label>
                                     <textarea id="address" rows="3" placeholder="Street address, suburb, city, postcode"></textarea>
-                                    <small>We will mail your formal invitation to this address</small>
                                 </div>
-
                                 <button id="submitAddressBtn">Submit My Details</button>
                                 <div class="back-link">
                                     <a href="#" id="backToCodeBtn">Enter a different code</a>
@@ -516,40 +251,27 @@
                 </div>
             `;
 
-            const savedCode = sessionStorage.getItem("guestCode");
-            if (savedCode) {
-                document.getElementById("inviteCode").value = savedCode;
-                verifyCode(savedCode);
-            }
-
-            document.getElementById("verifyCodeBtn").addEventListener("click", function() {
-                var code = document.getElementById("inviteCode").value.trim().toUpperCase();
-                verifyCode(code);
-            });
-
-            document.getElementById("backToCodeBtn").addEventListener("click", function(e) {
+            document.getElementById("verifyCodeBtn").onclick = async function() {
+                let code = document.getElementById("inviteCode").value.trim().toUpperCase();
+                await verifyCode(code);
+            };
+            document.getElementById("backToCodeBtn").onclick = function(e) {
                 e.preventDefault();
-                sessionStorage.removeItem("guestCode");
                 document.getElementById("addressFormSection").style.display = "none";
                 document.getElementById("codeEntrySection").style.display = "block";
                 document.getElementById("inviteCode").value = "";
-                document.getElementById("fullName").value = "";
-                document.getElementById("address").value = "";
-                document.getElementById("guestSuccessMsg").style.display = "none";
-                document.getElementById("guestErrorMsg").style.display = "none";
-            });
-
-            document.getElementById("submitAddressBtn").addEventListener("click", submitAddress);
+            };
+            document.getElementById("submitAddressBtn").onclick = async function() {
+                await submitAddress();
+            };
         }
 
         async function verifyCode(code) {
-            const errorDiv = document.getElementById("guestErrorMsg");
-            const infoDiv = document.getElementById("guestInfoMsg");
+            let errorDiv = document.getElementById("guestErrorMsg");
             errorDiv.style.display = "none";
-            infoDiv.style.display = "none";
-
+            
             if (!code) {
-                errorDiv.textContent = "Please enter your invitation code";
+                errorDiv.innerText = "Please enter your invitation code";
                 errorDiv.style.display = "block";
                 return;
             }
@@ -559,67 +281,70 @@
                 const snapshot = await getDocs(q);
 
                 if (snapshot.empty) {
-                    errorDiv.textContent = "Invalid invitation code. Please check the SMS we sent you.";
+                    errorDiv.innerText = "Invalid invitation code. Please check the SMS we sent you.";
                     errorDiv.style.display = "block";
                     return;
                 }
 
-                const guest = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+                const guest = snapshot.docs[0].data();
+                const guestId = snapshot.docs[0].id;
                 
-                const responseQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", code));
-                const responseSnapshot = await getDocs(responseQuery);
+                // Check if already submitted
+                const rQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", code));
+                const rSnapshot = await getDocs(rQuery);
                 
-                if (!responseSnapshot.empty) {
-                    const existing = responseSnapshot.docs[0].data();
-                    infoDiv.textContent = "Thank you! You have already submitted your details.";
-                    infoDiv.style.display = "block";
+                if (!rSnapshot.empty) {
+                    let existing = rSnapshot.docs[0].data();
                     document.getElementById("fullName").value = existing.fullName || "";
                     document.getElementById("address").value = existing.address || "";
+                    let infoDiv = document.getElementById("guestInfoMsg");
+                    infoDiv.innerText = "You have already submitted your details. You can update them below.";
+                    infoDiv.style.display = "block";
                 }
 
                 sessionStorage.setItem("guestCode", code);
-                sessionStorage.setItem("guestId", guest.id);
+                sessionStorage.setItem("guestId", guestId);
                 sessionStorage.setItem("guestName", guest.name);
 
                 document.getElementById("welcomeName").innerHTML = "Welcome " + escapeHtml(guest.name) + "!";
                 document.getElementById("codeEntrySection").style.display = "none";
                 document.getElementById("addressFormSection").style.display = "block";
 
-            } catch (error) {
-                errorDiv.textContent = "Something went wrong. Please try again.";
+            } catch (err) {
+                errorDiv.innerText = "Something went wrong. Please try again.";
                 errorDiv.style.display = "block";
+                console.error(err);
             }
         }
 
         async function submitAddress() {
-            const fullName = document.getElementById("fullName").value.trim();
-            const address = document.getElementById("address").value.trim();
-            const guestCode = sessionStorage.getItem("guestCode");
-            const guestId = sessionStorage.getItem("guestId");
-            const guestName = sessionStorage.getItem("guestName");
+            let fullName = document.getElementById("fullName").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let guestCode = sessionStorage.getItem("guestCode");
+            let guestId = sessionStorage.getItem("guestId");
+            let guestName = sessionStorage.getItem("guestName");
             
-            const errorDiv = document.getElementById("guestErrorMsg");
-            const successDiv = document.getElementById("guestSuccessMsg");
+            let errorDiv = document.getElementById("guestErrorMsg");
+            let successDiv = document.getElementById("guestSuccessMsg");
             errorDiv.style.display = "none";
             successDiv.style.display = "none";
 
             if (!fullName) {
-                errorDiv.textContent = "Please enter your full name";
+                errorDiv.innerText = "Please enter your full name";
                 errorDiv.style.display = "block";
                 return;
             }
-
             if (!address) {
-                errorDiv.textContent = "Please enter your postal address";
+                errorDiv.innerText = "Please enter your postal address";
                 errorDiv.style.display = "block";
                 return;
             }
 
             try {
-                const responseQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", guestCode));
-                const responseSnapshot = await getDocs(responseQuery);
+                const rQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", guestCode));
+                const rSnapshot = await getDocs(rQuery);
 
-                const responseData = {
+                let responseData = {
                     guestCode: guestCode,
                     guestId: guestId,
                     guestName: guestName,
@@ -628,199 +353,167 @@
                     submittedAt: new Date().toISOString()
                 };
 
-                if (!responseSnapshot.empty) {
-                    const responseId = responseSnapshot.docs[0].id;
-                    await updateDoc(doc(db, RESPONSES_COLLECTION, responseId), responseData);
+                if (!rSnapshot.empty) {
+                    await updateDoc(doc(db, RESPONSES_COLLECTION, rSnapshot.docs[0].id), responseData);
                 } else {
                     await addDoc(collection(db, RESPONSES_COLLECTION), responseData);
                     await updateDoc(doc(db, GUESTS_COLLECTION, guestId), { replied: true, status: "replied" });
                 }
 
-                successDiv.innerHTML = "Thank you! We have received your details. Your formal invitation will be mailed to you soon.";
+                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon.";
                 successDiv.style.display = "block";
                 
                 document.getElementById("fullName").value = "";
                 document.getElementById("address").value = "";
 
-            } catch (error) {
-                errorDiv.textContent = "Something went wrong. Please try again.";
+            } catch (err) {
+                errorDiv.innerText = "Something went wrong. Please try again.";
                 errorDiv.style.display = "block";
+                console.error(err);
             }
         }
 
         // ============ ADMIN DASHBOARD ============
-        async function seedGuests() {
-            const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
-            if (snapshot.empty) {
-                for (var i = 0; i < preloadedGuests.length; i++) {
-                    var name = preloadedGuests[i];
-                    var code = generateCode(name);
-                    await addDoc(collection(db, GUESTS_COLLECTION), {
-                        name: name,
-                        code: code,
-                        phone: "",
-                        status: "pending",
-                        smsSent: false,
-                        replied: false,
-                        createdAt: new Date().toISOString()
-                    });
-                }
-                console.log("Seeded " + preloadedGuests.length + " guests");
-            }
-        }
-
         async function loadAdminData() {
-            const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
-            allGuests = [];
-            guestsSnap.forEach(function(docSnap) {
-                allGuests.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            
-            const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
-            allResponses = [];
-            responsesSnap.forEach(function(docSnap) {
-                allResponses.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            
-            for (var i = 0; i < allGuests.length; i++) {
-                var guest = allGuests[i];
-                var foundResponse = null;
-                for (var j = 0; j < allResponses.length; j++) {
-                    if (allResponses[j].guestCode === guest.code) {
-                        foundResponse = allResponses[j];
-                        break;
+            try {
+                const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
+                allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
+                allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                for (let guest of allGuests) {
+                    let found = allResponses.find(r => r.guestCode === guest.code);
+                    if (found) {
+                        guest.responseStatus = "replied";
+                    } else {
+                        guest.responseStatus = guest.smsSent ? "sent" : "pending";
                     }
                 }
-                if (foundResponse) {
-                    guest.responseStatus = "replied";
-                    guest.responseData = foundResponse;
-                } else {
-                    guest.responseStatus = guest.smsSent ? "sent" : "pending";
-                }
+                renderGuestTable();
+                renderRepliesTable();
+                updateStats();
+            } catch (err) {
+                console.error("Load error:", err);
             }
-            
-            renderAdminGuestTable();
-            renderAdminRepliesTable();
-            updateAdminStats();
         }
 
-        function renderAdminGuestTable() {
-            var search = document.getElementById("searchGuest")?.value.toLowerCase() || "";
-            var filterStatus = document.getElementById("filterStatus")?.value || "all";
+        function renderGuestTable() {
+            let search = document.getElementById("searchGuest")?.value.toLowerCase() || "";
+            let filterStatus = document.getElementById("filterStatus")?.value || "all";
             
-            var filtered = [];
-            for (var i = 0; i < allGuests.length; i++) {
-                var g = allGuests[i];
-                var nameMatch = g.name.toLowerCase().indexOf(search) > -1 || g.code.toLowerCase().indexOf(search) > -1;
-                var statusMatch = filterStatus === "all" || g.responseStatus === filterStatus;
-                if (nameMatch && statusMatch) {
-                    filtered.push(g);
-                }
-            }
+            let filtered = allGuests.filter(g => {
+                let match = g.name.toLowerCase().includes(search) || g.code.toLowerCase().includes(search);
+                if (filterStatus !== "all") match = match && g.responseStatus === filterStatus;
+                return match;
+            });
             
-            var tbody = document.getElementById("guestTableBody");
+            let tbody = document.getElementById("guestTableBody");
             if (filtered.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No guests found</td></tr>';
                 return;
             }
             
-            var html = "";
-            for (var i = 0; i < filtered.length; i++) {
-                var guest = filtered[i];
-                var statusClass = guest.responseStatus === "replied" ? "status-replied" : (guest.responseStatus === "sent" ? "status-sent" : "status-pending");
-                var statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
-                var phoneDisplay = guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>';
+            let html = "";
+            for (let guest of filtered) {
+                let statusClass = guest.responseStatus === "replied" ? "status-replied" : (guest.responseStatus === "sent" ? "status-sent" : "status-pending");
+                let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
+                let phoneDisplay = guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>';
                 
-                var safeId = escapeForJS(guest.id);
-                var safeName = escapeForJS(guest.name);
-                var safePhone = escapeForJS(guest.phone || "");
-                var safeCode = escapeForJS(guest.code);
-                
-                html += '<tr>' +
-                    '<td><code>' + escapeHtml(guest.code) + '</code></td>' +
-                    '<td><strong>' + escapeHtml(guest.name) + '</strong></td>' +
-                    '<td>' + phoneDisplay + '</td>' +
-                    '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
-                    '<td>' +
-                        '<button class="btn-sm btn-blue" onclick="openAdminEdit(\'' + safeId + '\', \'' + safeName + '\', \'' + safePhone + '\')">Edit</button> ' +
-                        '<button class="btn-sm btn-green" onclick="sendDirectSms(\'' + safeCode + '\', \'' + safeName + '\', \'' + safePhone + '\')">SMS</button>' +
-                    '</td>' +
-                '</tr>';
+                html += `<tr>
+                    <td><code>${escapeHtml(guest.code)}</code></td>
+                    <td><strong>${escapeHtml(guest.name)}</strong></td>
+                    <td>${phoneDisplay}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="btn-sm btn-blue" onclick="openEdit('${guest.id}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">Edit</button>
+                        <button class="btn-sm btn-green" onclick="openSms('${guest.code}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">SMS</button>
+                    </td>
+                </tr>`;
             }
             tbody.innerHTML = html;
         }
 
-        function renderAdminRepliesTable() {
-            var search = document.getElementById("searchReply")?.value.toLowerCase() || "";
+        function renderRepliesTable() {
+            let search = document.getElementById("searchReply")?.value.toLowerCase() || "";
+            let filtered = allResponses.filter(r => 
+                (r.fullName && r.fullName.toLowerCase().includes(search)) || 
+                (r.guestName && r.guestName.toLowerCase().includes(search))
+            );
             
-            var filtered = [];
-            for (var i = 0; i < allResponses.length; i++) {
-                var r = allResponses[i];
-                var nameMatch = (r.fullName && r.fullName.toLowerCase().indexOf(search) > -1) || (r.guestName && r.guestName.toLowerCase().indexOf(search) > -1);
-                if (nameMatch) {
-                    filtered.push(r);
-                }
-            }
-            
-            var tbody = document.getElementById("repliesTableBody");
+            let tbody = document.getElementById("repliesTableBody");
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No responses yet. Send SMS to guests!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No responses yet</td></tr>';
                 return;
             }
             
-            var html = "";
-            for (var i = 0; i < filtered.length; i++) {
-                var r = filtered[i];
-                var addressShort = r.address ? (r.address.substring(0, 60) + (r.address.length > 60 ? "..." : "")) : "";
-                var submittedDate = r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : "";
-                
-                html += '<tr>' +
-                    '<td><code>' + escapeHtml(r.guestCode) + '</code></td>' +
-                    '<td>' + escapeHtml(r.guestName) + '</td>' +
-                    '<td><strong>' + escapeHtml(r.fullName || "") + '</strong></td>' +
-                    '<td style="max-width:250px;">' + escapeHtml(addressShort) + '</td>' +
-                    '<td>' + submittedDate + '</td>' +
-                '</tr>';
+            let html = "";
+            for (let r of filtered) {
+                let addressShort = r.address ? r.address.substring(0, 60) + (r.address.length > 60 ? "..." : "") : "";
+                html += `<tr>
+                    <td><code>${escapeHtml(r.guestCode)}</code></td>
+                    <td>${escapeHtml(r.guestName)}</td>
+                    <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
+                    <td style="max-width:250px;">${escapeHtml(addressShort)}</td>
+                    <td>${r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : ""}</td>
+                </tr>`;
             }
             tbody.innerHTML = html;
         }
 
-        function updateAdminStats() {
-            var total = allGuests.length;
-            var sent = 0;
-            var replied = allResponses.length;
-            var pending = 0;
+        function updateStats() {
+            let total = allGuests.length;
+            let sent = allGuests.filter(g => g.smsSent).length;
+            let replied = allResponses.length;
+            let pending = total - replied;
             
-            for (var i = 0; i < allGuests.length; i++) {
-                if (allGuests[i].smsSent === true) sent++;
-            }
-            pending = total - replied;
-            
-            var statsHtml = '<div class="stat-card"><div class="stat-number">' + total + '</div><div>Total Invited</div></div>' +
-                '<div class="stat-card"><div class="stat-number">' + sent + '</div><div>SMS Sent</div></div>' +
-                '<div class="stat-card"><div class="stat-number">' + replied + '</div><div>Addresses Received</div></div>' +
-                '<div class="stat-card"><div class="stat-number">' + pending + '</div><div>Awaiting Reply</div></div>';
-            
-            var statsContainer = document.getElementById("statsContainer");
-            if (statsContainer) statsContainer.innerHTML = statsHtml;
+            document.getElementById("statsContainer").innerHTML = `
+                <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
+                <div class="stat-card"><div class="stat-number">${sent}</div><div>SMS Sent</div></div>
+                <div class="stat-card"><div class="stat-number">${replied}</div><div>Addresses Received</div></div>
+                <div class="stat-card"><div class="stat-number">${pending}</div><div>Awaiting Reply</div></div>
+            `;
         }
 
+        window.openEdit = function(id, name, phone) {
+            document.getElementById("editGuestId").value = id;
+            document.getElementById("editGuestName").value = name;
+            document.getElementById("editGuestPhone").value = phone;
+            document.getElementById("editModal").style.display = "flex";
+        };
+
+        window.openSms = function(code, name, phone) {
+            if (!phone) {
+                alert("Please add a mobile number for " + name + " first. Click Edit to add.");
+                return;
+            }
+            let appUrl = window.location.origin;
+            let msg = `Dear ${name.split(' ')[0]},\n\nWe are hoping to celebrate our wedding with you on October 3, 2026 at Fior Parkville.\n\nBefore we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\nPlease visit: ${appUrl}\nEnter your code: ${code}\n\nThis will take just 2 minutes. We would be truly honoured to have you there.\n\nWarmly,\nLaura & Daniel`;
+            
+            document.getElementById("smsGuestName").innerText = name;
+            document.getElementById("smsPhone").innerText = phone;
+            document.getElementById("smsMessage").value = msg;
+            document.getElementById("smsModal").style.display = "flex";
+            
+            let guest = allGuests.find(g => g.code === code);
+            if (guest && !guest.smsSent) {
+                updateDoc(doc(db, GUESTS_COLLECTION, guest.id), { smsSent: true, status: "sent" });
+                setTimeout(loadAdminData, 500);
+            }
+        };
+
         function renderAdminDashboard() {
-            const appDiv = document.getElementById("app");
-            appDiv.innerHTML = `
+            document.getElementById("app").innerHTML = `
                 <div class="admin-container">
                     <div class="admin-header">
                         <h1>Admin Dashboard</h1>
                         <p>Manage Guests and Track Responses</p>
                     </div>
-
                     <div class="stats" id="statsContainer"></div>
-
                     <div class="tabs">
                         <button class="tab-btn active" data-tab="guests">Guest List</button>
                         <button class="tab-btn" data-tab="replies">Guest Responses</button>
                     </div>
-
                     <div id="guests" class="tab-content active">
                         <div class="filter-bar">
                             <input type="text" id="searchGuest" placeholder="Search guests...">
@@ -832,35 +525,27 @@
                             </select>
                             <button id="refreshBtn" class="btn-sm btn-blue">Refresh</button>
                         </div>
-
                         <div class="add-guest-form">
                             <input type="text" id="newGuestName" placeholder="New guest name">
                             <input type="tel" id="newGuestPhone" placeholder="Mobile number">
                             <button id="addGuestBtn" class="btn-sm btn-green">Add Guest</button>
                         </div>
-
                         <div class="guest-table-container">
-                            <table>
-                                <thead><tr><th>Code</th><th>Guest Name</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
-                                <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
-                            </table>
+                            <table><thead><tr><th>Code</th><th>Guest Name</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody></table>
                         </div>
                     </div>
-
                     <div id="replies" class="tab-content">
                         <div class="filter-bar">
                             <input type="text" id="searchReply" placeholder="Search by name...">
                         </div>
                         <div class="guest-table-container">
-                            <table>
-                                <thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Postal Address</th><th>Submitted</th></tr></thead>
-                                <tbody id="repliesTableBody"><tr><td colspan="5">No responses yet...</td></tr></tbody>
-                            </table>
+                            <table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Postal Address</th><th>Submitted</th></tr></thead>
+                            <tbody id="repliesTableBody"><tr><td colspan="5">No responses yet...</td></tr></tbody></table>
                             <button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top: 15px;">Export Addresses (CSV)</button>
                         </div>
                     </div>
                 </div>
-
                 <div id="editModal" class="modal">
                     <div class="edit-modal-content">
                         <h3>Edit Guest</h3>
@@ -877,7 +562,6 @@
                         <button id="deleteGuestBtn" class="btn-sm btn-red" style="width:100%;">Delete Guest</button>
                     </div>
                 </div>
-
                 <div id="smsModal" class="modal">
                     <div class="modal-content">
                         <h3>Send SMS to Guest</h3>
@@ -893,208 +577,91 @@
                 </div>
             `;
 
-            document.getElementById("addGuestBtn")?.addEventListener("click", addNewGuest);
-            document.getElementById("refreshBtn")?.addEventListener("click", loadAdminData);
-            document.getElementById("exportCsvBtn")?.addEventListener("click", exportCsv);
-            document.getElementById("searchGuest")?.addEventListener("input", function() { renderAdminGuestTable(); });
-            document.getElementById("filterStatus")?.addEventListener("change", function() { renderAdminGuestTable(); });
-            document.getElementById("searchReply")?.addEventListener("input", function() { renderAdminRepliesTable(); });
-            document.getElementById("closeEditModal")?.addEventListener("click", function() {
-                document.getElementById("editModal").style.display = "none";
-            });
-            document.getElementById("closeSmsModal")?.addEventListener("click", function() {
-                document.getElementById("smsModal").style.display = "none";
-            });
-            document.getElementById("saveEditBtn")?.addEventListener("click", saveGuestEdit);
-            document.getElementById("deleteGuestBtn")?.addEventListener("click", deleteGuest);
-            document.getElementById("copySmsBtn")?.addEventListener("click", copySmsMessage);
-            document.getElementById("sendDirectSmsBtn")?.addEventListener("click", openSmsApp);
-
-            var tabBtns = document.querySelectorAll(".tab-btn");
-            for (var i = 0; i < tabBtns.length; i++) {
-                tabBtns[i].addEventListener("click", function() {
-                    var targetTab = this.getAttribute("data-tab");
-                    for (var j = 0; j < tabBtns.length; j++) {
-                        tabBtns[j].classList.remove("active");
-                    }
-                    this.classList.add("active");
-                    var tabContents = document.querySelectorAll(".tab-content");
-                    for (var j = 0; j < tabContents.length; j++) {
-                        tabContents[j].classList.remove("active");
-                    }
-                    document.getElementById(targetTab).classList.add("active");
-                    if (targetTab === "replies") renderAdminRepliesTable();
-                });
-            }
-
-            await loadAdminData();
-        }
-
-        async function addNewGuest() {
-            var name = document.getElementById("newGuestName").value.trim();
-            var phone = document.getElementById("newGuestPhone").value.trim();
-            
-            if (!name) {
-                alert("Please enter a guest name");
-                return;
-            }
-            
-            var code = generateCode(name);
-            await addDoc(collection(db, GUESTS_COLLECTION), {
-                name: name,
-                code: code,
-                phone: phone,
-                status: "pending",
-                smsSent: false,
-                replied: false,
-                createdAt: new Date().toISOString()
-            });
-            
-            document.getElementById("newGuestName").value = "";
-            document.getElementById("newGuestPhone").value = "";
-            loadAdminData();
-        }
-
-        window.openAdminEdit = function(id, name, phone) {
-            document.getElementById("editGuestId").value = id;
-            document.getElementById("editGuestName").value = name;
-            document.getElementById("editGuestPhone").value = phone;
-            document.getElementById("editModal").style.display = "flex";
-        };
-
-        async function saveGuestEdit() {
-            var id = document.getElementById("editGuestId").value;
-            var newName = document.getElementById("editGuestName").value.trim();
-            var newPhone = document.getElementById("editGuestPhone").value.trim();
-            
-            if (!newName) {
-                alert("Guest name cannot be empty");
-                return;
-            }
-            
-            await updateDoc(doc(db, GUESTS_COLLECTION, id), {
-                name: newName,
-                phone: newPhone
-            });
-            
-            document.getElementById("editModal").style.display = "none";
-            loadAdminData();
-        }
-
-        async function deleteGuest() {
-            var id = document.getElementById("editGuestId").value;
-            var guestName = document.getElementById("editGuestName").value;
-            
-            if (confirm("Are you sure you want to permanently delete " + guestName + "?")) {
-                var guest = null;
-                for (var i = 0; i < allGuests.length; i++) {
-                    if (allGuests[i].id === id) {
-                        guest = allGuests[i];
-                        break;
-                    }
+            document.getElementById("addGuestBtn").onclick = async () => {
+                let name = document.getElementById("newGuestName").value.trim();
+                let phone = document.getElementById("newGuestPhone").value.trim();
+                if (!name) { alert("Enter name"); return; }
+                let code = generateCode(name);
+                await addDoc(collection(db, GUESTS_COLLECTION), { name, code, phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString() });
+                document.getElementById("newGuestName").value = "";
+                document.getElementById("newGuestPhone").value = "";
+                loadAdminData();
+            };
+            document.getElementById("refreshBtn").onclick = loadAdminData;
+            document.getElementById("exportCsvBtn").onclick = () => {
+                let withAddress = allResponses.filter(r => r.address);
+                if (withAddress.length === 0) { alert("No addresses yet"); return; }
+                let csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Submitted"]];
+                for (let r of withAddress) {
+                    csv.push([r.guestCode, r.guestName, r.fullName, r.address, new Date(r.submittedAt).toLocaleDateString()]);
                 }
+                let content = csv.map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+                let blob = new Blob(["\uFEFF" + content], { type: "text/csv" });
+                let url = URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = `wedding_addresses_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+            document.getElementById("closeEditModal").onclick = () => document.getElementById("editModal").style.display = "none";
+            document.getElementById("closeSmsModal").onclick = () => document.getElementById("smsModal").style.display = "none";
+            document.getElementById("saveEditBtn").onclick = async () => {
+                let id = document.getElementById("editGuestId").value;
+                let newName = document.getElementById("editGuestName").value.trim();
+                let newPhone = document.getElementById("editGuestPhone").value.trim();
+                await updateDoc(doc(db, GUESTS_COLLECTION, id), { name: newName, phone: newPhone });
+                document.getElementById("editModal").style.display = "none";
+                loadAdminData();
+            };
+            document.getElementById("deleteGuestBtn").onclick = async () => {
+                if (!confirm("Delete this guest?")) return;
+                let id = document.getElementById("editGuestId").value;
+                let guest = allGuests.find(g => g.id === id);
                 if (guest) {
-                    for (var i = 0; i < allResponses.length; i++) {
-                        if (allResponses[i].guestCode === guest.code) {
-                            await deleteDoc(doc(db, RESPONSES_COLLECTION, allResponses[i].id));
-                            break;
-                        }
-                    }
+                    let resp = allResponses.find(r => r.guestCode === guest.code);
+                    if (resp) await deleteDoc(doc(db, RESPONSES_COLLECTION, resp.id));
                 }
                 await deleteDoc(doc(db, GUESTS_COLLECTION, id));
                 document.getElementById("editModal").style.display = "none";
                 loadAdminData();
-            }
+            };
+            document.getElementById("copySmsBtn").onclick = () => {
+                navigator.clipboard.writeText(document.getElementById("smsMessage").value);
+                alert("Copied!");
+            };
+            document.getElementById("sendDirectSmsBtn").onclick = () => {
+                let phone = document.getElementById("smsPhone").innerText;
+                let msg = document.getElementById("smsMessage").value;
+                window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(msg);
+            };
+            document.getElementById("searchGuest").oninput = () => renderGuestTable();
+            document.getElementById("filterStatus").onchange = () => renderGuestTable();
+            document.getElementById("searchReply").oninput = () => renderRepliesTable();
+
+            let btns = document.querySelectorAll(".tab-btn");
+            btns.forEach(btn => {
+                btn.onclick = () => {
+                    btns.forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+                    document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+                    document.getElementById(btn.dataset.tab).classList.add("active");
+                    if (btn.dataset.tab === "replies") renderRepliesTable();
+                };
+            });
+            await loadAdminData();
         }
 
-        window.sendDirectSms = function(code, name, phone) {
-            if (!phone) {
-                alert("Please add a mobile number for " + name + " first. Click Edit to add.");
-                return;
-            }
-            
-            var appUrl = window.location.origin;
-            var smsMessage = "Dear " + name.split(' ')[0] + ",\n\n";
-            smsMessage += "We are hoping to celebrate our wedding with you on October 3, 2026 at Fior Parkville.\n\n";
-            smsMessage += "Before we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\n";
-            smsMessage += "Please visit: " + appUrl + "\n";
-            smsMessage += "Enter your code: " + code + "\n\n";
-            smsMessage += "This will take just 2 minutes. We would be truly honoured to have you there.\n\n";
-            smsMessage += "Warmly,\nLaura & Daniel";
-            
-            document.getElementById("smsGuestName").innerText = name;
-            document.getElementById("smsPhone").innerText = phone;
-            document.getElementById("smsMessage").value = smsMessage;
-            document.getElementById("smsModal").style.display = "flex";
-            
-            for (var i = 0; i < allGuests.length; i++) {
-                if (allGuests[i].code === code && !allGuests[i].smsSent) {
-                    updateDoc(doc(db, GUESTS_COLLECTION, allGuests[i].id), { smsSent: true, status: "sent" });
-                    break;
-                }
+        window.onclick = function(e) {
+            if (e.target.classList && e.target.classList.contains("modal")) {
+                e.target.style.display = "none";
             }
         };
 
-        function copySmsMessage() {
-            var message = document.getElementById("smsMessage").value;
-            navigator.clipboard.writeText(message);
-            alert("SMS copied! Paste into your messaging app to send.");
-        }
-
-        function openSmsApp() {
-            var phone = document.getElementById("smsPhone").innerText;
-            var message = document.getElementById("smsMessage").value;
-            var encodedMessage = encodeURIComponent(message);
-            window.location.href = "sms:" + phone + "?body=" + encodedMessage;
-        }
-
-        function exportCsv() {
-            var withAddress = [];
-            for (var i = 0; i < allResponses.length; i++) {
-                if (allResponses[i].address) {
-                    withAddress.push(allResponses[i]);
-                }
-            }
-            if (withAddress.length === 0) {
-                alert("No addresses collected yet.");
-                return;
-            }
-            
-            var csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Submitted"]];
-            for (var i = 0; i < withAddress.length; i++) {
-                var r = withAddress[i];
-                csv.push([r.guestCode, r.guestName, r.fullName, r.address, new Date(r.submittedAt).toLocaleDateString()]);
-            }
-            
-            var csvContent = "";
-            for (var i = 0; i < csv.length; i++) {
-                var row = [];
-                for (var j = 0; j < csv[i].length; j++) {
-                    row.push('"' + String(csv[i][j]).replace(/"/g, '""') + '"');
-                }
-                csvContent += row.join(",") + "\n";
-            }
-            
-            var blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv" });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = "wedding_addresses_" + new Date().toISOString().slice(0,10) + ".csv";
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        window.addEventListener("click", function(e) {
-            var editModal = document.getElementById("editModal");
-            var smsModal = document.getElementById("smsModal");
-            if (e.target === editModal) editModal.style.display = "none";
-            if (e.target === smsModal) smsModal.style.display = "none";
-        });
-
-        // Initialize
+        // Start the app
         await seedGuests();
-        
-        if (isAdmin) {
+        const urlAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+        if (urlAdmin) {
             renderAdminDashboard();
         } else {
             renderGuestForm();
