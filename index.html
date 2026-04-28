@@ -77,7 +77,7 @@
         .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 20px; display: none; }
         .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
         .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
-        .limit-warning { background: #fff3cd; color: #856404; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; border-left: 4px solid #ffc107; }
+        .limit-warning { background: #fef8e7; color: #856404; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; border-left: 4px solid #c4a882; font-style: italic; }
         .guest-names-list { margin-top: 15px; }
         .guest-name-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
         .guest-name-row input { flex: 1; }
@@ -242,10 +242,10 @@
 
         function getCodeTypeInfo(type) {
             const types = {
-                single: { name: "Single", max: 1, icon: "👤", desc: "1 guest only" },
-                couple: { name: "Couple", max: 2, icon: "💑", desc: "2 guests (husband & wife only - no children)" },
-                family: { name: "Family", max: 4, icon: "👨‍👩‍👧‍👦", desc: "Up to 4 guests (parents + children)" },
-                extended: { name: "Extended", max: 6, icon: "👥", desc: "Up to 6 guests (extended family)" }
+                single: { name: "Single", max: 1, icon: "👤", desc: "seating for 1 guest" },
+                couple: { name: "Couple", max: 2, icon: "💑", desc: "seating for 2 guests" },
+                family: { name: "Family", max: 4, icon: "👨‍👩‍👧‍👦", desc: "seating for up to 4 guests" },
+                extended: { name: "Extended", max: 6, icon: "👥", desc: "seating for up to 6 guests" }
             };
             return types[type] || types.single;
         }
@@ -415,7 +415,7 @@
         function addGuestNameField() {
             let currentCount = document.querySelectorAll(".guest-name").length;
             if (currentCount >= currentMaxGuests) {
-                alert(`You can only add up to ${currentMaxGuests} guests total (including yourself). Your invitation type only allows ${currentMaxGuests} guest(s).`);
+                alert(`Your invitation includes seating for up to ${currentMaxGuests} guest(s). You have already listed ${currentCount}.`);
                 return;
             }
             const container = document.getElementById("guestNamesList");
@@ -464,8 +464,8 @@
                 sessionStorage.setItem("maxGuests", currentMaxGuests);
                 sessionStorage.setItem("codeType", currentCodeType);
 
-                document.getElementById("welcomeName").innerHTML = `Welcome ${escapeHtml(guest.name)}!<br><small>${typeInfo.icon} ${typeInfo.name} Invitation - ${typeInfo.desc}</small>`;
-                document.getElementById("limitWarning").innerHTML = `<strong>⚠️ Important:</strong> Your invitation is for ${typeInfo.desc}. Maximum ${currentMaxGuests} guest(s) total.`;
+                document.getElementById("welcomeName").innerHTML = `Welcome ${escapeHtml(guest.name)}!<br><small>${typeInfo.icon} ${typeInfo.name} Invitation</small>`;
+                document.getElementById("limitWarning").innerHTML = `✨ <strong>Your invitation includes</strong> ${typeInfo.desc}. Please let us know the names of everyone attending below.`;
                 
                 // Populate guest count dropdown
                 let countSelect = document.getElementById("guestCount");
@@ -547,7 +547,7 @@
                     if (document.querySelectorAll(".guest-name").length > 1) {
                         this.parentElement.remove();
                     } else {
-                        alert("You must have at least one guest (yourself)");
+                        alert("You must include at least yourself as a guest");
                     }
                 };
             });
@@ -580,7 +580,7 @@
             }
             
             if (guestNames.length > currentMaxGuests) {
-                alert(`You can only have up to ${currentMaxGuests} guests. Please remove extras.`);
+                alert(`Your invitation includes seating for up to ${currentMaxGuests} guest(s). Please adjust the number.`);
                 return;
             }
             
@@ -640,7 +640,7 @@
                     await updateDoc(doc(db, GUESTS_COLLECTION, guestId), { replied: true, status: "replied" });
                 }
 
-                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon.";
+                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon. We look forward to celebrating with you!";
                 successDiv.style.display = "block";
 
             } catch (err) {
@@ -650,7 +650,7 @@
             }
         }
 
-        // Admin Dashboard (simplified for space - same as before but with code type display)
+        // Admin Dashboard
         function renderAdminLogin() {
             document.getElementById("app").innerHTML = `
                 <div class="login-box">
@@ -689,7 +689,7 @@
                 let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
                 html += `<tr>
                     <td><code>${escapeHtml(guest.code)}</code> <span class="code-type-badge code-${guest.codeType}">${typeInfo.icon} ${typeInfo.name}</span></td>
-                    <td><strong>${escapeHtml(guest.name)}</strong> (max ${guest.maxGuests})</td>
+                    <td><strong>${escapeHtml(guest.name)}</strong> (${typeInfo.desc})</td>
                     <td>${guest.phone || '<span style="color:#999;">Not set</span>'}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td><button class="btn-sm btn-blue" onclick="openEdit('${guest.id}')">Edit</button>
@@ -736,11 +736,11 @@
         };
 
         window.openSms = function(code, name, phone) {
-            if (!phone) { alert("Add mobile number first"); return; }
+            if (!phone) { alert("Please add a mobile number first. Click Edit to add."); return; }
             let appUrl = window.location.origin;
             let guest = allGuests.find(g => g.code === code);
             let typeInfo = getCodeTypeInfo(guest?.codeType || "single");
-            let msg = `Dear ${name.split(' ')[0]},\n\nWe are hoping to celebrate our wedding with you on Saturday, 3rd October 2026.\n\nBefore we send the formal invitation by mail, please confirm your postal address.\n\nPlease visit: ${appUrl}\nEnter your code: ${code}\n\nThis invitation is for ${typeInfo.desc}. Maximum ${guest?.maxGuests || 1} guest(s).\n\nWarmly,\nDaniel & Laura`;
+            let msg = `Dear ${name.split(' ')[0]},\n\nWe are hoping to celebrate our wedding with you on Saturday, 3rd October 2026 at St Monica's Catholic Church, Moonee Ponds.\n\nBefore we send the formal invitation by mail, could you please confirm your postal address?\n\nPlease visit: ${appUrl}\nEnter your code: ${code}\n\nYour invitation includes ${typeInfo.desc}. We would be truly honoured to have you there.\n\nWarmly,\nDaniel & Laura`;
             document.getElementById("smsGuestName").innerText = name;
             document.getElementById("smsPhone").innerText = phone;
             document.getElementById("smsMessage").value = msg;
@@ -762,7 +762,7 @@
                         <div class="add-guest-form"><input type="text" id="newGuestName" placeholder="Guest name"><select id="newCodeType"><option value="single">👤 Single (1 guest)</option><option value="couple">💑 Couple (2 guests)</option><option value="family">👨‍👩‍👧‍👦 Family (4 guests)</option><option value="extended">👥 Extended (6 guests)</option></select><input type="tel" id="newGuestPhone" placeholder="Mobile"><button id="addGuestBtn" class="btn-sm btn-green">Add</button></div>
                         <div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead><tbody id="guestTableBody"></tbody></table></div>
                     </div>
-                    <div id="replies" class="tab-content"><div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
+                    <div id="replies" class="tab-content"><div class="guest-table-container"><td><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
                 </div>
                 <div id="editModal" class="modal"><div class="edit-modal-content"><h3>Edit Guest</h3><label>Name:</label><input type="text" id="editGuestName"><label>Phone:</label><input type="tel" id="editGuestPhone"><label>Code Type:</label><select id="editCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><label>Max Guests:</label><input type="number" id="editMaxGuests" min="1" max="10"><div class="action-buttons"><button id="saveEditBtn" class="btn-sm btn-green">Save</button><button id="closeEditModal" class="btn-sm btn-red">Cancel</button></div><hr><button id="deleteGuestBtn" class="btn-sm btn-red">Delete Guest</button></div></div>
                 <div id="smsModal" class="modal"><div class="modal-content"><h3>SMS to Guest</h3><p><strong id="smsGuestName"></strong></p><p>Mobile: <span id="smsPhone"></span></p><textarea id="smsMessage" readonly></textarea><div class="sms-buttons"><button id="copySmsBtn" class="btn-sm btn-blue">Copy</button><button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button><button id="closeSmsModal" class="btn-sm btn-red">Close</button></div></div></div>
@@ -805,7 +805,7 @@
                 loadAdminData();
             };
             document.getElementById("deleteGuestBtn").onclick = async () => {
-                if (!confirm("Delete?")) return;
+                if (!confirm("Delete this guest?")) return;
                 let guest = allGuests.find(g => g.id === currentEditGuestId);
                 if (guest) {
                     let resp = allResponses.find(r => r.guestCode === guest.code);
