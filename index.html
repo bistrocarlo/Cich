@@ -162,72 +162,73 @@
         
         const submissionTracker = new Map();
 
+        // Complete guest list with PRE-ASSIGNED CODES
         const preloadedGuests = [
-            { name: "Rossi Mel", type: "couple", maxGuests: 2 },
-            { name: "Gianni Laverde", type: "single", maxGuests: 1 },
-            { name: "Anthony Diaco", type: "single", maxGuests: 1 },
-            { name: "Michael La verde", type: "couple", maxGuests: 2 },
-            { name: "Michael Ferraro", type: "single", maxGuests: 1 },
-            { name: "Joe Ferraro", type: "single", maxGuests: 1 },
-            { name: "Gina Patti", type: "single", maxGuests: 1 },
-            { name: "Frank Cammaroto", type: "couple", maxGuests: 2 },
-            { name: "Cosimo Patti", type: "couple", maxGuests: 2 },
-            { name: "Frank Andronaco", type: "family", maxGuests: 4 },
-            { name: "Domenic Chila", type: "family", maxGuests: 4 },
-            { name: "Dom Iervasi", type: "couple", maxGuests: 2 },
-            { name: "Cosimo Bertone", type: "single", maxGuests: 1 },
-            { name: "Mick Iermano", type: "couple", maxGuests: 2 },
-            { name: "Rocco Careri", type: "single", maxGuests: 1 },
-            { name: "Mimmo Ranieri", type: "couple", maxGuests: 2 },
-            { name: "Cathy Tripodi", type: "couple", maxGuests: 2 },
-            { name: "Rita Vicari", type: "family", maxGuests: 4 },
-            { name: "George and Amelia", type: "couple", maxGuests: 2 },
-            { name: "George and Faye", type: "couple", maxGuests: 2 },
-            { name: "Nector and Irene", type: "couple", maxGuests: 2 },
-            { name: "Marco and Kathy", type: "couple", maxGuests: 2 },
-            { name: "Chris and Feola", type: "couple", maxGuests: 2 },
-            { name: "Chris and Wife", type: "couple", maxGuests: 2 },
-            { name: "Toni and Perri", type: "couple", maxGuests: 2 },
-            { name: "Ralph and Gloria", type: "couple", maxGuests: 2 },
-            { name: "Joe Trimboli and Wife", type: "couple", maxGuests: 2 },
-            { name: "Frank Marcoccio and Mary", type: "couple", maxGuests: 2 },
-            { name: "Vincent Maria Deluca", type: "single", maxGuests: 1 },
-            { name: "Phillip and Maria Nesci", type: "couple", maxGuests: 2 },
-            { name: "Nello and Sarina Lanza", type: "couple", maxGuests: 2 },
-            { name: "Micheal and Maria Depetro", type: "couple", maxGuests: 2 },
-            { name: "Elsa and Anthony Pagniello", type: "couple", maxGuests: 2 },
-            { name: "Frank and Jackie Costanzo", type: "couple", maxGuests: 2 },
-            { name: "John Macedonio and Wife", type: "couple", maxGuests: 2 },
-            { name: "Patti and Vanessa Barbaro", type: "couple", maxGuests: 2 },
-            { name: "Tony and Sharron Corso", type: "couple", maxGuests: 2 },
-            { name: "Jake and Judy Venuto", type: "couple", maxGuests: 2 },
-            { name: "Nella and Toni", type: "couple", maxGuests: 2 },
-            { name: "Alex and Anka and family", type: "family", maxGuests: 4 },
-            { name: "Daniele and Tony", type: "couple", maxGuests: 2 },
-            { name: "Marcello and Kylie and Family", type: "family", maxGuests: 4 },
-            { name: "Ramsay and Family", type: "family", maxGuests: 4 },
-            { name: "Ralph Martino and Theresa", type: "couple", maxGuests: 2 },
-            { name: "Carmine and Romina", type: "couple", maxGuests: 2 },
-            { name: "Lamir and Fran", type: "couple", maxGuests: 2 },
-            { name: "Crystal's family", type: "family", maxGuests: 4 },
-            { name: "Melissa Cerra and Luca and Natalia", type: "family", maxGuests: 3 },
-            { name: "Paco Paola and Francisco", type: "family", maxGuests: 3 },
-            { name: "Carlos and Gloria", type: "couple", maxGuests: 2 },
-            { name: "Celine Marco Matias", type: "family", maxGuests: 3 },
-            { name: "Dominic Natalie Trentadue", type: "family", maxGuests: 3 },
-            { name: "Melinda and Peter Gamos with Nico", type: "family", maxGuests: 3 },
-            { name: "Frank and Teresa Taverna", type: "couple", maxGuests: 2 },
-            { name: "Charlie and Nadia Bevilaqua", type: "couple", maxGuests: 2 },
-            { name: "Melissa's parents baldo Angela", type: "couple", maxGuests: 2 },
-            { name: "Natoli family", type: "extended", maxGuests: 6 },
-            { name: "Ubaldo and Angela", type: "couple", maxGuests: 2 },
-            { name: "Frank Barbaro", type: "family", maxGuests: 4 },
-            { name: "Kristina", type: "single", maxGuests: 1 },
-            { name: "Stretch", type: "single", maxGuests: 1 },
-            { name: "John and Rose Schiaccitano", type: "couple", maxGuests: 2 },
-            { name: "Teresa and Anthony Raso", type: "couple", maxGuests: 2 },
-            { name: "Peter and Giovanna", type: "couple", maxGuests: 2 },
-            { name: "Alex Calenda and partner", type: "couple", maxGuests: 2 }
+            { name: "Rossi Mel", type: "couple", maxGuests: 2, code: "CRO102" },
+            { name: "Gianni Laverde", type: "single", maxGuests: 1, code: "SGL103" },
+            { name: "Anthony Diaco", type: "single", maxGuests: 1, code: "SAD104" },
+            { name: "Michael La verde", type: "couple", maxGuests: 2, code: "CML105" },
+            { name: "Michael Ferraro", type: "single", maxGuests: 1, code: "SMF106" },
+            { name: "Joe Ferraro", type: "single", maxGuests: 1, code: "SJF107" },
+            { name: "Gina Patti", type: "single", maxGuests: 1, code: "SGP108" },
+            { name: "Frank Cammaroto", type: "couple", maxGuests: 2, code: "CFC109" },
+            { name: "Cosimo Patti", type: "couple", maxGuests: 2, code: "CCP110" },
+            { name: "Frank Andronaco", type: "family", maxGuests: 4, code: "FFA111" },
+            { name: "Domenic Chila", type: "family", maxGuests: 4, code: "FDC112" },
+            { name: "Dom Iervasi", type: "couple", maxGuests: 2, code: "CDI113" },
+            { name: "Cosimo Bertone", type: "single", maxGuests: 1, code: "SCB114" },
+            { name: "Mick Iermano", type: "couple", maxGuests: 2, code: "CMI115" },
+            { name: "Rocco Careri", type: "single", maxGuests: 1, code: "SRC116" },
+            { name: "Mimmo Ranieri", type: "couple", maxGuests: 2, code: "CMR117" },
+            { name: "Cathy Tripodi", type: "couple", maxGuests: 2, code: "CCT118" },
+            { name: "Rita Vicari", type: "family", maxGuests: 4, code: "FRV119" },
+            { name: "George and Amelia", type: "couple", maxGuests: 2, code: "CGA120" },
+            { name: "George and Faye", type: "couple", maxGuests: 2, code: "CGF121" },
+            { name: "Nector and Irene", type: "couple", maxGuests: 2, code: "CNI122" },
+            { name: "Marco and Kathy", type: "couple", maxGuests: 2, code: "CMK123" },
+            { name: "Chris and Feola", type: "couple", maxGuests: 2, code: "CCF124" },
+            { name: "Chris and Wife", type: "couple", maxGuests: 2, code: "CCW125" },
+            { name: "Toni and Perri", type: "couple", maxGuests: 2, code: "CTP126" },
+            { name: "Ralph and Gloria", type: "couple", maxGuests: 2, code: "CRG127" },
+            { name: "Joe Trimboli and Wife", type: "couple", maxGuests: 2, code: "CJT128" },
+            { name: "Frank Marcoccio and Mary", type: "couple", maxGuests: 2, code: "CFM129" },
+            { name: "Vincent Maria Deluca", type: "single", maxGuests: 1, code: "SVD130" },
+            { name: "Phillip and Maria Nesci", type: "couple", maxGuests: 2, code: "CPN131" },
+            { name: "Nello and Sarina Lanza", type: "couple", maxGuests: 2, code: "CNS132" },
+            { name: "Micheal and Maria Depetro", type: "couple", maxGuests: 2, code: "CMM133" },
+            { name: "Elsa and Anthony Pagniello", type: "couple", maxGuests: 2, code: "CEA134" },
+            { name: "Frank and Jackie Costanzo", type: "couple", maxGuests: 2, code: "CFJ135" },
+            { name: "John Macedonio and Wife", type: "couple", maxGuests: 2, code: "CJM136" },
+            { name: "Patti and Vanessa Barbaro", type: "couple", maxGuests: 2, code: "CPV137" },
+            { name: "Tony and Sharron Corso", type: "couple", maxGuests: 2, code: "CTS138" },
+            { name: "Jake and Judy Venuto", type: "couple", maxGuests: 2, code: "CJJ139" },
+            { name: "Nella and Toni", type: "couple", maxGuests: 2, code: "CNT140" },
+            { name: "Alex and Anka and family", type: "family", maxGuests: 4, code: "FAA141" },
+            { name: "Daniele and Tony", type: "couple", maxGuests: 2, code: "CDT142" },
+            { name: "Marcello and Kylie and Family", type: "family", maxGuests: 4, code: "FMK143" },
+            { name: "Ramsay and Family", type: "family", maxGuests: 4, code: "FRF144" },
+            { name: "Ralph Martino and Theresa", type: "couple", maxGuests: 2, code: "CRM145" },
+            { name: "Carmine and Romina", type: "couple", maxGuests: 2, code: "CCR146" },
+            { name: "Lamir and Fran", type: "couple", maxGuests: 2, code: "CLF147" },
+            { name: "Crystal's family", type: "family", maxGuests: 4, code: "FCF148" },
+            { name: "Melissa Cerra and Luca and Natalia", type: "family", maxGuests: 3, code: "FMN149" },
+            { name: "Paco Paola and Francisco", type: "family", maxGuests: 3, code: "FPP150" },
+            { name: "Carlos and Gloria", type: "couple", maxGuests: 2, code: "CCG151" },
+            { name: "Celine Marco Matias", type: "family", maxGuests: 3, code: "FCM152" },
+            { name: "Dominic Natalie Trentadue", type: "family", maxGuests: 3, code: "FDT153" },
+            { name: "Melinda and Peter Gamos with Nico", type: "family", maxGuests: 3, code: "FMP154" },
+            { name: "Frank and Teresa Taverna", type: "couple", maxGuests: 2, code: "CFT155" },
+            { name: "Charlie and Nadia Bevilaqua", type: "couple", maxGuests: 2, code: "CCN156" },
+            { name: "Melissa's parents baldo Angela", type: "couple", maxGuests: 2, code: "CMB157" },
+            { name: "Natoli family", type: "extended", maxGuests: 6, code: "ENF158" },
+            { name: "Ubaldo and Angela", type: "couple", maxGuests: 2, code: "CUA159" },
+            { name: "Frank Barbaro", type: "family", maxGuests: 4, code: "FFB160" },
+            { name: "Kristina", type: "single", maxGuests: 1, code: "SKK161" },
+            { name: "Stretch", type: "single", maxGuests: 1, code: "SSS162" },
+            { name: "John and Rose Schiaccitano", type: "couple", maxGuests: 2, code: "CJS163" },
+            { name: "Teresa and Anthony Raso", type: "couple", maxGuests: 2, code: "CTR164" },
+            { name: "Peter and Giovanna", type: "couple", maxGuests: 2, code: "CPG165" },
+            { name: "Alex Calenda and partner", type: "couple", maxGuests: 2, code: "CAC166" }
         ];
 
         let allGuests = [];
@@ -245,17 +246,6 @@
             } else {
                 if (existing) existing.remove();
             }
-        }
-
-        function generateCode(name, type) {
-            let typeCode = "";
-            if (type === "single") typeCode = "S";
-            else if (type === "couple") typeCode = "C";
-            else if (type === "family") typeCode = "F";
-            else typeCode = "E";
-            let prefix = name.substring(0, 2).toUpperCase().replace(/[^A-Z]/g, '');
-            let random = Math.floor(Math.random() * 900) + 100;
-            return typeCode + prefix + random;
         }
 
         function getCodeTypeInfo(type) {
@@ -304,10 +294,9 @@
                 if (snapshot.empty) {
                     for (let i = 0; i < preloadedGuests.length; i++) {
                         let g = preloadedGuests[i];
-                        let code = generateCode(g.name, g.type);
                         await addDoc(collection(db, GUESTS_COLLECTION), {
                             name: g.name,
-                            code: code,
+                            code: g.code,
                             codeType: g.type,
                             maxGuests: g.maxGuests,
                             phone: "",
@@ -317,7 +306,7 @@
                             createdAt: new Date().toISOString()
                         });
                     }
-                    console.log("Seeded " + preloadedGuests.length + " guests with codes");
+                    console.log("Seeded " + preloadedGuests.length + " guests with pre-assigned codes");
                 }
             } catch (e) {
                 console.error("Seed error:", e);
@@ -326,6 +315,7 @@
             }
         }
 
+        // Guest Form
         function renderGuestForm() {
             document.getElementById("app").innerHTML = `
                 <div class="invitation-card">
@@ -736,11 +726,10 @@
             for (let r of filteredResponses) {
                 repliesHtml += `<tr>
                     <td><code>${escapeHtml(r.guestCode)}</code></td>
-                    <td>${escapeHtml(r.guestName)}</td>
+                    <td>${escapeHtml(r.guestName)}</td></td>
                     <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
                     <td style="max-width:250px;">${escapeHtml(r.fullAddress || "")}</td>
-                    <td>${r.guestCount || 1} guests</td>
-                </tr>`;
+                    <td>${r.guestCount || 1} guests</td></tr>`;
             }
             repliesBody.innerHTML = repliesHtml || '<tr><td colspan="5">No responses yet</td></tr>';
         }
@@ -791,7 +780,10 @@
                 <div class="admin-container">
                     <div class="admin-header"><h1>Admin Dashboard</h1><p>Manage Guests with Guest Limits</p></div>
                     <div class="stats" id="statsContainer"></div>
-                    <div class="tabs"><button class="tab-btn active" data-tab="guests">Guest List</button><button class="tab-btn" data-tab="replies">Responses</button></div>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="guests">Guest List</button>
+                        <button class="tab-btn" data-tab="replies">Responses</button>
+                    </div>
                     <div id="guests" class="tab-content active">
                         <div class="filter-bar">
                             <input type="text" id="searchGuest" placeholder="Search by name or code...">
@@ -809,6 +801,7 @@
                                 <option value="extended">Extended</option>
                             </select>
                             <button id="searchBtn" class="btn-sm btn-blue">Search</button>
+                            <button id="resetBtn" class="btn-sm btn-blue">Reset</button>
                             <button id="refreshBtn" class="btn-sm btn-blue">Refresh</button>
                         </div>
                         <div class="add-guest-form">
@@ -823,20 +816,28 @@
                             <button id="addGuestBtn" class="btn-sm btn-green">Add Guest</button>
                         </div>
                         <div class="guest-table-container">
-                            <table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
-                            <tbody id="guestTableBody"><td><td colspan="5">Loading...</td></tr></tbody>
-                        </table>
+                            <table>
+                                <thead>
+                                    <tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                            </table>
                         </div>
                     </div>
                     <div id="replies" class="tab-content">
                         <div class="filter-bar">
                             <input type="text" id="searchReply" placeholder="Search by name...">
                             <button id="searchReplyBtn" class="btn-sm btn-blue">Search</button>
+                            <button id="resetReplyBtn" class="btn-sm btn-blue">Reset</button>
                         </div>
                         <div class="guest-table-container">
-                            <table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead>
-                            <tbody id="repliesTableBody"><tr><td colspan="5">Loading...</td></td></tbody>
-                        </table>
+                            <table>
+                                <thead>
+                                    <tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr>
+                                </thead>
+                                <tbody id="repliesTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
                         <button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button>
                     </div>
                 </div>
@@ -845,53 +846,74 @@
                 <a href="?admin=false" class="admin-link">Exit Admin</a>
             `;
 
-            // Add Guest
-            document.getElementById("addGuestBtn").onclick = async () => {
-                let name = document.getElementById("newGuestName").value.trim();
-                let type = document.getElementById("newCodeType").value;
-                let phone = document.getElementById("newGuestPhone").value.trim();
-                if (!name) { alert("Enter guest name"); return; }
-                let maxMap = { single: 1, couple: 2, family: 4, extended: 6 };
-                let code = generateCode(name, type);
-                showLoading(true, "Adding guest...");
-                try {
-                    await addDoc(collection(db, GUESTS_COLLECTION), { name, code, codeType: type, maxGuests: maxMap[type], phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString() });
-                    document.getElementById("newGuestName").value = ""; document.getElementById("newGuestPhone").value = "";
-                    await loadAdminData();
-                } finally {
-                    showLoading(false);
-                }
-            };
-            
-            // Search button for guests - FIXED
+            // Search functionality for Guests - FIXED
             const searchBtn = document.getElementById("searchBtn");
             const searchInput = document.getElementById("searchGuest");
             const filterStatus = document.getElementById("filterStatus");
             const filterType = document.getElementById("filterType");
+            const resetBtn = document.getElementById("resetBtn");
             
             const performSearch = () => {
                 renderAdminTables();
             };
             
+            const performReset = () => {
+                if (searchInput) searchInput.value = "";
+                if (filterStatus) filterStatus.value = "all";
+                if (filterType) filterType.value = "all";
+                renderAdminTables();
+            };
+            
             if (searchBtn) searchBtn.onclick = performSearch;
+            if (resetBtn) resetBtn.onclick = performReset;
             if (searchInput) searchInput.onkeypress = (e) => { if (e.key === "Enter") performSearch(); };
             if (filterStatus) filterStatus.onchange = performSearch;
             if (filterType) filterType.onchange = performSearch;
             
-            // Search button for replies - FIXED
+            // Search functionality for Replies - FIXED
             const searchReplyBtn = document.getElementById("searchReplyBtn");
             const searchReplyInput = document.getElementById("searchReply");
+            const resetReplyBtn = document.getElementById("resetReplyBtn");
             
             const performReplySearch = () => {
                 renderAdminTables();
             };
             
+            const performReplyReset = () => {
+                if (searchReplyInput) searchReplyInput.value = "";
+                renderAdminTables();
+            };
+            
             if (searchReplyBtn) searchReplyBtn.onclick = performReplySearch;
+            if (resetReplyBtn) resetReplyBtn.onclick = performReplyReset;
             if (searchReplyInput) searchReplyInput.onkeypress = (e) => { if (e.key === "Enter") performReplySearch(); };
             
             // Refresh button
             const refreshBtn = document.getElementById("refreshBtn");
             if (refreshBtn) refreshBtn.onclick = loadAdminData;
+            
+            // Add Guest
+            const addGuestBtn = document.getElementById("addGuestBtn");
+            if (addGuestBtn) {
+                addGuestBtn.onclick = async () => {
+                    let name = document.getElementById("newGuestName").value.trim();
+                    let type = document.getElementById("newCodeType").value;
+                    let phone = document.getElementById("newGuestPhone").value.trim();
+                    if (!name) { alert("Enter guest name"); return; }
+                    let maxMap = { single: 1, couple: 2, family: 4, extended: 6 };
+                    let typeCode = type === "single" ? "S" : (type === "couple" ? "C" : (type === "family" ? "F" : "E"));
+                    let random = Math.floor(Math.random() * 900) + 100;
+                    let code = typeCode + name.substring(0, 2).toUpperCase().replace(/[^A-Z]/g, '') + random;
+                    showLoading(true, "Adding guest...");
+                    try {
+                        await addDoc(collection(db, GUESTS_COLLECTION), { name, code, codeType: type, maxGuests: maxMap[type], phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString() });
+                        document.getElementById("newGuestName").value = ""; document.getElementById("newGuestPhone").value = "";
+                        await loadAdminData();
+                    } finally {
+                        showLoading(false);
+                    }
+                };
+            }
             
             // Export CSV
             const exportBtn = document.getElementById("exportCsvBtn");
