@@ -164,6 +164,7 @@
         const submissionTracker = new Map();
 
         const preloadedGuests = [
+            { name: "Rossi Mel", type: "couple", maxGuests: 2 },
             { name: "Gianni Laverde", type: "single", maxGuests: 1 },
             { name: "Anthony Diaco", type: "single", maxGuests: 1 },
             { name: "Michael La verde", type: "couple", maxGuests: 2 },
@@ -344,7 +345,7 @@
                             820 Mt Alexander Road, Moonee Ponds VIC 3039
                         </div>
                         <div class="reception">
-                            <strong>Reception to follow at 6:30 pm</strong><br>
+                            <strong>Reception to follow at 6:00 pm</strong><br>
                             Fior<br>
                             476 Brunswick Road, Parkville VIC 3052<br>
                             <em>Formal Attire</em>
@@ -689,9 +690,23 @@
         }
 
         function renderAdminTables() {
+            // Get filter values
+            let searchValue = document.getElementById("searchGuest")?.value.toLowerCase() || "";
+            let statusFilter = document.getElementById("filterStatus")?.value || "all";
+            let typeFilter = document.getElementById("filterType")?.value || "all";
+            
+            // Filter guests
+            let filteredGuests = allGuests.filter(guest => {
+                let matchesSearch = guest.name.toLowerCase().includes(searchValue) || guest.code.toLowerCase().includes(searchValue);
+                let matchesStatus = statusFilter === "all" || guest.responseStatus === statusFilter;
+                let matchesType = typeFilter === "all" || guest.codeType === typeFilter;
+                return matchesSearch && matchesStatus && matchesType;
+            });
+            
+            // Render guest table
             let tbody = document.getElementById("guestTableBody");
             let html = "";
-            for (let guest of allGuests) {
+            for (let guest of filteredGuests) {
                 let typeInfo = getCodeTypeInfo(guest.codeType);
                 let statusClass = guest.responseStatus === "replied" ? "status-replied" : (guest.responseStatus === "sent" ? "status-sent" : "status-pending");
                 let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
@@ -705,11 +720,19 @@
                     </td>
                 </tr>`;
             }
-            tbody.innerHTML = html;
+            tbody.innerHTML = html || '<td><td colspan="5">No guests found</td></tr>';
             
+            // Filter responses
+            let searchReply = document.getElementById("searchReply")?.value.toLowerCase() || "";
+            let filteredResponses = allResponses.filter(r => 
+                r.guestName.toLowerCase().includes(searchReply) || 
+                (r.fullName && r.fullName.toLowerCase().includes(searchReply))
+            );
+            
+            // Render replies table
             let repliesBody = document.getElementById("repliesTableBody");
             let repliesHtml = "";
-            for (let r of allResponses) {
+            for (let r of filteredResponses) {
                 repliesHtml += `<tr>
                     <td><code>${escapeHtml(r.guestCode)}</code></td>
                     <td>${escapeHtml(r.guestName)}</td>
@@ -766,22 +789,64 @@
                     <div class="stats" id="statsContainer"></div>
                     <div class="tabs"><button class="tab-btn active" data-tab="guests">Guest List</button><button class="tab-btn" data-tab="replies">Responses</button></div>
                     <div id="guests" class="tab-content active">
-                        <div class="filter-bar"><input type="text" id="searchGuest" placeholder="Search..."><select id="filterStatus"><option value="all">All</option><option value="pending">Pending</option><option value="sent">SMS Sent</option><option value="replied">Replied</option></select><button id="refreshBtn" class="btn-sm btn-blue">Refresh</button></div>
-                        <div class="add-guest-form"><input type="text" id="newGuestName" placeholder="Guest name"><select id="newCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><input type="tel" id="newGuestPhone" placeholder="Mobile"><button id="addGuestBtn" class="btn-sm btn-green">Add</button></div>
-                        <div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead><tbody id="guestTableBody"></tbody></table></div>
+                        <div class="filter-bar">
+                            <input type="text" id="searchGuest" placeholder="Search by name or code...">
+                            <select id="filterStatus">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="sent">SMS Sent</option>
+                                <option value="replied">Address Received</option>
+                            </select>
+                            <select id="filterType">
+                                <option value="all">All Types</option>
+                                <option value="single">Single</option>
+                                <option value="couple">Couple</option>
+                                <option value="family">Family</option>
+                                <option value="extended">Extended</option>
+                            </select>
+                            <button id="searchBtn" class="btn-sm btn-blue">Search</button>
+                            <button id="refreshBtn" class="btn-sm btn-blue">Refresh</button>
+                        </div>
+                        <div class="add-guest-form">
+                            <input type="text" id="newGuestName" placeholder="Guest name">
+                            <select id="newCodeType">
+                                <option value="single">Single (1 guest)</option>
+                                <option value="couple">Couple (2 guests)</option>
+                                <option value="family">Family (4 guests)</option>
+                                <option value="extended">Extended (6 guests)</option>
+                            </select>
+                            <input type="tel" id="newGuestPhone" placeholder="Mobile">
+                            <button id="addGuestBtn" class="btn-sm btn-green">Add Guest</button>
+                        </div>
+                        <div class="guest-table-container">
+                            <table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                        </table>
+                        </div>
                     </div>
-                    <div id="replies" class="tab-content"><div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
+                    <div id="replies" class="tab-content">
+                        <div class="filter-bar">
+                            <input type="text" id="searchReply" placeholder="Search by name...">
+                            <button id="searchReplyBtn" class="btn-sm btn-blue">Search</button>
+                        </div>
+                        <div class="guest-table-container">
+                            <table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead>
+                            <tbody id="repliesTableBody"><td><td colspan="5">Loading...</td></tr></tbody>
+                        </table>
+                        <button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button>
+                    </div>
                 </div>
                 <div id="editModal" class="modal"><div class="edit-modal-content"><h3>Edit Guest</h3><label>Name:</label><input type="text" id="editGuestName"><label>Phone:</label><input type="tel" id="editGuestPhone"><label>Code Type:</label><select id="editCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><label>Max Guests:</label><input type="number" id="editMaxGuests" min="1" max="10"><div class="action-buttons"><button id="saveEditBtn" class="btn-sm btn-green">Save</button><button id="closeEditModal" class="btn-sm btn-red">Cancel</button></div><hr><button id="deleteGuestBtn" class="btn-sm btn-red">Delete Guest</button></div></div>
                 <div id="smsModal" class="modal"><div class="modal-content"><h3>SMS to Guest</h3><p><strong id="smsGuestName"></strong></p><p>Mobile: <span id="smsPhone"></span></p><textarea id="smsMessage" readonly></textarea><div class="sms-buttons"><button id="copySmsBtn" class="btn-sm btn-blue">Copy</button><button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button><button id="closeSmsModal" class="btn-sm btn-red">Close</button></div></div></div>
                 <a href="?admin=false" class="admin-link">Exit Admin</a>
             `;
             
+            // Add Guest
             document.getElementById("addGuestBtn").onclick = async () => {
                 let name = document.getElementById("newGuestName").value.trim();
                 let type = document.getElementById("newCodeType").value;
                 let phone = document.getElementById("newGuestPhone").value.trim();
-                if (!name) return;
+                if (!name) { alert("Enter guest name"); return; }
                 let maxMap = { single: 1, couple: 2, family: 4, extended: 6 };
                 let code = generateCode(name, type);
                 showLoading(true, "Adding guest...");
@@ -793,7 +858,23 @@
                     showLoading(false);
                 }
             };
+            
+            // Search button for guests
+            document.getElementById("searchBtn").onclick = function() { renderAdminTables(); };
+            document.getElementById("searchGuest").onkeypress = function(e) { if (e.key === "Enter") renderAdminTables(); };
+            
+            // Search button for replies
+            document.getElementById("searchReplyBtn").onclick = function() { renderAdminTables(); };
+            document.getElementById("searchReply").onkeypress = function(e) { if (e.key === "Enter") renderAdminTables(); };
+            
+            // Filter dropdowns
+            document.getElementById("filterStatus").onchange = function() { renderAdminTables(); };
+            document.getElementById("filterType").onchange = function() { renderAdminTables(); };
+            
+            // Refresh button
             document.getElementById("refreshBtn").onclick = loadAdminData;
+            
+            // Export CSV
             document.getElementById("exportCsvBtn").onclick = () => {
                 let csv = [["Code", "Guest Name", "Type", "Verified Name", "Address", "Guest Count", "Guest Names"]];
                 for (let r of allResponses) {
@@ -808,8 +889,12 @@
                 a.click();
                 URL.revokeObjectURL(url);
             };
+            
+            // Modal close buttons
             document.getElementById("closeEditModal").onclick = () => document.getElementById("editModal").style.display = "none";
             document.getElementById("closeSmsModal").onclick = () => document.getElementById("smsModal").style.display = "none";
+            
+            // Save edit
             document.getElementById("saveEditBtn").onclick = async () => {
                 let newName = document.getElementById("editGuestName").value.trim();
                 let newPhone = document.getElementById("editGuestPhone").value.trim();
@@ -824,8 +909,10 @@
                     showLoading(false);
                 }
             };
+            
+            // Delete guest
             document.getElementById("deleteGuestBtn").onclick = async () => {
-                if (!confirm("Delete this guest?")) return;
+                if (!confirm("Delete this guest? This cannot be undone.")) return;
                 let guest = allGuests.find(g => g.id === currentEditGuestId);
                 showLoading(true, "Deleting guest...");
                 try {
@@ -840,12 +927,21 @@
                     showLoading(false);
                 }
             };
+            
+            // SMS buttons
             document.getElementById("copySmsBtn").onclick = () => { navigator.clipboard.writeText(document.getElementById("smsMessage").value); alert("Copied!"); };
             document.getElementById("sendDirectSmsBtn").onclick = () => { let p = document.getElementById("smsPhone").innerText; let m = document.getElementById("smsMessage").value; window.location.href = "sms:" + p + "?body=" + encodeURIComponent(m); };
-            document.getElementById("searchGuest").oninput = () => renderAdminTables();
-            document.getElementById("filterStatus").onchange = () => renderAdminTables();
+            
+            // Tab switching
             let btns = document.querySelectorAll(".tab-btn");
-            btns.forEach(b => b.onclick = function() { btns.forEach(btn => btn.classList.remove("active")); this.classList.add("active"); document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active")); document.getElementById(this.dataset.tab).classList.add("active"); });
+            btns.forEach(b => b.onclick = function() { 
+                btns.forEach(btn => btn.classList.remove("active")); 
+                this.classList.add("active"); 
+                document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active")); 
+                document.getElementById(this.dataset.tab).classList.add("active");
+                if (this.dataset.tab === "replies") renderAdminTables();
+            });
+            
             loadAdminData();
         }
 
