@@ -109,9 +109,9 @@
         .status-pending { background: #f39c12; color: white; }
         .status-sent { background: #3498db; color: white; }
         .status-replied { background: #27ae60; color: white; }
-        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
         .filter-bar input, .filter-bar select { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #d4c4a8; border-radius: 4px; }
-        .btn-sm { padding: 5px 10px; font-size: 0.8rem; margin: 2px; width: auto; display: inline-block; cursor: pointer; border: none; border-radius: 4px; }
+        .btn-sm { padding: 8px 16px; font-size: 0.8rem; margin: 2px; width: auto; display: inline-block; cursor: pointer; border: none; border-radius: 4px; }
         .btn-green { background: #27ae60; color: white; }
         .btn-blue { background: #3498db; color: white; }
         .btn-red { background: #e74c3c; color: white; }
@@ -160,7 +160,6 @@
         const RESPONSES_COLLECTION = "guest_responses";
         const ADMIN_PASSWORD = "LauraDaniel2026";
         
-        // Rate limiting storage
         const submissionTracker = new Map();
 
         const preloadedGuests = [
@@ -327,7 +326,6 @@
             }
         }
 
-        // Guest Form
         function renderGuestForm() {
             document.getElementById("app").innerHTML = `
                 <div class="invitation-card">
@@ -562,7 +560,6 @@
             
             let guestCode = sessionStorage.getItem("guestCode");
             
-            // Rate limiting check
             let lastSubmit = submissionTracker.get(guestCode);
             if (lastSubmit && (Date.now() - lastSubmit) < 30000) {
                 let errorDiv = document.getElementById("guestErrorMsg");
@@ -705,6 +702,8 @@
             
             // Render guest table
             let tbody = document.getElementById("guestTableBody");
+            if (!tbody) return;
+            
             let html = "";
             for (let guest of filteredGuests) {
                 let typeInfo = getCodeTypeInfo(guest.codeType);
@@ -720,7 +719,7 @@
                     </td>
                 </tr>`;
             }
-            tbody.innerHTML = html || '<td><td colspan="5">No guests found</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="5">No guests found</td></tr>';
             
             // Filter responses
             let searchReply = document.getElementById("searchReply")?.value.toLowerCase() || "";
@@ -731,6 +730,8 @@
             
             // Render replies table
             let repliesBody = document.getElementById("repliesTableBody");
+            if (!repliesBody) return;
+            
             let repliesHtml = "";
             for (let r of filteredResponses) {
                 repliesHtml += `<tr>
@@ -748,12 +749,15 @@
             let total = allGuests.length;
             let sent = allGuests.filter(g => g.smsSent).length;
             let replied = allResponses.length;
-            document.getElementById("statsContainer").innerHTML = `
-                <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
-                <div class="stat-card"><div class="stat-number">${sent}</div><div>SMS Sent</div></div>
-                <div class="stat-card"><div class="stat-number">${replied}</div><div>Addresses Received</div></div>
-                <div class="stat-card"><div class="stat-number">${total - replied}</div><div>Awaiting Reply</div></div>
-            `;
+            let statsContainer = document.getElementById("statsContainer");
+            if (statsContainer) {
+                statsContainer.innerHTML = `
+                    <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
+                    <div class="stat-card"><div class="stat-number">${sent}</div><div>SMS Sent</div></div>
+                    <div class="stat-card"><div class="stat-number">${replied}</div><div>Addresses Received</div></div>
+                    <div class="stat-card"><div class="stat-number">${total - replied}</div><div>Awaiting Reply</div></div>
+                `;
+            }
         }
 
         window.openEdit = function(id) {
@@ -820,7 +824,7 @@
                         </div>
                         <div class="guest-table-container">
                             <table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
-                            <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                            <tbody id="guestTableBody"><td><td colspan="5">Loading...</td></tr></tbody>
                         </table>
                         </div>
                     </div>
@@ -831,7 +835,7 @@
                         </div>
                         <div class="guest-table-container">
                             <table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead>
-                            <tbody id="repliesTableBody"><td><td colspan="5">Loading...</td></tr></tbody>
+                            <tbody id="repliesTableBody"><tr><td colspan="5">Loading...</td></td></tbody>
                         </table>
                         <button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button>
                     </div>
@@ -840,7 +844,7 @@
                 <div id="smsModal" class="modal"><div class="modal-content"><h3>SMS to Guest</h3><p><strong id="smsGuestName"></strong></p><p>Mobile: <span id="smsPhone"></span></p><textarea id="smsMessage" readonly></textarea><div class="sms-buttons"><button id="copySmsBtn" class="btn-sm btn-blue">Copy</button><button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button><button id="closeSmsModal" class="btn-sm btn-red">Close</button></div></div></div>
                 <a href="?admin=false" class="admin-link">Exit Admin</a>
             `;
-            
+
             // Add Guest
             document.getElementById("addGuestBtn").onclick = async () => {
                 let name = document.getElementById("newGuestName").value.trim();
@@ -859,78 +863,114 @@
                 }
             };
             
-            // Search button for guests
-            document.getElementById("searchBtn").onclick = function() { renderAdminTables(); };
-            document.getElementById("searchGuest").onkeypress = function(e) { if (e.key === "Enter") renderAdminTables(); };
+            // Search button for guests - FIXED
+            const searchBtn = document.getElementById("searchBtn");
+            const searchInput = document.getElementById("searchGuest");
+            const filterStatus = document.getElementById("filterStatus");
+            const filterType = document.getElementById("filterType");
             
-            // Search button for replies
-            document.getElementById("searchReplyBtn").onclick = function() { renderAdminTables(); };
-            document.getElementById("searchReply").onkeypress = function(e) { if (e.key === "Enter") renderAdminTables(); };
+            const performSearch = () => {
+                renderAdminTables();
+            };
             
-            // Filter dropdowns
-            document.getElementById("filterStatus").onchange = function() { renderAdminTables(); };
-            document.getElementById("filterType").onchange = function() { renderAdminTables(); };
+            if (searchBtn) searchBtn.onclick = performSearch;
+            if (searchInput) searchInput.onkeypress = (e) => { if (e.key === "Enter") performSearch(); };
+            if (filterStatus) filterStatus.onchange = performSearch;
+            if (filterType) filterType.onchange = performSearch;
+            
+            // Search button for replies - FIXED
+            const searchReplyBtn = document.getElementById("searchReplyBtn");
+            const searchReplyInput = document.getElementById("searchReply");
+            
+            const performReplySearch = () => {
+                renderAdminTables();
+            };
+            
+            if (searchReplyBtn) searchReplyBtn.onclick = performReplySearch;
+            if (searchReplyInput) searchReplyInput.onkeypress = (e) => { if (e.key === "Enter") performReplySearch(); };
             
             // Refresh button
-            document.getElementById("refreshBtn").onclick = loadAdminData;
+            const refreshBtn = document.getElementById("refreshBtn");
+            if (refreshBtn) refreshBtn.onclick = loadAdminData;
             
             // Export CSV
-            document.getElementById("exportCsvBtn").onclick = () => {
-                let csv = [["Code", "Guest Name", "Type", "Verified Name", "Address", "Guest Count", "Guest Names"]];
-                for (let r of allResponses) {
-                    csv.push([r.guestCode, r.guestName, r.codeType, r.fullName, r.fullAddress, r.guestCount, (r.guestNames || []).join("; ")]);
-                }
-                let content = csv.map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
-                let blob = new Blob(["\uFEFF" + content], { type: "text/csv" });
-                let url = URL.createObjectURL(blob);
-                let a = document.createElement("a");
-                a.href = url;
-                a.download = `wedding_guests_${new Date().toISOString().slice(0,10)}.csv`;
-                a.click();
-                URL.revokeObjectURL(url);
-            };
+            const exportBtn = document.getElementById("exportCsvBtn");
+            if (exportBtn) {
+                exportBtn.onclick = () => {
+                    let csv = [["Code", "Guest Name", "Type", "Verified Name", "Address", "Guest Count", "Guest Names"]];
+                    for (let r of allResponses) {
+                        csv.push([r.guestCode, r.guestName, r.codeType, r.fullName, r.fullAddress, r.guestCount, (r.guestNames || []).join("; ")]);
+                    }
+                    let content = csv.map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+                    let blob = new Blob(["\uFEFF" + content], { type: "text/csv" });
+                    let url = URL.createObjectURL(blob);
+                    let a = document.createElement("a");
+                    a.href = url;
+                    a.download = `wedding_guests_${new Date().toISOString().slice(0,10)}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                };
+            }
             
             // Modal close buttons
-            document.getElementById("closeEditModal").onclick = () => document.getElementById("editModal").style.display = "none";
-            document.getElementById("closeSmsModal").onclick = () => document.getElementById("smsModal").style.display = "none";
+            const closeEditModal = document.getElementById("closeEditModal");
+            if (closeEditModal) closeEditModal.onclick = () => document.getElementById("editModal").style.display = "none";
+            
+            const closeSmsModal = document.getElementById("closeSmsModal");
+            if (closeSmsModal) closeSmsModal.onclick = () => document.getElementById("smsModal").style.display = "none";
             
             // Save edit
-            document.getElementById("saveEditBtn").onclick = async () => {
-                let newName = document.getElementById("editGuestName").value.trim();
-                let newPhone = document.getElementById("editGuestPhone").value.trim();
-                let newType = document.getElementById("editCodeType").value;
-                let newMax = parseInt(document.getElementById("editMaxGuests").value);
-                showLoading(true, "Saving changes...");
-                try {
-                    await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone, codeType: newType, maxGuests: newMax });
-                    document.getElementById("editModal").style.display = "none";
-                    await loadAdminData();
-                } finally {
-                    showLoading(false);
-                }
-            };
+            const saveEditBtn = document.getElementById("saveEditBtn");
+            if (saveEditBtn) {
+                saveEditBtn.onclick = async () => {
+                    let newName = document.getElementById("editGuestName").value.trim();
+                    let newPhone = document.getElementById("editGuestPhone").value.trim();
+                    let newType = document.getElementById("editCodeType").value;
+                    let newMax = parseInt(document.getElementById("editMaxGuests").value);
+                    showLoading(true, "Saving changes...");
+                    try {
+                        await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone, codeType: newType, maxGuests: newMax });
+                        document.getElementById("editModal").style.display = "none";
+                        await loadAdminData();
+                    } finally {
+                        showLoading(false);
+                    }
+                };
+            }
             
             // Delete guest
-            document.getElementById("deleteGuestBtn").onclick = async () => {
-                if (!confirm("Delete this guest? This cannot be undone.")) return;
-                let guest = allGuests.find(g => g.id === currentEditGuestId);
-                showLoading(true, "Deleting guest...");
-                try {
-                    if (guest) {
-                        let resp = allResponses.find(r => r.guestCode === guest.code);
-                        if (resp) await deleteDoc(doc(db, RESPONSES_COLLECTION, resp.id));
+            const deleteGuestBtn = document.getElementById("deleteGuestBtn");
+            if (deleteGuestBtn) {
+                deleteGuestBtn.onclick = async () => {
+                    if (!confirm("Delete this guest? This cannot be undone.")) return;
+                    let guest = allGuests.find(g => g.id === currentEditGuestId);
+                    showLoading(true, "Deleting guest...");
+                    try {
+                        if (guest) {
+                            let resp = allResponses.find(r => r.guestCode === guest.code);
+                            if (resp) await deleteDoc(doc(db, RESPONSES_COLLECTION, resp.id));
+                        }
+                        await deleteDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId));
+                        document.getElementById("editModal").style.display = "none";
+                        await loadAdminData();
+                    } finally {
+                        showLoading(false);
                     }
-                    await deleteDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId));
-                    document.getElementById("editModal").style.display = "none";
-                    await loadAdminData();
-                } finally {
-                    showLoading(false);
-                }
-            };
+                };
+            }
             
             // SMS buttons
-            document.getElementById("copySmsBtn").onclick = () => { navigator.clipboard.writeText(document.getElementById("smsMessage").value); alert("Copied!"); };
-            document.getElementById("sendDirectSmsBtn").onclick = () => { let p = document.getElementById("smsPhone").innerText; let m = document.getElementById("smsMessage").value; window.location.href = "sms:" + p + "?body=" + encodeURIComponent(m); };
+            const copySmsBtn = document.getElementById("copySmsBtn");
+            if (copySmsBtn) copySmsBtn.onclick = () => { navigator.clipboard.writeText(document.getElementById("smsMessage").value); alert("Copied!"); };
+            
+            const sendDirectSmsBtn = document.getElementById("sendDirectSmsBtn");
+            if (sendDirectSmsBtn) {
+                sendDirectSmsBtn.onclick = () => { 
+                    let p = document.getElementById("smsPhone").innerText; 
+                    let m = document.getElementById("smsMessage").value; 
+                    window.location.href = "sms:" + p + "?body=" + encodeURIComponent(m);
+                };
+            }
             
             // Tab switching
             let btns = document.querySelectorAll(".tab-btn");
