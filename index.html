@@ -81,8 +81,6 @@
         .guest-names-list { margin-top: 15px; }
         .guest-name-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
         .guest-name-row input { flex: 1; }
-        .remove-guest { background: #dc3545; color: white; border: none; width: 36px; height: 36px; border-radius: 4px; cursor: pointer; margin-top: 0; }
-        .add-guest-btn { background: #6c757d; padding: 10px; font-size: 0.85rem; margin-top: 10px; }
         .footer { text-align: center; color: #9b8a75; font-size: 0.7rem; padding: 20px; border-top: 1px solid #e8dcc8; }
         .back-link { text-align: center; margin-top: 20px; }
         .back-link a { color: #8b7355; text-decoration: none; }
@@ -157,7 +155,6 @@
         const RESPONSES_COLLECTION = "guest_responses";
         const ADMIN_PASSWORD = "LauraDaniel2026";
 
-        // Guest list with assigned code types
         const preloadedGuests = [
             { name: "Gianni Laverde", type: "single", maxGuests: 1 },
             { name: "Anthony Diaco", type: "single", maxGuests: 1 },
@@ -339,7 +336,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label id="guestCountLabel">Number of guests attending (including yourself)</label>
+                                <label>Number of guests attending (including yourself)</label>
                                 <select id="guestCount">
                                     <option value="1">1 guest</option>
                                 </select>
@@ -347,12 +344,7 @@
 
                             <div id="guestNamesSection">
                                 <label>Names of all guests attending</label>
-                                <div id="guestNamesList">
-                                    <div class="guest-name-row">
-                                        <input type="text" placeholder="Your name" class="guest-name" id="primaryGuestName">
-                                    </div>
-                                </div>
-                                <button type="button" id="addGuestNameBtn" class="add-guest-btn">+ Add another guest</button>
+                                <div id="guestNamesList"></div>
                             </div>
 
                             <div class="form-group">
@@ -406,27 +398,10 @@
                 document.getElementById("inviteCode").value = "";
             };
             document.getElementById("submitAddressBtn").onclick = function() { submitAddress(); };
-            document.getElementById("addGuestNameBtn").onclick = addGuestNameField;
         }
 
         let currentMaxGuests = 1;
         let currentCodeType = "single";
-
-        function addGuestNameField() {
-            let currentCount = document.querySelectorAll(".guest-name").length;
-            if (currentCount >= currentMaxGuests) {
-                alert(`Your invitation includes seating for up to ${currentMaxGuests} guest(s). You have already listed ${currentCount}.`);
-                return;
-            }
-            const container = document.getElementById("guestNamesList");
-            const div = document.createElement("div");
-            div.className = "guest-name-row";
-            div.innerHTML = `
-                <input type="text" placeholder="Guest name" class="guest-name">
-                <button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>
-            `;
-            container.appendChild(div);
-        }
 
         async function verifyCode() {
             let code = document.getElementById("inviteCode").value.trim().toUpperCase();
@@ -467,7 +442,6 @@
                 document.getElementById("welcomeName").innerHTML = `Welcome ${escapeHtml(guest.name)}!<br><small>${typeInfo.icon} ${typeInfo.name} Invitation</small>`;
                 document.getElementById("limitWarning").innerHTML = `✨ <strong>Your invitation includes</strong> ${typeInfo.desc}. Please let us know the names of everyone attending below.`;
                 
-                // Populate guest count dropdown
                 let countSelect = document.getElementById("guestCount");
                 countSelect.innerHTML = "";
                 for (let i = 1; i <= currentMaxGuests; i++) {
@@ -521,36 +495,15 @@
 
         function updateGuestNameFields(count) {
             const container = document.getElementById("guestNamesList");
-            const currentInputs = container.querySelectorAll(".guest-name-row");
-            const currentCount = currentInputs.length;
+            container.innerHTML = "";
             
-            if (count > currentCount) {
-                for (let i = currentCount; i < count; i++) {
-                    const div = document.createElement("div");
-                    div.className = "guest-name-row";
-                    let placeholder = i === 0 ? "Your name" : `Guest ${i + 1} name`;
-                    div.innerHTML = `
-                        <input type="text" placeholder="${placeholder}" class="guest-name">
-                        ${i > 0 ? '<button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>' : ''}
-                    `;
-                    container.appendChild(div);
-                }
-            } else if (count < currentCount) {
-                for (let i = currentCount - 1; i >= count; i--) {
-                    if (currentInputs[i]) currentInputs[i].remove();
-                }
+            for (let i = 0; i < count; i++) {
+                const div = document.createElement("div");
+                div.className = "guest-name-row";
+                let placeholder = i === 0 ? "Your name" : `Guest ${i + 1} name`;
+                div.innerHTML = `<input type="text" placeholder="${placeholder}" class="guest-name">`;
+                container.appendChild(div);
             }
-            
-            // Ensure remove buttons work on existing
-            document.querySelectorAll(".remove-guest").forEach(btn => {
-                btn.onclick = function() { 
-                    if (document.querySelectorAll(".guest-name").length > 1) {
-                        this.parentElement.remove();
-                    } else {
-                        alert("You must include at least yourself as a guest");
-                    }
-                };
-            });
         }
 
         async function submitAddress() {
@@ -579,8 +532,8 @@
                 if (guestName) guestNames.push(guestName);
             }
             
-            if (guestNames.length > currentMaxGuests) {
-                alert(`Your invitation includes seating for up to ${currentMaxGuests} guest(s). Please adjust the number.`);
+            if (guestNames.length !== guestCount) {
+                alert(`Please provide names for all ${guestCount} guest(s).`);
                 return;
             }
             
@@ -635,12 +588,12 @@
 
                 if (!rSnapshot.empty) {
                     await updateDoc(doc(db, RESPONSES_COLLECTION, rSnapshot.docs[0].id), responseData);
+                    successDiv.innerText = "Thank you! Your details have been updated. Your formal invitation will be mailed to you soon.";
                 } else {
                     await addDoc(collection(db, RESPONSES_COLLECTION), responseData);
                     await updateDoc(doc(db, GUESTS_COLLECTION, guestId), { replied: true, status: "replied" });
+                    successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon. We look forward to celebrating with you!";
                 }
-
-                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon. We look forward to celebrating with you!";
                 successDiv.style.display = "block";
 
             } catch (err) {
@@ -704,11 +657,10 @@
             for (let r of allResponses) {
                 repliesHtml += `<tr>
                     <td><code>${escapeHtml(r.guestCode)}</code></td>
-                    <td>${escapeHtml(r.guestName)}</td>
+                    <td>${escapeHtml(r.guestName)}</td></td>
                     <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
                     <td style="max-width:250px;">${escapeHtml(r.fullAddress || "")}</td>
-                    <td>${r.guestCount || 1} guests</td>
-                </tr>`;
+                    <td>${r.guestCount || 1} guests</td></tr>`;
             }
             repliesBody.innerHTML = repliesHtml || '<tr><td colspan="5">No responses yet</td></tr>';
         }
@@ -759,15 +711,16 @@
                     <div class="tabs"><button class="tab-btn active" data-tab="guests">Guest List</button><button class="tab-btn" data-tab="replies">Responses</button></div>
                     <div id="guests" class="tab-content active">
                         <div class="filter-bar"><input type="text" id="searchGuest" placeholder="Search..."><select id="filterStatus"><option value="all">All</option><option value="pending">Pending</option><option value="sent">SMS Sent</option><option value="replied">Replied</option></select><button id="refreshBtn" class="btn-sm btn-blue">Refresh</button></div>
-                        <div class="add-guest-form"><input type="text" id="newGuestName" placeholder="Guest name"><select id="newCodeType"><option value="single">👤 Single (1 guest)</option><option value="couple">💑 Couple (2 guests)</option><option value="family">👨‍👩‍👧‍👦 Family (4 guests)</option><option value="extended">👥 Extended (6 guests)</option></select><input type="tel" id="newGuestPhone" placeholder="Mobile"><button id="addGuestBtn" class="btn-sm btn-green">Add</button></div>
+                        <div class="add-guest-form"><input type="text" id="newGuestName" placeholder="Guest name"><select id="newCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><input type="tel" id="newGuestPhone" placeholder="Mobile"><button id="addGuestBtn" class="btn-sm btn-green">Add</button></div>
                         <div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead><tbody id="guestTableBody"></tbody></table></div>
                     </div>
-                    <div id="replies" class="tab-content"><div class="guest-table-container"><td><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
+                    <div id="replies" class="tab-content"><div class="guest-table-container"><tr><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
                 </div>
                 <div id="editModal" class="modal"><div class="edit-modal-content"><h3>Edit Guest</h3><label>Name:</label><input type="text" id="editGuestName"><label>Phone:</label><input type="tel" id="editGuestPhone"><label>Code Type:</label><select id="editCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><label>Max Guests:</label><input type="number" id="editMaxGuests" min="1" max="10"><div class="action-buttons"><button id="saveEditBtn" class="btn-sm btn-green">Save</button><button id="closeEditModal" class="btn-sm btn-red">Cancel</button></div><hr><button id="deleteGuestBtn" class="btn-sm btn-red">Delete Guest</button></div></div>
                 <div id="smsModal" class="modal"><div class="modal-content"><h3>SMS to Guest</h3><p><strong id="smsGuestName"></strong></p><p>Mobile: <span id="smsPhone"></span></p><textarea id="smsMessage" readonly></textarea><div class="sms-buttons"><button id="copySmsBtn" class="btn-sm btn-blue">Copy</button><button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button><button id="closeSmsModal" class="btn-sm btn-red">Close</button></div></div></div>
                 <a href="?admin=false" class="admin-link">Exit Admin</a>
             `;
+            
             document.getElementById("addGuestBtn").onclick = async () => {
                 let name = document.getElementById("newGuestName").value.trim();
                 let type = document.getElementById("newCodeType").value;
