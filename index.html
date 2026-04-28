@@ -3,119 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Laura & Daniel's Wedding - Confirm Your Address</title>
+    <title>Daniel & Laura - Guest Address Confirmation</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c0 100%);
+            font-family: 'Georgia', 'Times New Roman', Times, serif;
+            background: #f5f0e8;
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
         }
-        .container { max-width: 550px; margin: 0 auto; }
-        .admin-container { max-width: 1400px; margin: 0 auto; }
-        
-        .form-card {
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        .invitation-card {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #fffef7;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             overflow: hidden;
-            margin-bottom: 20px;
+            border: 1px solid #e8dcc8;
         }
-        .form-header {
-            background: linear-gradient(135deg, #8b5a2b, #c49a6c);
+        .invitation-header {
+            background: linear-gradient(135deg, #8b7355, #c4a882);
             color: white;
-            padding: 35px 25px;
+            padding: 40px 30px;
             text-align: center;
+            border-bottom: 3px solid #d4c4a8;
         }
-        .form-header h1 { font-size: 1.8rem; font-family: 'Georgia', serif; }
-        .form-header p { margin-top: 10px; opacity: 0.9; }
-        .form-body { padding: 30px 25px; }
-        
-        .code-section { text-align: center; margin-bottom: 25px; }
+        .invitation-header h1 { font-size: 2rem; letter-spacing: 2px; font-weight: normal; }
+        .invitation-header p { font-size: 0.9rem; opacity: 0.9; font-style: italic; }
+        .wedding-details { padding: 30px; text-align: center; border-bottom: 1px solid #e8dcc8; }
+        .wedding-details h2 { font-size: 1.4rem; color: #8b7355; margin-bottom: 20px; font-weight: normal; }
+        .wedding-details .date { font-size: 1.3rem; color: #5a4a35; margin: 15px 0; }
+        .wedding-details .church, .wedding-details .reception { margin: 15px 0; line-height: 1.5; color: #6b5a45; }
+        .wedding-details .reception { margin-top: 20px; padding-top: 15px; border-top: 1px solid #e8dcc8; }
+        .form-body { padding: 30px; }
+        .code-section { text-align: center; margin-bottom: 30px; }
         .code-section input {
             width: 100%;
-            padding: 18px;
-            font-size: 1.3rem;
+            padding: 16px;
+            font-size: 1.2rem;
             text-align: center;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             font-family: monospace;
-            border: 2px solid #e8d5c0;
-            border-radius: 16px;
-            background: #faf7f2;
+            border: 1px solid #d4c4a8;
+            border-radius: 4px;
+            background: #fefcf8;
         }
-        .code-section input:focus { outline: none; border-color: #c49a6c; }
-        
+        .code-section input:focus { outline: none; border-color: #c4a882; }
         .form-group { margin-bottom: 22px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: #5a2d1c; }
-        input, textarea {
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #5a4a35; font-size: 0.85rem; }
+        input, textarea, select {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e8d5c0;
-            border-radius: 12px;
+            padding: 12px 14px;
+            border: 1px solid #d4c4a8;
+            border-radius: 4px;
             font-size: 1rem;
-            font-family: inherit;
+            font-family: 'Georgia', serif;
+            background: #fefcf8;
         }
-        input:focus, textarea:focus { outline: none; border-color: #c49a6c; }
-        textarea { resize: vertical; min-height: 100px; }
-        
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #c4a882; }
+        .address-row { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px; }
+        .address-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         button {
             width: 100%;
-            background: linear-gradient(135deg, #8b5a2b, #c49a6c);
+            background: #8b7355;
             color: white;
             border: none;
             padding: 16px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
-            border-radius: 50px;
+            border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
         }
-        .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; display: none; }
-        .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
-        .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
-        .back-link { text-align: center; margin-top: 15px; }
-        .back-link a { color: #8b5a2b; text-decoration: none; }
-        .footer { text-align: center; color: #7a4a2e; font-size: 0.75rem; padding: 20px; }
+        button:hover { background: #6b5a45; }
+        .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 20px; display: none; }
+        .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        .back-link { text-align: center; margin-top: 20px; }
+        .back-link a { color: #8b7355; text-decoration: none; }
+        .guest-count-selector { background: #fefcf8; padding: 15px; border: 1px solid #e8dcc8; border-radius: 4px; margin: 15px 0; }
+        .guest-names-list { margin-top: 15px; }
+        .guest-name-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .guest-name-row input { flex: 1; }
+        .remove-guest { background: #dc3545; color: white; border: none; width: 36px; height: 36px; border-radius: 4px; cursor: pointer; margin-top: 0; }
+        .add-guest-btn { background: #6c757d; padding: 10px; font-size: 0.85rem; margin-top: 10px; }
+        .footer { text-align: center; color: #9b8a75; font-size: 0.7rem; padding: 20px; border-top: 1px solid #e8dcc8; }
         
-        .admin-header { background: linear-gradient(135deg, #8b5a2b, #c49a6c); color: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; text-align: center; }
+        /* Admin Styles */
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        .admin-header { background: linear-gradient(135deg, #8b7355, #c4a882); color: white; padding: 30px; border-radius: 4px; margin-bottom: 30px; text-align: center; }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .stat-number { font-size: 2rem; font-weight: bold; color: #8b5a2b; }
+        .stat-card { background: white; padding: 20px; border-radius: 4px; text-align: center; border: 1px solid #e8dcc8; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #8b7355; }
         .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn { background: #eee1d4; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; color: #5a2d1c; }
-        .tab-btn.active { background: #8b5a2b; color: white; }
-        .tab-content { display: none; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .tab-btn { background: #e8dcc8; border: none; padding: 12px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; color: #5a4a35; }
+        .tab-btn.active { background: #8b7355; color: white; }
+        .tab-content { display: none; background: white; border-radius: 4px; padding: 25px; border: 1px solid #e8dcc8; }
         .tab-content.active { display: block; }
         .guest-table-container { overflow-x: auto; max-height: 500px; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #faf7f2; }
-        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e8dcc8; }
+        th { background: #fefcf8; color: #5a4a35; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
         .status-pending { background: #f39c12; color: white; }
         .status-sent { background: #3498db; color: white; }
         .status-replied { background: #27ae60; color: white; }
         .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filter-bar input, .filter-bar select { flex: 1; min-width: 150px; padding: 10px; border: 2px solid #e8d5c0; border-radius: 10px; }
-        .btn-sm { padding: 5px 10px; font-size: 0.8rem; margin: 2px; width: auto; display: inline-block; cursor: pointer; }
-        .btn-green { background: #27ae60; color: white; border: none; }
-        .btn-blue { background: #3498db; color: white; border: none; }
-        .btn-red { background: #e74c3c; color: white; border: none; }
+        .filter-bar input, .filter-bar select { flex: 1; min-width: 150px; padding: 10px; border: 1px solid #d4c4a8; border-radius: 4px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; margin: 2px; width: auto; display: inline-block; cursor: pointer; border: none; border-radius: 4px; }
+        .btn-green { background: #27ae60; color: white; }
+        .btn-blue { background: #3498db; color: white; }
+        .btn-red { background: #e74c3c; color: white; }
         .add-guest-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; align-items: end; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 500px; width: 90%; }
+        .modal-content { background: white; border-radius: 4px; padding: 25px; max-width: 500px; width: 90%; }
         .modal-content textarea { width: 100%; height: 180px; margin: 15px 0; }
-        .edit-modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 450px; width: 90%; }
-        .edit-modal-content input { width: 100%; margin-bottom: 15px; padding: 12px; }
+        .edit-modal-content { background: white; border-radius: 4px; padding: 25px; max-width: 450px; width: 90%; }
+        .edit-modal-content input { width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #d4c4a8; border-radius: 4px; }
         .sms-buttons { display: flex; gap: 10px; margin-top: 10px; }
         .btn-sms-direct { background: #25D366; color: white; border: none; }
         .action-buttons { display: flex; gap: 10px; margin-top: 10px; }
         hr { margin: 15px 0; }
-        .login-box { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .login-box input { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #e8d5c0; border-radius: 12px; font-size: 1rem; }
-        .login-box h2 { color: #5a2d1c; margin-bottom: 10px; }
-        .admin-link { position: fixed; bottom: 20px; right: 20px; background: #8b5a2b; color: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-size: 0.8rem; opacity: 0.7; }
-        .admin-link:hover { opacity: 1; }
+        .login-box { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 4px; text-align: center; border: 1px solid #e8dcc8; }
+        .login-box input { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #d4c4a8; border-radius: 4px; }
+        .admin-link { position: fixed; bottom: 20px; right: 20px; background: #8b7355; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-family: 'Georgia', serif; }
+        @media (max-width: 600px) { .address-row, .address-row-3 { grid-template-columns: 1fr; gap: 10px; } }
     </style>
 </head>
 <body>
@@ -162,6 +174,7 @@
 
         let allGuests = [];
         let allResponses = [];
+        let currentEditGuestId = null;
 
         function generateCode(name) {
             let prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
@@ -201,61 +214,164 @@
                             createdAt: new Date().toISOString()
                         });
                     }
-                    console.log("Seeded " + preloadedGuests.length + " guests");
+                    console.log("Seeded " + preloadedGuests.length + " guests with codes");
                 }
             } catch (e) {
                 console.error("Seed error:", e);
             }
         }
 
-        // ============ GUEST FORM ============
+        // Guest Form
         function renderGuestForm() {
             document.getElementById("app").innerHTML = `
-                <div class="container">
-                    <div class="form-card">
-                        <div class="form-header">
-                            <h1>Laura & Daniel</h1>
-                            <p>Please confirm your details for your formal invitation</p>
+                <div class="invitation-card">
+                    <div class="invitation-header">
+                        <h1>Daniel & Laura</h1>
+                        <p>request the pleasure of your company</p>
+                    </div>
+                    <div class="wedding-details">
+                        <h2>Celebration of Marriage</h2>
+                        <div class="date">Saturday, 3rd October 2026</div>
+                        <div class="church">
+                            <strong>Ceremony at 12 noon</strong><br>
+                            Please arrive by 11:45 am<br>
+                            St Monica's Catholic Church<br>
+                            820 Mt Alexander Road, Moonee Ponds VIC 3039
                         </div>
-                        <div class="form-body">
-                            <div id="guestSuccessMsg" class="success-message"></div>
-                            <div id="guestErrorMsg" class="error-message"></div>
-                            <div id="guestInfoMsg" class="info-message"></div>
+                        <div class="reception">
+                            <strong>Reception to follow at 6:30 pm</strong><br>
+                            Fior<br>
+                            476 Brunswick Road, Parkville VIC 3052<br>
+                            <em>Formal Attire</em>
+                        </div>
+                    </div>
+                    <div class="form-body">
+                        <div id="guestSuccessMsg" class="success-message"></div>
+                        <div id="guestErrorMsg" class="error-message"></div>
+                        <div id="guestInfoMsg" class="info-message"></div>
 
-                            <div id="codeEntrySection">
-                                <div class="code-section">
-                                    <input type="text" id="inviteCode" placeholder="Enter your invitation code" maxlength="10">
-                                </div>
-                                <button id="verifyCodeBtn">Verify My Code</button>
-                                <p style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #7a4a2e;">
-                                    Your invitation code is on the SMS we sent you
-                                </p>
+                        <div id="codeEntrySection">
+                            <div class="code-section">
+                                <input type="text" id="inviteCode" placeholder="Enter your invitation code" maxlength="10">
+                            </div>
+                            <button id="verifyCodeBtn">Verify Code</button>
+                            <p style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #9b8a75;">
+                                Your invitation code is on the SMS we sent you
+                            </p>
+                        </div>
+
+                        <div id="addressFormSection" style="display: none;">
+                            <div id="guestWelcome" style="background: #fefcf8; padding: 15px; margin-bottom: 20px; text-align: center; border: 1px solid #e8dcc8;">
+                                <strong id="welcomeName"></strong>
                             </div>
 
-                            <div id="addressFormSection" style="display: none;">
-                                <div id="guestWelcome" style="background: #f0e6d8; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
-                                    <strong id="welcomeName"></strong>
+                            <div class="form-group">
+                                <label>Contact Name (for invitation)</label>
+                                <input type="text" id="fullName" placeholder="e.g., Mr Mario Rossimel">
+                            </div>
+
+                            <div class="guest-count-selector">
+                                <label>Number of guests attending</label>
+                                <select id="guestCount">
+                                    <option value="1">1 guest</option>
+                                    <option value="2">2 guests</option>
+                                    <option value="3">3 guests</option>
+                                    <option value="4">4 guests</option>
+                                    <option value="5">5 guests</option>
+                                    <option value="6">6+ guests</option>
+                                </select>
+                            </div>
+
+                            <div id="guestNamesSection" style="display: none;">
+                                <label>Names of all guests attending</label>
+                                <div id="guestNamesList">
+                                    <div class="guest-name-row">
+                                        <input type="text" placeholder="Guest name" class="guest-name">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Your Full Name (please check spelling)</label>
-                                    <input type="text" id="fullName" placeholder="e.g., John Michael Smith">
+                                <button type="button" id="addGuestNameBtn" class="add-guest-btn">+ Add another guest</button>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Postal Address</label>
+                                <div class="address-row">
+                                    <input type="text" id="unitNumber" placeholder="Unit/Flat/House number">
+                                    <input type="text" id="streetAddress" placeholder="Street address">
                                 </div>
-                                <div class="form-group">
-                                    <label>Your Postal Address</label>
-                                    <textarea id="address" rows="3" placeholder="Street address, suburb, city, postcode"></textarea>
+                                <div class="address-row">
+                                    <input type="text" id="suburb" placeholder="Suburb">
+                                    <input type="text" id="city" placeholder="City">
                                 </div>
-                                <button id="submitAddressBtn">Submit My Details</button>
-                                <div class="back-link">
-                                    <a href="#" id="backToCodeBtn">Enter a different code</a>
+                                <div class="address-row-3">
+                                    <select id="state">
+                                        <option value="">State</option>
+                                        <option value="VIC">VIC</option>
+                                        <option value="NSW">NSW</option>
+                                        <option value="QLD">QLD</option>
+                                        <option value="WA">WA</option>
+                                        <option value="SA">SA</option>
+                                        <option value="TAS">TAS</option>
+                                        <option value="ACT">ACT</option>
+                                        <option value="NT">NT</option>
+                                    </select>
+                                    <input type="text" id="postcode" placeholder="Postcode">
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email or Phone (optional)</label>
+                                <input type="text" id="contact" placeholder="In case we need to reach you">
+                            </div>
+
+                            <button id="submitAddressBtn">Submit My Details</button>
+                            <div class="back-link">
+                                <a href="#" id="backToCodeBtn">Enter a different code</a>
                             </div>
                         </div>
                     </div>
                     <div class="footer">
-                        <p>Laura & Daniel's Wedding | October 3, 2026 | Fior Parkville</p>
+                        <p>Please respond by 1st August 2026</p>
                     </div>
                 </div>
             `;
+
+            const guestCountSelect = document.getElementById("guestCount");
+            const guestNamesSection = document.getElementById("guestNamesSection");
+            
+            guestCountSelect.addEventListener("change", function() {
+                let count = parseInt(this.value);
+                if (count > 1) {
+                    guestNamesSection.style.display = "block";
+                    updateGuestNameInputs(count);
+                } else {
+                    guestNamesSection.style.display = "none";
+                }
+            });
+
+            function updateGuestNameInputs(count) {
+                const container = document.getElementById("guestNamesList");
+                container.innerHTML = "";
+                for (let i = 1; i < count; i++) {
+                    const div = document.createElement("div");
+                    div.className = "guest-name-row";
+                    div.innerHTML = `
+                        <input type="text" placeholder="Guest ${i} name" class="guest-name">
+                        ${i > 1 ? '<button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>' : ''}
+                    `;
+                    container.appendChild(div);
+                }
+            }
+
+            document.getElementById("addGuestNameBtn").onclick = function() {
+                const container = document.getElementById("guestNamesList");
+                const div = document.createElement("div");
+                div.className = "guest-name-row";
+                div.innerHTML = `
+                    <input type="text" placeholder="Additional guest name" class="guest-name">
+                    <button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>
+                `;
+                container.appendChild(div);
+            };
 
             document.getElementById("verifyCodeBtn").onclick = function() { verifyCode(); };
             document.getElementById("backToCodeBtn").onclick = function(e) {
@@ -299,7 +415,13 @@
                 if (!rSnapshot.empty) {
                     let existing = rSnapshot.docs[0].data();
                     document.getElementById("fullName").value = existing.fullName || "";
-                    document.getElementById("address").value = existing.address || "";
+                    document.getElementById("unitNumber").value = existing.unitNumber || "";
+                    document.getElementById("streetAddress").value = existing.streetAddress || "";
+                    document.getElementById("suburb").value = existing.suburb || "";
+                    document.getElementById("city").value = existing.city || "";
+                    document.getElementById("state").value = existing.state || "";
+                    document.getElementById("postcode").value = existing.postcode || "";
+                    document.getElementById("contact").value = existing.contact || "";
                     infoDiv.innerText = "You have already submitted your details. You can update them below.";
                     infoDiv.style.display = "block";
                 }
@@ -321,7 +443,32 @@
 
         async function submitAddress() {
             let fullName = document.getElementById("fullName").value.trim();
-            let address = document.getElementById("address").value.trim();
+            let unitNumber = document.getElementById("unitNumber").value.trim();
+            let streetAddress = document.getElementById("streetAddress").value.trim();
+            let suburb = document.getElementById("suburb").value.trim();
+            let city = document.getElementById("city").value.trim();
+            let state = document.getElementById("state").value;
+            let postcode = document.getElementById("postcode").value.trim();
+            let contact = document.getElementById("contact").value.trim();
+            let guestCount = parseInt(document.getElementById("guestCount").value);
+            
+            let fullAddress = "";
+            if (unitNumber) fullAddress += unitNumber + " ";
+            if (streetAddress) fullAddress += streetAddress;
+            if (suburb) fullAddress += ", " + suburb;
+            if (city) fullAddress += ", " + city;
+            if (state) fullAddress += " " + state;
+            if (postcode) fullAddress += " " + postcode;
+            
+            let guestNames = [];
+            if (guestCount > 1) {
+                let nameInputs = document.querySelectorAll(".guest-name");
+                for (let i = 0; i < nameInputs.length; i++) {
+                    let guestName = nameInputs[i].value.trim();
+                    if (guestName) guestNames.push(guestName);
+                }
+            }
+            
             let guestCode = sessionStorage.getItem("guestCode");
             let guestId = sessionStorage.getItem("guestId");
             let guestName = sessionStorage.getItem("guestName");
@@ -332,12 +479,22 @@
             successDiv.style.display = "none";
 
             if (!fullName) {
-                errorDiv.innerText = "Please enter your full name";
+                errorDiv.innerText = "Please enter your name";
                 errorDiv.style.display = "block";
                 return;
             }
-            if (!address) {
-                errorDiv.innerText = "Please enter your postal address";
+            if (!streetAddress) {
+                errorDiv.innerText = "Please enter your street address";
+                errorDiv.style.display = "block";
+                return;
+            }
+            if (!suburb) {
+                errorDiv.innerText = "Please enter your suburb";
+                errorDiv.style.display = "block";
+                return;
+            }
+            if (!postcode) {
+                errorDiv.innerText = "Please enter your postcode";
                 errorDiv.style.display = "block";
                 return;
             }
@@ -351,7 +508,16 @@
                     guestId: guestId,
                     guestName: guestName,
                     fullName: fullName,
-                    address: address,
+                    unitNumber: unitNumber,
+                    streetAddress: streetAddress,
+                    suburb: suburb,
+                    city: city,
+                    state: state,
+                    postcode: postcode,
+                    fullAddress: fullAddress,
+                    guestCount: guestCount,
+                    guestNames: guestNames,
+                    contact: contact,
                     submittedAt: new Date().toISOString()
                 };
 
@@ -362,11 +528,8 @@
                     await updateDoc(doc(db, GUESTS_COLLECTION, guestId), { replied: true, status: "replied" });
                 }
 
-                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon.";
+                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon. We look forward to celebrating with you!";
                 successDiv.style.display = "block";
-                
-                document.getElementById("fullName").value = "";
-                document.getElementById("address").value = "";
 
             } catch (err) {
                 errorDiv.innerText = "Something went wrong. Please try again.";
@@ -375,7 +538,7 @@
             }
         }
 
-        // ============ ADMIN DASHBOARD ============
+        // Admin Dashboard
         function renderAdminLogin() {
             document.getElementById("app").innerHTML = `
                 <div class="login-box">
@@ -429,8 +592,8 @@
         }
 
         function renderGuestTable() {
-            let search = document.getElementById("searchGuest") ? document.getElementById("searchGuest").value.toLowerCase() : "";
-            let filterStatus = document.getElementById("filterStatus") ? document.getElementById("filterStatus").value : "all";
+            let search = document.getElementById("searchGuest")?.value.toLowerCase() || "";
+            let filterStatus = document.getElementById("filterStatus")?.value || "all";
             
             let filtered = [];
             for (let i = 0; i < allGuests.length; i++) {
@@ -442,7 +605,7 @@
             
             let tbody = document.getElementById("guestTableBody");
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No guests found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No guests found</td></tr>';
                 return;
             }
             
@@ -453,22 +616,22 @@
                 let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
                 let phoneDisplay = guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>';
                 
-                html += '<tr>' +
-                    '<td><code>' + escapeHtml(guest.code) + '</code></td>' +
-                    '<td><strong>' + escapeHtml(guest.name) + '</strong></td>' +
-                    '<td>' + phoneDisplay + '</td>' +
-                    '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
-                    '<td>' +
-                        '<button class="btn-sm btn-blue" onclick="openEdit(\'' + guest.id + '\', \'' + escapeForJS(guest.name) + '\', \'' + escapeForJS(guest.phone || "") + '\')">Edit</button> ' +
-                        '<button class="btn-sm btn-green" onclick="openSms(\'' + guest.code + '\', \'' + escapeForJS(guest.name) + '\', \'' + escapeForJS(guest.phone || "") + '\')">SMS</button>' +
-                    '</td>' +
-                '</tr>';
+                html += `<tr>
+                    <td><code>${escapeHtml(guest.code)}</code></td>
+                    <td><strong>${escapeHtml(guest.name)}</strong></td>
+                    <td>${phoneDisplay}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="btn-sm btn-blue" onclick="openEdit('${guest.id}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">Edit</button>
+                        <button class="btn-sm btn-green" onclick="openSms('${guest.code}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">SMS</button>
+                    </td>
+                </tr>`;
             }
             tbody.innerHTML = html;
         }
 
         function renderRepliesTable() {
-            let search = document.getElementById("searchReply") ? document.getElementById("searchReply").value.toLowerCase() : "";
+            let search = document.getElementById("searchReply")?.value.toLowerCase() || "";
             let filtered = [];
             for (let i = 0; i < allResponses.length; i++) {
                 let r = allResponses[i];
@@ -485,14 +648,14 @@
             let html = "";
             for (let i = 0; i < filtered.length; i++) {
                 let r = filtered[i];
-                let addressShort = r.address ? r.address.substring(0, 60) + (r.address.length > 60 ? "..." : "") : "";
-                html += '<tr>' +
-                    '<td><code>' + escapeHtml(r.guestCode) + '</code></td>' +
-                    '<td>' + escapeHtml(r.guestName) + '</td>' +
-                    '<td><strong>' + escapeHtml(r.fullName || "") + '</strong></td>' +
-                    '<td style="max-width:250px;">' + escapeHtml(addressShort) + '</td>' +
-                    '<td>' + (r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : "") + '</td>' +
-                '</tr>';
+                let addressShort = r.fullAddress ? r.fullAddress.substring(0, 60) + (r.fullAddress.length > 60 ? "..." : "") : "";
+                html += `<tr>
+                    <td><code>${escapeHtml(r.guestCode)}</code></td>
+                    <td>${escapeHtml(r.guestName)}</td>
+                    <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
+                    <td style="max-width:250px;">${escapeHtml(addressShort)}</td>
+                    <td>${r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : ""}</td>
+                </tr>`;
             }
             tbody.innerHTML = html;
         }
@@ -506,17 +669,18 @@
             let replied = allResponses.length;
             let pending = total - replied;
             
-            let statsHtml = '<div class="stat-card"><div class="stat-number">' + total + '</div><div>Total Invited</div></div>' +
-                '<div class="stat-card"><div class="stat-number">' + sent + '</div><div>SMS Sent</div></div>' +
-                '<div class="stat-card"><div class="stat-number">' + replied + '</div><div>Addresses Received</div></div>' +
-                '<div class="stat-card"><div class="stat-number">' + pending + '</div><div>Awaiting Reply</div></div>';
-            
+            let statsHtml = `
+                <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
+                <div class="stat-card"><div class="stat-number">${sent}</div><div>SMS Sent</div></div>
+                <div class="stat-card"><div class="stat-number">${replied}</div><div>Addresses Received</div></div>
+                <div class="stat-card"><div class="stat-number">${pending}</div><div>Awaiting Reply</div></div>
+            `;
             let statsContainer = document.getElementById("statsContainer");
             if (statsContainer) statsContainer.innerHTML = statsHtml;
         }
 
         window.openEdit = function(id, name, phone) {
-            document.getElementById("editGuestId").value = id;
+            currentEditGuestId = id;
             document.getElementById("editGuestName").value = name;
             document.getElementById("editGuestPhone").value = phone;
             document.getElementById("editModal").style.display = "flex";
@@ -528,7 +692,7 @@
                 return;
             }
             let appUrl = window.location.origin;
-            let msg = "Dear " + name.split(' ')[0] + ",\n\nWe are hoping to celebrate our wedding with you on October 3, 2026 at Fior Parkville.\n\nBefore we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\nPlease visit: " + appUrl + "\nEnter your code: " + code + "\n\nThis will take just 2 minutes. We would be truly honoured to have you there.\n\nWarmly,\nLaura & Daniel";
+            let msg = "Dear " + name.split(' ')[0] + ",\n\nWe are hoping to celebrate our wedding with you on Saturday, 3rd October 2026 at St Monica's Catholic Church, Moonee Ponds.\n\nBefore we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\nPlease visit: " + appUrl + "\nEnter your code: " + code + "\n\nThis will take just 2 minutes. We would be truly honoured to have you there.\n\nWarmly,\nDaniel & Laura";
             
             document.getElementById("smsGuestName").innerText = name;
             document.getElementById("smsPhone").innerText = phone;
@@ -575,7 +739,7 @@
                         <div class="guest-table-container">
                             <table>
                                 <thead><tr><th>Code</th><th>Guest Name</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
-                                <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                                <tbody id="guestTableBody"><td><td colspan="5">Loading...</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -595,7 +759,6 @@
                 <div id="editModal" class="modal">
                     <div class="edit-modal-content">
                         <h3>Edit Guest</h3>
-                        <input type="hidden" id="editGuestId">
                         <label>Guest Name:</label>
                         <input type="text" id="editGuestName">
                         <label>Mobile Number:</label>
@@ -640,13 +803,14 @@
             document.getElementById("exportCsvBtn").onclick = function() {
                 let withAddress = [];
                 for (let i = 0; i < allResponses.length; i++) {
-                    if (allResponses[i].address) withAddress.push(allResponses[i]);
+                    if (allResponses[i].fullAddress) withAddress.push(allResponses[i]);
                 }
                 if (withAddress.length === 0) { alert("No addresses yet"); return; }
-                let csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Submitted"]];
+                let csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Guests", "Submitted"]];
                 for (let i = 0; i < withAddress.length; i++) {
                     let r = withAddress[i];
-                    csv.push([r.guestCode, r.guestName, r.fullName, r.address, new Date(r.submittedAt).toLocaleDateString()]);
+                    let guestNamesStr = r.guestNames ? r.guestNames.join("; ") : "";
+                    csv.push([r.guestCode, r.guestName, r.fullName, r.fullAddress, guestNamesStr, new Date(r.submittedAt).toLocaleDateString()]);
                 }
                 let content = "";
                 for (let i = 0; i < csv.length; i++) {
@@ -667,19 +831,17 @@
             document.getElementById("closeEditModal").onclick = function() { document.getElementById("editModal").style.display = "none"; };
             document.getElementById("closeSmsModal").onclick = function() { document.getElementById("smsModal").style.display = "none"; };
             document.getElementById("saveEditBtn").onclick = async function() {
-                let id = document.getElementById("editGuestId").value;
                 let newName = document.getElementById("editGuestName").value.trim();
                 let newPhone = document.getElementById("editGuestPhone").value.trim();
-                await updateDoc(doc(db, GUESTS_COLLECTION, id), { name: newName, phone: newPhone });
+                await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone });
                 document.getElementById("editModal").style.display = "none";
                 loadAdminData();
             };
             document.getElementById("deleteGuestBtn").onclick = async function() {
                 if (!confirm("Delete this guest?")) return;
-                let id = document.getElementById("editGuestId").value;
                 let guest = null;
                 for (let i = 0; i < allGuests.length; i++) {
-                    if (allGuests[i].id === id) { guest = allGuests[i]; break; }
+                    if (allGuests[i].id === currentEditGuestId) { guest = allGuests[i]; break; }
                 }
                 if (guest) {
                     for (let i = 0; i < allResponses.length; i++) {
@@ -689,7 +851,7 @@
                         }
                     }
                 }
-                await deleteDoc(doc(db, GUESTS_COLLECTION, id));
+                await deleteDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId));
                 document.getElementById("editModal").style.display = "none";
                 loadAdminData();
             };
@@ -715,7 +877,6 @@
                     let contents = document.querySelectorAll(".tab-content");
                     for (let j = 0; j < contents.length; j++) contents[j].classList.remove("active");
                     document.getElementById(this.getAttribute("data-tab")).classList.add("active");
-                    if (this.getAttribute("data-tab") === "replies") renderRepliesTable();
                 };
             }
             loadAdminData();
