@@ -250,6 +250,39 @@
             font-size: 0.8rem;
         }
 
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 450px;
+            width: 90%;
+        }
+
+        .edit-modal-content input, 
+        .edit-modal-content select {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         @media (max-width: 700px) {
             th, td {
                 font-size: 0.8rem;
@@ -381,6 +414,31 @@
         </div>
     </div>
 
+    <!-- Edit Guest Modal -->
+    <div id="editModal" class="edit-modal">
+        <div class="edit-modal-content">
+            <h3>✏️ Edit Guest</h3>
+            <input type="text" id="editGuestId" style="display:none;">
+            <label>Guest Name:</label>
+            <input type="text" id="editGuestName" placeholder="Full name">
+            <label>Mobile Number:</label>
+            <input type="tel" id="editGuestPhone" placeholder="Mobile number">
+            <label>Party Type:</label>
+            <select id="editGuestParty">
+                <option value="single">👤 Single</option>
+                <option value="couple">💑 Couple</option>
+                <option value="family">👨‍👩‍👧‍👦 Family</option>
+                <option value="extended">👥 Extended Family</option>
+            </select>
+            <div class="action-buttons">
+                <button id="saveEditBtn" class="btn btn-green">💾 Save Changes</button>
+                <button id="closeEditModal" class="btn btn-blue">Cancel</button>
+            </div>
+            <hr style="margin: 15px 0;">
+            <button id="deleteGuestBtn" class="btn btn-red" style="width:100%;">🗑️ Delete Guest Permanently</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -494,13 +552,13 @@
                 
                 return `
                     <tr>
-                        <td><code>${guest.code}</code></td>
+                        <td><code>${escapeHtml(guest.code)}</code></td>
                         <td><strong>${escapeHtml(guest.name)}</strong></td>
                         <td>${guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>'}</td>
                         <td>${partyIcon} ${guest.partyType}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-blue" onclick="editGuest('${guest.id}', '${escapeHtml(guest.name)}', '${escapeHtml(guest.phone || '')}', '${guest.partyType}')">✏️ Edit</button>
+                            <button class="btn btn-sm btn-blue" onclick="openEditModal('${guest.id}', '${escapeHtml(guest.name)}', '${escapeHtml(guest.phone || '')}', '${guest.partyType}')">✏️ Edit</button>
                             <button class="btn btn-sm btn-send" onclick="showSmsModal('${guest.code}', '${escapeHtml(guest.name)}', '${escapeHtml(guest.phone || '')}')">📱 Send SMS</button>
                             ${guest.responseData ? `<button class="btn btn-sm" style="background:#27ae60;" onclick="viewReply('${guest.code}')">📨 View</button>` : ''}
                         </td>
@@ -554,6 +612,7 @@
             `;
         }
 
+        // Add new guest
         document.getElementById("addGuestBtn")?.addEventListener("click", async () => {
             const name = document.getElementById("newGuestName").value.trim();
             const phone = document.getElementById("newGuestPhone").value.trim();
@@ -572,14 +631,68 @@
             loadData();
         });
 
-        window.editGuest = (id, name, phone, partyType) => {
-            const newPhone = prompt(`Edit mobile number for ${name}:`, phone);
-            if (newPhone !== null) {
-                updateDoc(doc(db, GUESTS_COLLECTION, id), { phone: newPhone });
-                loadData();
-            }
+        // Open Edit Modal
+        window.openEditModal = (id, name, phone, partyType) => {
+            document.getElementById("editGuestId").value = id;
+            document.getElementById("editGuestName").value = name;
+            document.getElementById("editGuestPhone").value = phone;
+            document.getElementById("editGuestParty").value = partyType;
+            document.getElementById("editModal").style.display = "flex";
         };
 
+        // Save Edit
+        document.getElementById("saveEditBtn")?.addEventListener("click", async () => {
+            const id = document.getElementById("editGuestId").value;
+            const newName = document.getElementById("editGuestName").value.trim();
+            const newPhone = document.getElementById("editGuestPhone").value.trim();
+            const newPartyType = document.getElementById("editGuestParty").value;
+            
+            if (!newName) { alert("Guest name cannot be empty"); return; }
+            
+            await updateDoc(doc(db, GUESTS_COLLECTION, id), {
+                name: newName,
+                phone: newPhone,
+                partyType: newPartyType
+            });
+            
+            document.getElementById("editModal").style.display = "none";
+            loadData();
+        });
+
+        // Delete Guest
+        document.getElementById("deleteGuestBtn")?.addEventListener("click", async () => {
+            const id = document.getElementById("editGuestId").value;
+            const guestName = document.getElementById("editGuestName").value;
+            
+            if (confirm(`Are you sure you want to permanently delete ${guestName} from the guest list? This cannot be undone.`)) {
+                // Delete any responses from this guest too
+                const guest = allGuests.find(g => g.id === id);
+                if (guest) {
+                    const responseToDelete = allResponses.find(r => r.guestCode === guest.code);
+                    if (responseToDelete) {
+                        await deleteDoc(doc(db, RESPONSES_COLLECTION, responseToDelete.id));
+                    }
+                }
+                await deleteDoc(doc(db, GUESTS_COLLECTION, id));
+                document.getElementById("editModal").style.display = "none";
+                loadData();
+            }
+        });
+
+        // Close Edit Modal
+        document.getElementById("closeEditModal")?.addEventListener("click", () => {
+            document.getElementById("editModal").style.display = "none";
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener("click", (e) => {
+            const editModal = document.getElementById("editModal");
+            const smsModal = document.getElementById("smsModal");
+            if (e.target === editModal) editModal.style.display = "none";
+            if (e.target === smsModal) smsModal.style.display = "none";
+        });
+
+        // Show SMS modal
         window.showSmsModal = (code, name, phone) => {
             if (!phone) {
                 alert(`Please add a mobile number for ${name} first. Click Edit to add.`);
