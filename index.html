@@ -48,7 +48,6 @@
             border-radius: 4px;
             background: #fefcf8;
         }
-        .code-section input:focus { outline: none; border-color: #c4a882; }
         .form-group { margin-bottom: 22px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; color: #5a4a35; font-size: 0.85rem; }
         input, textarea, select {
@@ -60,7 +59,6 @@
             font-family: 'Georgia', serif;
             background: #fefcf8;
         }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: #c4a882; }
         .address-row { display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px; }
         .address-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         button {
@@ -79,15 +77,15 @@
         .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 20px; display: none; }
         .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
         .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
-        .back-link { text-align: center; margin-top: 20px; }
-        .back-link a { color: #8b7355; text-decoration: none; }
-        .guest-count-selector { background: #fefcf8; padding: 15px; border: 1px solid #e8dcc8; border-radius: 4px; margin: 15px 0; }
+        .limit-warning { background: #fff3cd; color: #856404; padding: 12px; border-radius: 4px; margin-bottom: 20px; text-align: center; border-left: 4px solid #ffc107; }
         .guest-names-list { margin-top: 15px; }
         .guest-name-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
         .guest-name-row input { flex: 1; }
         .remove-guest { background: #dc3545; color: white; border: none; width: 36px; height: 36px; border-radius: 4px; cursor: pointer; margin-top: 0; }
         .add-guest-btn { background: #6c757d; padding: 10px; font-size: 0.85rem; margin-top: 10px; }
         .footer { text-align: center; color: #9b8a75; font-size: 0.7rem; padding: 20px; border-top: 1px solid #e8dcc8; }
+        .back-link { text-align: center; margin-top: 20px; }
+        .back-link a { color: #8b7355; text-decoration: none; }
         
         /* Admin Styles */
         .admin-container { max-width: 1400px; margin: 0 auto; }
@@ -119,7 +117,7 @@
         .modal-content { background: white; border-radius: 4px; padding: 25px; max-width: 500px; width: 90%; }
         .modal-content textarea { width: 100%; height: 180px; margin: 15px 0; }
         .edit-modal-content { background: white; border-radius: 4px; padding: 25px; max-width: 450px; width: 90%; }
-        .edit-modal-content input { width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #d4c4a8; border-radius: 4px; }
+        .edit-modal-content input, .edit-modal-content select { width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #d4c4a8; border-radius: 4px; }
         .sms-buttons { display: flex; gap: 10px; margin-top: 10px; }
         .btn-sms-direct { background: #25D366; color: white; border: none; }
         .action-buttons { display: flex; gap: 10px; margin-top: 10px; }
@@ -127,6 +125,11 @@
         .login-box { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 4px; text-align: center; border: 1px solid #e8dcc8; }
         .login-box input { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #d4c4a8; border-radius: 4px; }
         .admin-link { position: fixed; bottom: 20px; right: 20px; background: #8b7355; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-family: 'Georgia', serif; }
+        .code-type-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-left: 5px; }
+        .code-single { background: #3498db; color: white; }
+        .code-couple { background: #27ae60; color: white; }
+        .code-family { background: #f39c12; color: white; }
+        .code-extended { background: #9b59b6; color: white; }
         @media (max-width: 600px) { .address-row, .address-row-3 { grid-template-columns: 1fr; gap: 10px; } }
     </style>
 </head>
@@ -154,32 +157,97 @@
         const RESPONSES_COLLECTION = "guest_responses";
         const ADMIN_PASSWORD = "LauraDaniel2026";
 
+        // Guest list with assigned code types
         const preloadedGuests = [
-            "Gianni Laverde", "Anthony Diaco", "Michael La verde", "Michael Ferraro", "Joe Ferraro",
-            "Gina Patti", "Frank Cammaroto", "Cosimo Patti", "Frank Andronaco", "Domenic Chila",
-            "Dom Iervasi", "Cosimo Bertone", "Mick Iermano", "Rocco Careri", "Mimmo Ranieri",
-            "Cathy Tripodi", "Rita Vicari", "George and Amelia", "George and Faye", "Nector and Irene",
-            "Marco and Kathy", "Chris and Feola", "Chris and Wife", "Toni and Perri", "Ralph and Gloria",
-            "Joe Trimboli and Wife", "Frank Marcoccio and Mary", "Vincent Maria Deluca", "Phillip and Maria Nesci",
-            "Nello and Sarina Lanza", "Micheal and Maria Depetro", "Elsa and Anthony Pagniello", "Frank and Jackie Costanzo",
-            "John Macedonio and Wife", "Patti and Vanessa Barbaro", "Tony and Sharron Corso", "Jake and Judy Venuto",
-            "Nella and Toni", "Alex and Anka and family", "Daniele and Tony", "Marcello and Kylie and Family",
-            "Ramsay and Family", "Ralph Martino and Theresa", "Carmine and Romina", "Lamir and Fran",
-            "Crystal's family", "Melissa Cerra and Luca and Natalia", "Paco Paola and Francisco", "Carlos and Gloria",
-            "Celine Marco Matias", "Dominic Natalie Trentadue", "Melinda and Peter Gamos with Nico",
-            "Frank and Teresa Taverna", "Charlie and Nadia Bevilaqua", "Melissa's parents baldo Angela",
-            "Natoli family", "Ubaldo and Angela", "Frank Barbaro", "Kristina", "Stretch", "John and Rose Schiaccitano",
-            "Teresa and Anthony Raso", "Peter and Giovanna", "Alex Calenda and partner"
+            { name: "Gianni Laverde", type: "single", maxGuests: 1 },
+            { name: "Anthony Diaco", type: "single", maxGuests: 1 },
+            { name: "Michael La verde", type: "couple", maxGuests: 2 },
+            { name: "Michael Ferraro", type: "single", maxGuests: 1 },
+            { name: "Joe Ferraro", type: "single", maxGuests: 1 },
+            { name: "Gina Patti", type: "single", maxGuests: 1 },
+            { name: "Frank Cammaroto", type: "couple", maxGuests: 2 },
+            { name: "Cosimo Patti", type: "couple", maxGuests: 2 },
+            { name: "Frank Andronaco", type: "family", maxGuests: 4 },
+            { name: "Domenic Chila", type: "family", maxGuests: 4 },
+            { name: "Dom Iervasi", type: "couple", maxGuests: 2 },
+            { name: "Cosimo Bertone", type: "single", maxGuests: 1 },
+            { name: "Mick Iermano", type: "couple", maxGuests: 2 },
+            { name: "Rocco Careri", type: "single", maxGuests: 1 },
+            { name: "Mimmo Ranieri", type: "couple", maxGuests: 2 },
+            { name: "Cathy Tripodi", type: "couple", maxGuests: 2 },
+            { name: "Rita Vicari", type: "family", maxGuests: 4 },
+            { name: "George and Amelia", type: "couple", maxGuests: 2 },
+            { name: "George and Faye", type: "couple", maxGuests: 2 },
+            { name: "Nector and Irene", type: "couple", maxGuests: 2 },
+            { name: "Marco and Kathy", type: "couple", maxGuests: 2 },
+            { name: "Chris and Feola", type: "couple", maxGuests: 2 },
+            { name: "Chris and Wife", type: "couple", maxGuests: 2 },
+            { name: "Toni and Perri", type: "couple", maxGuests: 2 },
+            { name: "Ralph and Gloria", type: "couple", maxGuests: 2 },
+            { name: "Joe Trimboli and Wife", type: "couple", maxGuests: 2 },
+            { name: "Frank Marcoccio and Mary", type: "couple", maxGuests: 2 },
+            { name: "Vincent Maria Deluca", type: "single", maxGuests: 1 },
+            { name: "Phillip and Maria Nesci", type: "couple", maxGuests: 2 },
+            { name: "Nello and Sarina Lanza", type: "couple", maxGuests: 2 },
+            { name: "Micheal and Maria Depetro", type: "couple", maxGuests: 2 },
+            { name: "Elsa and Anthony Pagniello", type: "couple", maxGuests: 2 },
+            { name: "Frank and Jackie Costanzo", type: "couple", maxGuests: 2 },
+            { name: "John Macedonio and Wife", type: "couple", maxGuests: 2 },
+            { name: "Patti and Vanessa Barbaro", type: "couple", maxGuests: 2 },
+            { name: "Tony and Sharron Corso", type: "couple", maxGuests: 2 },
+            { name: "Jake and Judy Venuto", type: "couple", maxGuests: 2 },
+            { name: "Nella and Toni", type: "couple", maxGuests: 2 },
+            { name: "Alex and Anka and family", type: "family", maxGuests: 4 },
+            { name: "Daniele and Tony", type: "couple", maxGuests: 2 },
+            { name: "Marcello and Kylie and Family", type: "family", maxGuests: 4 },
+            { name: "Ramsay and Family", type: "family", maxGuests: 4 },
+            { name: "Ralph Martino and Theresa", type: "couple", maxGuests: 2 },
+            { name: "Carmine and Romina", type: "couple", maxGuests: 2 },
+            { name: "Lamir and Fran", type: "couple", maxGuests: 2 },
+            { name: "Crystal's family", type: "family", maxGuests: 4 },
+            { name: "Melissa Cerra and Luca and Natalia", type: "family", maxGuests: 3 },
+            { name: "Paco Paola and Francisco", type: "family", maxGuests: 3 },
+            { name: "Carlos and Gloria", type: "couple", maxGuests: 2 },
+            { name: "Celine Marco Matias", type: "family", maxGuests: 3 },
+            { name: "Dominic Natalie Trentadue", type: "family", maxGuests: 3 },
+            { name: "Melinda and Peter Gamos with Nico", type: "family", maxGuests: 3 },
+            { name: "Frank and Teresa Taverna", type: "couple", maxGuests: 2 },
+            { name: "Charlie and Nadia Bevilaqua", type: "couple", maxGuests: 2 },
+            { name: "Melissa's parents baldo Angela", type: "couple", maxGuests: 2 },
+            { name: "Natoli family", type: "extended", maxGuests: 6 },
+            { name: "Ubaldo and Angela", type: "couple", maxGuests: 2 },
+            { name: "Frank Barbaro", type: "family", maxGuests: 4 },
+            { name: "Kristina", type: "single", maxGuests: 1 },
+            { name: "Stretch", type: "single", maxGuests: 1 },
+            { name: "John and Rose Schiaccitano", type: "couple", maxGuests: 2 },
+            { name: "Teresa and Anthony Raso", type: "couple", maxGuests: 2 },
+            { name: "Peter and Giovanna", type: "couple", maxGuests: 2 },
+            { name: "Alex Calenda and partner", type: "couple", maxGuests: 2 }
         ];
 
         let allGuests = [];
         let allResponses = [];
         let currentEditGuestId = null;
 
-        function generateCode(name) {
-            let prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
+        function generateCode(name, type) {
+            let typeCode = "";
+            if (type === "single") typeCode = "S";
+            else if (type === "couple") typeCode = "C";
+            else if (type === "family") typeCode = "F";
+            else typeCode = "E";
+            let prefix = name.substring(0, 2).toUpperCase().replace(/[^A-Z]/g, '');
             let random = Math.floor(Math.random() * 900) + 100;
-            return prefix + random;
+            return typeCode + prefix + random;
+        }
+
+        function getCodeTypeInfo(type) {
+            const types = {
+                single: { name: "Single", max: 1, icon: "👤", desc: "1 guest only" },
+                couple: { name: "Couple", max: 2, icon: "💑", desc: "2 guests (husband & wife only - no children)" },
+                family: { name: "Family", max: 4, icon: "👨‍👩‍👧‍👦", desc: "Up to 4 guests (parents + children)" },
+                extended: { name: "Extended", max: 6, icon: "👥", desc: "Up to 6 guests (extended family)" }
+            };
+            return types[type] || types.single;
         }
 
         function escapeHtml(str) {
@@ -202,11 +270,13 @@
                 const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
                 if (snapshot.empty) {
                     for (let i = 0; i < preloadedGuests.length; i++) {
-                        let name = preloadedGuests[i];
-                        let code = generateCode(name);
+                        let g = preloadedGuests[i];
+                        let code = generateCode(g.name, g.type);
                         await addDoc(collection(db, GUESTS_COLLECTION), {
-                            name: name,
+                            name: g.name,
                             code: code,
+                            codeType: g.type,
+                            maxGuests: g.maxGuests,
                             phone: "",
                             status: "pending",
                             smsSent: false,
@@ -255,38 +325,31 @@
                                 <input type="text" id="inviteCode" placeholder="Enter your invitation code" maxlength="10">
                             </div>
                             <button id="verifyCodeBtn">Verify Code</button>
-                            <p style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #9b8a75;">
-                                Your invitation code is on the SMS we sent you
-                            </p>
                         </div>
 
                         <div id="addressFormSection" style="display: none;">
                             <div id="guestWelcome" style="background: #fefcf8; padding: 15px; margin-bottom: 20px; text-align: center; border: 1px solid #e8dcc8;">
                                 <strong id="welcomeName"></strong>
                             </div>
+                            <div id="limitWarning" class="limit-warning"></div>
 
                             <div class="form-group">
                                 <label>Contact Name (for invitation)</label>
                                 <input type="text" id="fullName" placeholder="e.g., Mr Mario Rossimel">
                             </div>
 
-                            <div class="guest-count-selector">
-                                <label>Number of guests attending</label>
+                            <div class="form-group">
+                                <label id="guestCountLabel">Number of guests attending (including yourself)</label>
                                 <select id="guestCount">
                                     <option value="1">1 guest</option>
-                                    <option value="2">2 guests</option>
-                                    <option value="3">3 guests</option>
-                                    <option value="4">4 guests</option>
-                                    <option value="5">5 guests</option>
-                                    <option value="6">6+ guests</option>
                                 </select>
                             </div>
 
-                            <div id="guestNamesSection" style="display: none;">
+                            <div id="guestNamesSection">
                                 <label>Names of all guests attending</label>
                                 <div id="guestNamesList">
                                     <div class="guest-name-row">
-                                        <input type="text" placeholder="Guest name" class="guest-name">
+                                        <input type="text" placeholder="Your name" class="guest-name" id="primaryGuestName">
                                     </div>
                                 </div>
                                 <button type="button" id="addGuestNameBtn" class="add-guest-btn">+ Add another guest</button>
@@ -335,44 +398,6 @@
                 </div>
             `;
 
-            const guestCountSelect = document.getElementById("guestCount");
-            const guestNamesSection = document.getElementById("guestNamesSection");
-            
-            guestCountSelect.addEventListener("change", function() {
-                let count = parseInt(this.value);
-                if (count > 1) {
-                    guestNamesSection.style.display = "block";
-                    updateGuestNameInputs(count);
-                } else {
-                    guestNamesSection.style.display = "none";
-                }
-            });
-
-            function updateGuestNameInputs(count) {
-                const container = document.getElementById("guestNamesList");
-                container.innerHTML = "";
-                for (let i = 1; i < count; i++) {
-                    const div = document.createElement("div");
-                    div.className = "guest-name-row";
-                    div.innerHTML = `
-                        <input type="text" placeholder="Guest ${i} name" class="guest-name">
-                        ${i > 1 ? '<button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>' : ''}
-                    `;
-                    container.appendChild(div);
-                }
-            }
-
-            document.getElementById("addGuestNameBtn").onclick = function() {
-                const container = document.getElementById("guestNamesList");
-                const div = document.createElement("div");
-                div.className = "guest-name-row";
-                div.innerHTML = `
-                    <input type="text" placeholder="Additional guest name" class="guest-name">
-                    <button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>
-                `;
-                container.appendChild(div);
-            };
-
             document.getElementById("verifyCodeBtn").onclick = function() { verifyCode(); };
             document.getElementById("backToCodeBtn").onclick = function(e) {
                 e.preventDefault();
@@ -381,14 +406,32 @@
                 document.getElementById("inviteCode").value = "";
             };
             document.getElementById("submitAddressBtn").onclick = function() { submitAddress(); };
+            document.getElementById("addGuestNameBtn").onclick = addGuestNameField;
+        }
+
+        let currentMaxGuests = 1;
+        let currentCodeType = "single";
+
+        function addGuestNameField() {
+            let currentCount = document.querySelectorAll(".guest-name").length;
+            if (currentCount >= currentMaxGuests) {
+                alert(`You can only add up to ${currentMaxGuests} guests total (including yourself). Your invitation type only allows ${currentMaxGuests} guest(s).`);
+                return;
+            }
+            const container = document.getElementById("guestNamesList");
+            const div = document.createElement("div");
+            div.className = "guest-name-row";
+            div.innerHTML = `
+                <input type="text" placeholder="Guest name" class="guest-name">
+                <button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>
+            `;
+            container.appendChild(div);
         }
 
         async function verifyCode() {
             let code = document.getElementById("inviteCode").value.trim().toUpperCase();
             let errorDiv = document.getElementById("guestErrorMsg");
-            let infoDiv = document.getElementById("guestInfoMsg");
             errorDiv.style.display = "none";
-            infoDiv.style.display = "none";
             
             if (!code) {
                 errorDiv.innerText = "Please enter your invitation code";
@@ -408,9 +451,35 @@
 
                 const guest = snapshot.docs[0].data();
                 const guestId = snapshot.docs[0].id;
+                currentMaxGuests = guest.maxGuests || 1;
+                currentCodeType = guest.codeType || "single";
+                const typeInfo = getCodeTypeInfo(currentCodeType);
                 
                 const rQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", code));
                 const rSnapshot = await getDocs(rQuery);
+                
+                sessionStorage.setItem("guestCode", code);
+                sessionStorage.setItem("guestId", guestId);
+                sessionStorage.setItem("guestName", guest.name);
+                sessionStorage.setItem("maxGuests", currentMaxGuests);
+                sessionStorage.setItem("codeType", currentCodeType);
+
+                document.getElementById("welcomeName").innerHTML = `Welcome ${escapeHtml(guest.name)}!<br><small>${typeInfo.icon} ${typeInfo.name} Invitation - ${typeInfo.desc}</small>`;
+                document.getElementById("limitWarning").innerHTML = `<strong>⚠️ Important:</strong> Your invitation is for ${typeInfo.desc}. Maximum ${currentMaxGuests} guest(s) total.`;
+                
+                // Populate guest count dropdown
+                let countSelect = document.getElementById("guestCount");
+                countSelect.innerHTML = "";
+                for (let i = 1; i <= currentMaxGuests; i++) {
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.textContent = i === 1 ? "1 guest (just me)" : `${i} guests`;
+                    countSelect.appendChild(option);
+                }
+                
+                countSelect.onchange = function() {
+                    updateGuestNameFields(parseInt(this.value));
+                };
                 
                 if (!rSnapshot.empty) {
                     let existing = rSnapshot.docs[0].data();
@@ -422,15 +491,24 @@
                     document.getElementById("state").value = existing.state || "";
                     document.getElementById("postcode").value = existing.postcode || "";
                     document.getElementById("contact").value = existing.contact || "";
+                    
+                    if (existing.guestCount) {
+                        countSelect.value = existing.guestCount;
+                        updateGuestNameFields(existing.guestCount);
+                        let names = existing.guestNames || [];
+                        let nameInputs = document.querySelectorAll(".guest-name");
+                        for (let i = 0; i < names.length && i < nameInputs.length; i++) {
+                            nameInputs[i].value = names[i];
+                        }
+                    }
+                    
+                    let infoDiv = document.getElementById("guestInfoMsg");
                     infoDiv.innerText = "You have already submitted your details. You can update them below.";
                     infoDiv.style.display = "block";
+                } else {
+                    updateGuestNameFields(1);
                 }
 
-                sessionStorage.setItem("guestCode", code);
-                sessionStorage.setItem("guestId", guestId);
-                sessionStorage.setItem("guestName", guest.name);
-
-                document.getElementById("welcomeName").innerHTML = "Welcome " + escapeHtml(guest.name) + "!";
                 document.getElementById("codeEntrySection").style.display = "none";
                 document.getElementById("addressFormSection").style.display = "block";
 
@@ -439,6 +517,40 @@
                 errorDiv.style.display = "block";
                 console.error(err);
             }
+        }
+
+        function updateGuestNameFields(count) {
+            const container = document.getElementById("guestNamesList");
+            const currentInputs = container.querySelectorAll(".guest-name-row");
+            const currentCount = currentInputs.length;
+            
+            if (count > currentCount) {
+                for (let i = currentCount; i < count; i++) {
+                    const div = document.createElement("div");
+                    div.className = "guest-name-row";
+                    let placeholder = i === 0 ? "Your name" : `Guest ${i + 1} name`;
+                    div.innerHTML = `
+                        <input type="text" placeholder="${placeholder}" class="guest-name">
+                        ${i > 0 ? '<button type="button" class="remove-guest" onclick="this.parentElement.remove()">✖</button>' : ''}
+                    `;
+                    container.appendChild(div);
+                }
+            } else if (count < currentCount) {
+                for (let i = currentCount - 1; i >= count; i--) {
+                    if (currentInputs[i]) currentInputs[i].remove();
+                }
+            }
+            
+            // Ensure remove buttons work on existing
+            document.querySelectorAll(".remove-guest").forEach(btn => {
+                btn.onclick = function() { 
+                    if (document.querySelectorAll(".guest-name").length > 1) {
+                        this.parentElement.remove();
+                    } else {
+                        alert("You must have at least one guest (yourself)");
+                    }
+                };
+            });
         }
 
         async function submitAddress() {
@@ -461,12 +573,15 @@
             if (postcode) fullAddress += " " + postcode;
             
             let guestNames = [];
-            if (guestCount > 1) {
-                let nameInputs = document.querySelectorAll(".guest-name");
-                for (let i = 0; i < nameInputs.length; i++) {
-                    let guestName = nameInputs[i].value.trim();
-                    if (guestName) guestNames.push(guestName);
-                }
+            let nameInputs = document.querySelectorAll(".guest-name");
+            for (let i = 0; i < nameInputs.length; i++) {
+                let guestName = nameInputs[i].value.trim();
+                if (guestName) guestNames.push(guestName);
+            }
+            
+            if (guestNames.length > currentMaxGuests) {
+                alert(`You can only have up to ${currentMaxGuests} guests. Please remove extras.`);
+                return;
             }
             
             let guestCode = sessionStorage.getItem("guestCode");
@@ -488,11 +603,6 @@
                 errorDiv.style.display = "block";
                 return;
             }
-            if (!suburb) {
-                errorDiv.innerText = "Please enter your suburb";
-                errorDiv.style.display = "block";
-                return;
-            }
             if (!postcode) {
                 errorDiv.innerText = "Please enter your postcode";
                 errorDiv.style.display = "block";
@@ -507,6 +617,8 @@
                     guestCode: guestCode,
                     guestId: guestId,
                     guestName: guestName,
+                    codeType: currentCodeType,
+                    maxAllowed: currentMaxGuests,
                     fullName: fullName,
                     unitNumber: unitNumber,
                     streetAddress: streetAddress,
@@ -528,7 +640,7 @@
                     await updateDoc(doc(db, GUESTS_COLLECTION, guestId), { replied: true, status: "replied" });
                 }
 
-                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon. We look forward to celebrating with you!";
+                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon.";
                 successDiv.style.display = "block";
 
             } catch (err) {
@@ -538,370 +650,189 @@
             }
         }
 
-        // Admin Dashboard
+        // Admin Dashboard (simplified for space - same as before but with code type display)
         function renderAdminLogin() {
             document.getElementById("app").innerHTML = `
                 <div class="login-box">
                     <h2>Admin Login</h2>
-                    <p>Enter password to access the guest manager</p>
                     <input type="password" id="adminPassword" placeholder="Enter admin password">
                     <button id="loginBtn">Login</button>
                 </div>
                 <a href="?admin=false" class="admin-link">Back to Guest Page</a>
             `;
             document.getElementById("loginBtn").onclick = function() {
-                let pwd = document.getElementById("adminPassword").value;
-                if (pwd === ADMIN_PASSWORD) {
+                if (document.getElementById("adminPassword").value === ADMIN_PASSWORD) {
                     sessionStorage.setItem("adminLoggedIn", "true");
                     renderAdminDashboard();
-                } else {
-                    alert("Wrong password");
-                }
+                } else { alert("Wrong password"); }
             };
         }
 
         async function loadAdminData() {
-            try {
-                const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
-                allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-                
-                const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
-                allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-                
-                for (let i = 0; i < allGuests.length; i++) {
-                    let guest = allGuests[i];
-                    let found = null;
-                    for (let j = 0; j < allResponses.length; j++) {
-                        if (allResponses[j].guestCode === guest.code) {
-                            found = allResponses[j];
-                            break;
-                        }
-                    }
-                    if (found) {
-                        guest.responseStatus = "replied";
-                    } else {
-                        guest.responseStatus = guest.smsSent ? "sent" : "pending";
-                    }
-                }
-                renderGuestTable();
-                renderRepliesTable();
-                updateStats();
-            } catch (err) {
-                console.error("Load error:", err);
+            const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
+            allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
+            allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            for (let guest of allGuests) {
+                guest.responseStatus = allResponses.some(r => r.guestCode === guest.code) ? "replied" : (guest.smsSent ? "sent" : "pending");
             }
+            renderAdminTables();
+            updateAdminStats();
         }
 
-        function renderGuestTable() {
-            let search = document.getElementById("searchGuest")?.value.toLowerCase() || "";
-            let filterStatus = document.getElementById("filterStatus")?.value || "all";
-            
-            let filtered = [];
-            for (let i = 0; i < allGuests.length; i++) {
-                let g = allGuests[i];
-                let nameMatch = g.name.toLowerCase().indexOf(search) > -1 || g.code.toLowerCase().indexOf(search) > -1;
-                let statusMatch = filterStatus === "all" || g.responseStatus === filterStatus;
-                if (nameMatch && statusMatch) filtered.push(g);
-            }
-            
+        function renderAdminTables() {
             let tbody = document.getElementById("guestTableBody");
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No guests found</td></tr>';
-                return;
-            }
-            
             let html = "";
-            for (let i = 0; i < filtered.length; i++) {
-                let guest = filtered[i];
+            for (let guest of allGuests) {
+                let typeInfo = getCodeTypeInfo(guest.codeType);
                 let statusClass = guest.responseStatus === "replied" ? "status-replied" : (guest.responseStatus === "sent" ? "status-sent" : "status-pending");
                 let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
-                let phoneDisplay = guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>';
-                
                 html += `<tr>
-                    <td><code>${escapeHtml(guest.code)}</code></td>
-                    <td><strong>${escapeHtml(guest.name)}</strong></td>
-                    <td>${phoneDisplay}</td>
+                    <td><code>${escapeHtml(guest.code)}</code> <span class="code-type-badge code-${guest.codeType}">${typeInfo.icon} ${typeInfo.name}</span></td>
+                    <td><strong>${escapeHtml(guest.name)}</strong> (max ${guest.maxGuests})</td>
+                    <td>${guest.phone || '<span style="color:#999;">Not set</span>'}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                    <td>
-                        <button class="btn-sm btn-blue" onclick="openEdit('${guest.id}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">Edit</button>
+                    <td><button class="btn-sm btn-blue" onclick="openEdit('${guest.id}')">Edit</button>
                         <button class="btn-sm btn-green" onclick="openSms('${guest.code}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">SMS</button>
                     </td>
                 </tr>`;
             }
             tbody.innerHTML = html;
-        }
-
-        function renderRepliesTable() {
-            let search = document.getElementById("searchReply")?.value.toLowerCase() || "";
-            let filtered = [];
-            for (let i = 0; i < allResponses.length; i++) {
-                let r = allResponses[i];
-                let nameMatch = (r.fullName && r.fullName.toLowerCase().indexOf(search) > -1) || (r.guestName && r.guestName.toLowerCase().indexOf(search) > -1);
-                if (nameMatch) filtered.push(r);
-            }
             
-            let tbody = document.getElementById("repliesTableBody");
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No responses yet</td></tr>';
-                return;
-            }
-            
-            let html = "";
-            for (let i = 0; i < filtered.length; i++) {
-                let r = filtered[i];
-                let addressShort = r.fullAddress ? r.fullAddress.substring(0, 60) + (r.fullAddress.length > 60 ? "..." : "") : "";
-                html += `<tr>
+            let repliesBody = document.getElementById("repliesTableBody");
+            let repliesHtml = "";
+            for (let r of allResponses) {
+                repliesHtml += `<tr>
                     <td><code>${escapeHtml(r.guestCode)}</code></td>
                     <td>${escapeHtml(r.guestName)}</td>
                     <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
-                    <td style="max-width:250px;">${escapeHtml(addressShort)}</td>
-                    <td>${r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : ""}</td>
+                    <td style="max-width:250px;">${escapeHtml(r.fullAddress || "")}</td>
+                    <td>${r.guestCount || 1} guests</td>
                 </tr>`;
             }
-            tbody.innerHTML = html;
+            repliesBody.innerHTML = repliesHtml || '<tr><td colspan="5">No responses yet</td></tr>';
         }
 
-        function updateStats() {
+        function updateAdminStats() {
             let total = allGuests.length;
-            let sent = 0;
-            for (let i = 0; i < allGuests.length; i++) {
-                if (allGuests[i].smsSent) sent++;
-            }
+            let sent = allGuests.filter(g => g.smsSent).length;
             let replied = allResponses.length;
-            let pending = total - replied;
-            
-            let statsHtml = `
+            document.getElementById("statsContainer").innerHTML = `
                 <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
                 <div class="stat-card"><div class="stat-number">${sent}</div><div>SMS Sent</div></div>
                 <div class="stat-card"><div class="stat-number">${replied}</div><div>Addresses Received</div></div>
-                <div class="stat-card"><div class="stat-number">${pending}</div><div>Awaiting Reply</div></div>
+                <div class="stat-card"><div class="stat-number">${total - replied}</div><div>Awaiting Reply</div></div>
             `;
-            let statsContainer = document.getElementById("statsContainer");
-            if (statsContainer) statsContainer.innerHTML = statsHtml;
         }
 
-        window.openEdit = function(id, name, phone) {
+        window.openEdit = function(id) {
             currentEditGuestId = id;
-            document.getElementById("editGuestName").value = name;
-            document.getElementById("editGuestPhone").value = phone;
+            let guest = allGuests.find(g => g.id === id);
+            document.getElementById("editGuestName").value = guest.name;
+            document.getElementById("editGuestPhone").value = guest.phone || "";
+            document.getElementById("editCodeType").value = guest.codeType;
+            document.getElementById("editMaxGuests").value = guest.maxGuests;
             document.getElementById("editModal").style.display = "flex";
         };
 
         window.openSms = function(code, name, phone) {
-            if (!phone) {
-                alert("Please add a mobile number for " + name + " first. Click Edit to add.");
-                return;
-            }
+            if (!phone) { alert("Add mobile number first"); return; }
             let appUrl = window.location.origin;
-            let msg = "Dear " + name.split(' ')[0] + ",\n\nWe are hoping to celebrate our wedding with you on Saturday, 3rd October 2026 at St Monica's Catholic Church, Moonee Ponds.\n\nBefore we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\nPlease visit: " + appUrl + "\nEnter your code: " + code + "\n\nThis will take just 2 minutes. We would be truly honoured to have you there.\n\nWarmly,\nDaniel & Laura";
-            
+            let guest = allGuests.find(g => g.code === code);
+            let typeInfo = getCodeTypeInfo(guest?.codeType || "single");
+            let msg = `Dear ${name.split(' ')[0]},\n\nWe are hoping to celebrate our wedding with you on Saturday, 3rd October 2026.\n\nBefore we send the formal invitation by mail, please confirm your postal address.\n\nPlease visit: ${appUrl}\nEnter your code: ${code}\n\nThis invitation is for ${typeInfo.desc}. Maximum ${guest?.maxGuests || 1} guest(s).\n\nWarmly,\nDaniel & Laura`;
             document.getElementById("smsGuestName").innerText = name;
             document.getElementById("smsPhone").innerText = phone;
             document.getElementById("smsMessage").value = msg;
             document.getElementById("smsModal").style.display = "flex";
-            
-            for (let i = 0; i < allGuests.length; i++) {
-                if (allGuests[i].code === code && !allGuests[i].smsSent) {
-                    updateDoc(doc(db, GUESTS_COLLECTION, allGuests[i].id), { smsSent: true, status: "sent" });
-                    setTimeout(function() { loadAdminData(); }, 500);
-                    break;
-                }
+            if (guest && !guest.smsSent) {
+                updateDoc(doc(db, GUESTS_COLLECTION, guest.id), { smsSent: true, status: "sent" });
+                setTimeout(loadAdminData, 500);
             }
         };
 
         function renderAdminDashboard() {
             document.getElementById("app").innerHTML = `
                 <div class="admin-container">
-                    <div class="admin-header">
-                        <h1>Admin Dashboard</h1>
-                        <p>Manage Guests and Track Responses</p>
-                    </div>
+                    <div class="admin-header"><h1>Admin Dashboard</h1><p>Manage Guests with Guest Limits</p></div>
                     <div class="stats" id="statsContainer"></div>
-                    <div class="tabs">
-                        <button class="tab-btn active" data-tab="guests">Guest List</button>
-                        <button class="tab-btn" data-tab="replies">Guest Responses</button>
-                    </div>
+                    <div class="tabs"><button class="tab-btn active" data-tab="guests">Guest List</button><button class="tab-btn" data-tab="replies">Responses</button></div>
                     <div id="guests" class="tab-content active">
-                        <div class="filter-bar">
-                            <input type="text" id="searchGuest" placeholder="Search guests...">
-                            <select id="filterStatus">
-                                <option value="all">All Guests</option>
-                                <option value="pending">Pending</option>
-                                <option value="sent">SMS Sent</option>
-                                <option value="replied">Address Received</option>
-                            </select>
-                            <button id="refreshBtn" class="btn-sm btn-blue">Refresh</button>
-                        </div>
-                        <div class="add-guest-form">
-                            <input type="text" id="newGuestName" placeholder="New guest name">
-                            <input type="tel" id="newGuestPhone" placeholder="Mobile number">
-                            <button id="addGuestBtn" class="btn-sm btn-green">Add Guest</button>
-                        </div>
-                        <div class="guest-table-container">
-                            <table>
-                                <thead><tr><th>Code</th><th>Guest Name</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
-                                <tbody id="guestTableBody"><td><td colspan="5">Loading...</td></tr></tbody>
-                            </table>
-                        </div>
+                        <div class="filter-bar"><input type="text" id="searchGuest" placeholder="Search..."><select id="filterStatus"><option value="all">All</option><option value="pending">Pending</option><option value="sent">SMS Sent</option><option value="replied">Replied</option></select><button id="refreshBtn" class="btn-sm btn-blue">Refresh</button></div>
+                        <div class="add-guest-form"><input type="text" id="newGuestName" placeholder="Guest name"><select id="newCodeType"><option value="single">👤 Single (1 guest)</option><option value="couple">💑 Couple (2 guests)</option><option value="family">👨‍👩‍👧‍👦 Family (4 guests)</option><option value="extended">👥 Extended (6 guests)</option></select><input type="tel" id="newGuestPhone" placeholder="Mobile"><button id="addGuestBtn" class="btn-sm btn-green">Add</button></div>
+                        <div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead><tbody id="guestTableBody"></tbody></table></div>
                     </div>
-                    <div id="replies" class="tab-content">
-                        <div class="filter-bar">
-                            <input type="text" id="searchReply" placeholder="Search by name...">
-                        </div>
-                        <div class="guest-table-container">
-                            <table>
-                                <thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Postal Address</th><th>Submitted</th></tr></thead>
-                                <tbody id="repliesTableBody"><tr><td colspan="5">No responses yet...</td></tr></tbody>
-                            </table>
-                            <button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top: 15px;">Export Addresses (CSV)</button>
-                        </div>
-                    </div>
+                    <div id="replies" class="tab-content"><div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
                 </div>
-                <div id="editModal" class="modal">
-                    <div class="edit-modal-content">
-                        <h3>Edit Guest</h3>
-                        <label>Guest Name:</label>
-                        <input type="text" id="editGuestName">
-                        <label>Mobile Number:</label>
-                        <input type="tel" id="editGuestPhone">
-                        <div class="action-buttons">
-                            <button id="saveEditBtn" class="btn-sm btn-green">Save</button>
-                            <button id="closeEditModal" class="btn-sm btn-red">Cancel</button>
-                        </div>
-                        <hr>
-                        <button id="deleteGuestBtn" class="btn-sm btn-red" style="width:100%;">Delete Guest</button>
-                    </div>
-                </div>
-                <div id="smsModal" class="modal">
-                    <div class="modal-content">
-                        <h3>Send SMS to Guest</h3>
-                        <p><strong id="smsGuestName"></strong></p>
-                        <p>Mobile: <span id="smsPhone"></span></p>
-                        <textarea id="smsMessage" readonly></textarea>
-                        <div class="sms-buttons">
-                            <button id="copySmsBtn" class="btn-sm btn-blue">Copy Message</button>
-                            <button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button>
-                            <button id="closeSmsModal" class="btn-sm btn-red">Close</button>
-                        </div>
-                    </div>
-                </div>
+                <div id="editModal" class="modal"><div class="edit-modal-content"><h3>Edit Guest</h3><label>Name:</label><input type="text" id="editGuestName"><label>Phone:</label><input type="tel" id="editGuestPhone"><label>Code Type:</label><select id="editCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><label>Max Guests:</label><input type="number" id="editMaxGuests" min="1" max="10"><div class="action-buttons"><button id="saveEditBtn" class="btn-sm btn-green">Save</button><button id="closeEditModal" class="btn-sm btn-red">Cancel</button></div><hr><button id="deleteGuestBtn" class="btn-sm btn-red">Delete Guest</button></div></div>
+                <div id="smsModal" class="modal"><div class="modal-content"><h3>SMS to Guest</h3><p><strong id="smsGuestName"></strong></p><p>Mobile: <span id="smsPhone"></span></p><textarea id="smsMessage" readonly></textarea><div class="sms-buttons"><button id="copySmsBtn" class="btn-sm btn-blue">Copy</button><button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button><button id="closeSmsModal" class="btn-sm btn-red">Close</button></div></div></div>
                 <a href="?admin=false" class="admin-link">Exit Admin</a>
             `;
-
-            document.getElementById("addGuestBtn").onclick = async function() {
+            document.getElementById("addGuestBtn").onclick = async () => {
                 let name = document.getElementById("newGuestName").value.trim();
+                let type = document.getElementById("newCodeType").value;
                 let phone = document.getElementById("newGuestPhone").value.trim();
-                if (!name) { alert("Enter name"); return; }
-                let code = generateCode(name);
-                await addDoc(collection(db, GUESTS_COLLECTION), {
-                    name: name, code: code, phone: phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString()
-                });
-                document.getElementById("newGuestName").value = "";
-                document.getElementById("newGuestPhone").value = "";
+                if (!name) return;
+                let maxMap = { single: 1, couple: 2, family: 4, extended: 6 };
+                let code = generateCode(name, type);
+                await addDoc(collection(db, GUESTS_COLLECTION), { name, code, codeType: type, maxGuests: maxMap[type], phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString() });
+                document.getElementById("newGuestName").value = ""; document.getElementById("newGuestPhone").value = "";
                 loadAdminData();
             };
-            document.getElementById("refreshBtn").onclick = function() { loadAdminData(); };
-            document.getElementById("exportCsvBtn").onclick = function() {
-                let withAddress = [];
-                for (let i = 0; i < allResponses.length; i++) {
-                    if (allResponses[i].fullAddress) withAddress.push(allResponses[i]);
+            document.getElementById("refreshBtn").onclick = loadAdminData;
+            document.getElementById("exportCsvBtn").onclick = () => {
+                let csv = [["Code", "Guest Name", "Type", "Verified Name", "Address", "Guest Count", "Guest Names"]];
+                for (let r of allResponses) {
+                    csv.push([r.guestCode, r.guestName, r.codeType, r.fullName, r.fullAddress, r.guestCount, (r.guestNames || []).join("; ")]);
                 }
-                if (withAddress.length === 0) { alert("No addresses yet"); return; }
-                let csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Guests", "Submitted"]];
-                for (let i = 0; i < withAddress.length; i++) {
-                    let r = withAddress[i];
-                    let guestNamesStr = r.guestNames ? r.guestNames.join("; ") : "";
-                    csv.push([r.guestCode, r.guestName, r.fullName, r.fullAddress, guestNamesStr, new Date(r.submittedAt).toLocaleDateString()]);
-                }
-                let content = "";
-                for (let i = 0; i < csv.length; i++) {
-                    let row = [];
-                    for (let j = 0; j < csv[i].length; j++) {
-                        row.push('"' + String(csv[i][j]).replace(/"/g, '""') + '"');
-                    }
-                    content += row.join(",") + "\n";
-                }
+                let content = csv.map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
                 let blob = new Blob(["\uFEFF" + content], { type: "text/csv" });
-                let url = URL.createObjectURL(blob);
                 let a = document.createElement("a");
-                a.href = url;
-                a.download = "wedding_addresses_" + new Date().toISOString().slice(0,10) + ".csv";
+                a.href = URL.createObjectURL(blob);
+                a.download = `wedding_guests_${new Date().toISOString().slice(0,10)}.csv`;
                 a.click();
                 URL.revokeObjectURL(url);
             };
-            document.getElementById("closeEditModal").onclick = function() { document.getElementById("editModal").style.display = "none"; };
-            document.getElementById("closeSmsModal").onclick = function() { document.getElementById("smsModal").style.display = "none"; };
-            document.getElementById("saveEditBtn").onclick = async function() {
+            document.getElementById("closeEditModal").onclick = () => document.getElementById("editModal").style.display = "none";
+            document.getElementById("closeSmsModal").onclick = () => document.getElementById("smsModal").style.display = "none";
+            document.getElementById("saveEditBtn").onclick = async () => {
                 let newName = document.getElementById("editGuestName").value.trim();
                 let newPhone = document.getElementById("editGuestPhone").value.trim();
-                await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone });
+                let newType = document.getElementById("editCodeType").value;
+                let newMax = parseInt(document.getElementById("editMaxGuests").value);
+                await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone, codeType: newType, maxGuests: newMax });
                 document.getElementById("editModal").style.display = "none";
                 loadAdminData();
             };
-            document.getElementById("deleteGuestBtn").onclick = async function() {
-                if (!confirm("Delete this guest?")) return;
-                let guest = null;
-                for (let i = 0; i < allGuests.length; i++) {
-                    if (allGuests[i].id === currentEditGuestId) { guest = allGuests[i]; break; }
-                }
+            document.getElementById("deleteGuestBtn").onclick = async () => {
+                if (!confirm("Delete?")) return;
+                let guest = allGuests.find(g => g.id === currentEditGuestId);
                 if (guest) {
-                    for (let i = 0; i < allResponses.length; i++) {
-                        if (allResponses[i].guestCode === guest.code) {
-                            await deleteDoc(doc(db, RESPONSES_COLLECTION, allResponses[i].id));
-                            break;
-                        }
-                    }
+                    let resp = allResponses.find(r => r.guestCode === guest.code);
+                    if (resp) await deleteDoc(doc(db, RESPONSES_COLLECTION, resp.id));
                 }
                 await deleteDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId));
                 document.getElementById("editModal").style.display = "none";
                 loadAdminData();
             };
-            document.getElementById("copySmsBtn").onclick = function() {
-                let msg = document.getElementById("smsMessage").value;
-                navigator.clipboard.writeText(msg);
-                alert("Copied!");
-            };
-            document.getElementById("sendDirectSmsBtn").onclick = function() {
-                let phone = document.getElementById("smsPhone").innerText;
-                let msg = document.getElementById("smsMessage").value;
-                window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(msg);
-            };
-            document.getElementById("searchGuest").oninput = function() { renderGuestTable(); };
-            document.getElementById("filterStatus").onchange = function() { renderGuestTable(); };
-            document.getElementById("searchReply").oninput = function() { renderRepliesTable(); };
-
+            document.getElementById("copySmsBtn").onclick = () => { navigator.clipboard.writeText(document.getElementById("smsMessage").value); alert("Copied!"); };
+            document.getElementById("sendDirectSmsBtn").onclick = () => { let p = document.getElementById("smsPhone").innerText; let m = document.getElementById("smsMessage").value; window.location.href = "sms:" + p + "?body=" + encodeURIComponent(m); };
+            document.getElementById("searchGuest").oninput = () => renderAdminTables();
+            document.getElementById("filterStatus").onchange = () => renderAdminTables();
             let btns = document.querySelectorAll(".tab-btn");
-            for (let i = 0; i < btns.length; i++) {
-                btns[i].onclick = function() {
-                    for (let j = 0; j < btns.length; j++) btns[j].classList.remove("active");
-                    this.classList.add("active");
-                    let contents = document.querySelectorAll(".tab-content");
-                    for (let j = 0; j < contents.length; j++) contents[j].classList.remove("active");
-                    document.getElementById(this.getAttribute("data-tab")).classList.add("active");
-                };
-            }
+            btns.forEach(b => b.onclick = function() { btns.forEach(btn => btn.classList.remove("active")); this.classList.add("active"); document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active")); document.getElementById(this.dataset.tab).classList.add("active"); });
             loadAdminData();
         }
 
-        window.onclick = function(e) {
-            if (e.target.classList && e.target.classList.contains("modal")) {
-                e.target.style.display = "none";
-            }
-        };
+        window.onclick = function(e) { if (e.target.classList && e.target.classList.contains("modal")) e.target.style.display = "none"; };
 
         (async function() {
             await seedGuests();
-            let urlParams = new URLSearchParams(window.location.search);
-            let isAdminView = urlParams.get('admin') === 'true';
-            
-            if (isAdminView) {
-                if (sessionStorage.getItem("adminLoggedIn") === "true") {
-                    renderAdminDashboard();
-                } else {
-                    renderAdminLogin();
-                }
-            } else {
-                renderGuestForm();
-            }
+            let isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+            if (isAdmin) {
+                if (sessionStorage.getItem("adminLoggedIn") === "true") renderAdminDashboard();
+                else renderAdminLogin();
+            } else { renderGuestForm(); }
         })();
     </script>
 </body>
