@@ -73,7 +73,8 @@
             cursor: pointer;
             margin-top: 15px;
         }
-        button:hover { background: #6b5a45; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        button:hover:not(:disabled) { background: #6b5a45; }
         .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 4px; text-align: center; margin-bottom: 20px; display: none; }
         .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
         .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: none; }
@@ -84,6 +85,10 @@
         .footer { text-align: center; color: #9b8a75; font-size: 0.7rem; padding: 20px; border-top: 1px solid #e8dcc8; }
         .back-link { text-align: center; margin-top: 20px; }
         .back-link a { color: #8b7355; text-decoration: none; }
+        .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        .loading-spinner { background: white; padding: 20px 40px; border-radius: 8px; font-family: Georgia, serif; }
         
         /* Admin Styles */
         .admin-container { max-width: 1400px; margin: 0 auto; }
@@ -154,6 +159,9 @@
         const GUESTS_COLLECTION = "wedding_guests";
         const RESPONSES_COLLECTION = "guest_responses";
         const ADMIN_PASSWORD = "LauraDaniel2026";
+        
+        // Rate limiting storage
+        const submissionTracker = new Map();
 
         const preloadedGuests = [
             { name: "Gianni Laverde", type: "single", maxGuests: 1 },
@@ -226,6 +234,19 @@
         let allResponses = [];
         let currentEditGuestId = null;
 
+        function showLoading(show, message = "Loading...") {
+            let existing = document.querySelector(".loading-overlay");
+            if (show) {
+                if (existing) existing.remove();
+                let overlay = document.createElement("div");
+                overlay.className = "loading-overlay";
+                overlay.innerHTML = `<div class="loading-spinner"><div class="spinner"></div> ${message}</div>`;
+                document.body.appendChild(overlay);
+            } else {
+                if (existing) existing.remove();
+            }
+        }
+
         function generateCode(name, type) {
             let typeCode = "";
             if (type === "single") typeCode = "S";
@@ -262,8 +283,23 @@
             return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
         }
 
+        function formatAustralianAddress(unit, street, suburb, city, state, postcode) {
+            let parts = [];
+            if (unit && street) parts.push(`${unit} ${street}`);
+            else if (street) parts.push(street);
+            if (suburb) parts.push(suburb);
+            if (city && city !== suburb) parts.push(city);
+            let statePostcode = "";
+            if (state && postcode) statePostcode = `${state} ${postcode}`;
+            else if (state) statePostcode = state;
+            else if (postcode) statePostcode = postcode;
+            if (statePostcode) parts.push(statePostcode);
+            return parts.join(", ");
+        }
+
         async function seedGuests() {
             try {
+                showLoading(true, "Setting up guest list...");
                 const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
                 if (snapshot.empty) {
                     for (let i = 0; i < preloadedGuests.length; i++) {
@@ -285,6 +321,8 @@
                 }
             } catch (e) {
                 console.error("Seed error:", e);
+            } finally {
+                showLoading(false);
             }
         }
 
@@ -355,7 +393,7 @@
                                 </div>
                                 <div class="address-row">
                                     <input type="text" id="suburb" placeholder="Suburb">
-                                    <input type="text" id="city" placeholder="City">
+                                    <input type="text" id="city" placeholder="City (optional)">
                                 </div>
                                 <div class="address-row-3">
                                     <select id="state">
@@ -414,6 +452,7 @@
                 return;
             }
 
+            showLoading(true, "Verifying code...");
             try {
                 const q = query(collection(db, GUESTS_COLLECTION), where("code", "==", code));
                 const snapshot = await getDocs(q);
@@ -421,6 +460,7 @@
                 if (snapshot.empty) {
                     errorDiv.innerText = "Invalid invitation code. Please check the SMS we sent you.";
                     errorDiv.style.display = "block";
+                    showLoading(false);
                     return;
                 }
 
@@ -490,6 +530,8 @@
                 errorDiv.innerText = "Something went wrong. Please try again.";
                 errorDiv.style.display = "block";
                 console.error(err);
+            } finally {
+                showLoading(false);
             }
         }
 
@@ -517,13 +559,18 @@
             let contact = document.getElementById("contact").value.trim();
             let guestCount = parseInt(document.getElementById("guestCount").value);
             
-            let fullAddress = "";
-            if (unitNumber) fullAddress += unitNumber + " ";
-            if (streetAddress) fullAddress += streetAddress;
-            if (suburb) fullAddress += ", " + suburb;
-            if (city) fullAddress += ", " + city;
-            if (state) fullAddress += " " + state;
-            if (postcode) fullAddress += " " + postcode;
+            let guestCode = sessionStorage.getItem("guestCode");
+            
+            // Rate limiting check
+            let lastSubmit = submissionTracker.get(guestCode);
+            if (lastSubmit && (Date.now() - lastSubmit) < 30000) {
+                let errorDiv = document.getElementById("guestErrorMsg");
+                errorDiv.innerText = "Please wait 30 seconds before submitting again.";
+                errorDiv.style.display = "block";
+                return;
+            }
+            
+            let fullAddress = formatAustralianAddress(unitNumber, streetAddress, suburb, city, state, postcode);
             
             let guestNames = [];
             let nameInputs = document.querySelectorAll(".guest-name");
@@ -537,7 +584,6 @@
                 return;
             }
             
-            let guestCode = sessionStorage.getItem("guestCode");
             let guestId = sessionStorage.getItem("guestId");
             let guestName = sessionStorage.getItem("guestName");
             
@@ -562,6 +608,7 @@
                 return;
             }
 
+            showLoading(true, "Saving your details...");
             try {
                 const rQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", guestCode));
                 const rSnapshot = await getDocs(rQuery);
@@ -595,11 +642,14 @@
                     successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon. We look forward to celebrating with you!";
                 }
                 successDiv.style.display = "block";
+                submissionTracker.set(guestCode, Date.now());
 
             } catch (err) {
                 errorDiv.innerText = "Something went wrong. Please try again.";
                 errorDiv.style.display = "block";
                 console.error(err);
+            } finally {
+                showLoading(false);
             }
         }
 
@@ -622,15 +672,20 @@
         }
 
         async function loadAdminData() {
-            const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
-            allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-            const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
-            allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-            for (let guest of allGuests) {
-                guest.responseStatus = allResponses.some(r => r.guestCode === guest.code) ? "replied" : (guest.smsSent ? "sent" : "pending");
+            showLoading(true, "Loading guest data...");
+            try {
+                const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
+                allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
+                allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                for (let guest of allGuests) {
+                    guest.responseStatus = allResponses.some(r => r.guestCode === guest.code) ? "replied" : (guest.smsSent ? "sent" : "pending");
+                }
+                renderAdminTables();
+                updateAdminStats();
+            } finally {
+                showLoading(false);
             }
-            renderAdminTables();
-            updateAdminStats();
         }
 
         function renderAdminTables() {
@@ -657,10 +712,11 @@
             for (let r of allResponses) {
                 repliesHtml += `<tr>
                     <td><code>${escapeHtml(r.guestCode)}</code></td>
-                    <td>${escapeHtml(r.guestName)}</td></td>
+                    <td>${escapeHtml(r.guestName)}</td>
                     <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
                     <td style="max-width:250px;">${escapeHtml(r.fullAddress || "")}</td>
-                    <td>${r.guestCount || 1} guests</td></tr>`;
+                    <td>${r.guestCount || 1} guests</td>
+                </tr>`;
             }
             repliesBody.innerHTML = repliesHtml || '<tr><td colspan="5">No responses yet</td></tr>';
         }
@@ -714,7 +770,7 @@
                         <div class="add-guest-form"><input type="text" id="newGuestName" placeholder="Guest name"><select id="newCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><input type="tel" id="newGuestPhone" placeholder="Mobile"><button id="addGuestBtn" class="btn-sm btn-green">Add</button></div>
                         <div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead><tbody id="guestTableBody"></tbody></table></div>
                     </div>
-                    <div id="replies" class="tab-content"><div class="guest-table-container"><tr><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
+                    <div id="replies" class="tab-content"><div class="guest-table-container"><table><thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Address</th><th>Guests</th></tr></thead><tbody id="repliesTableBody"></tbody></table><button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top:15px;">Export CSV</button></div></div>
                 </div>
                 <div id="editModal" class="modal"><div class="edit-modal-content"><h3>Edit Guest</h3><label>Name:</label><input type="text" id="editGuestName"><label>Phone:</label><input type="tel" id="editGuestPhone"><label>Code Type:</label><select id="editCodeType"><option value="single">Single (1 guest)</option><option value="couple">Couple (2 guests)</option><option value="family">Family (4 guests)</option><option value="extended">Extended (6 guests)</option></select><label>Max Guests:</label><input type="number" id="editMaxGuests" min="1" max="10"><div class="action-buttons"><button id="saveEditBtn" class="btn-sm btn-green">Save</button><button id="closeEditModal" class="btn-sm btn-red">Cancel</button></div><hr><button id="deleteGuestBtn" class="btn-sm btn-red">Delete Guest</button></div></div>
                 <div id="smsModal" class="modal"><div class="modal-content"><h3>SMS to Guest</h3><p><strong id="smsGuestName"></strong></p><p>Mobile: <span id="smsPhone"></span></p><textarea id="smsMessage" readonly></textarea><div class="sms-buttons"><button id="copySmsBtn" class="btn-sm btn-blue">Copy</button><button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button><button id="closeSmsModal" class="btn-sm btn-red">Close</button></div></div></div>
@@ -728,9 +784,14 @@
                 if (!name) return;
                 let maxMap = { single: 1, couple: 2, family: 4, extended: 6 };
                 let code = generateCode(name, type);
-                await addDoc(collection(db, GUESTS_COLLECTION), { name, code, codeType: type, maxGuests: maxMap[type], phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString() });
-                document.getElementById("newGuestName").value = ""; document.getElementById("newGuestPhone").value = "";
-                loadAdminData();
+                showLoading(true, "Adding guest...");
+                try {
+                    await addDoc(collection(db, GUESTS_COLLECTION), { name, code, codeType: type, maxGuests: maxMap[type], phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString() });
+                    document.getElementById("newGuestName").value = ""; document.getElementById("newGuestPhone").value = "";
+                    await loadAdminData();
+                } finally {
+                    showLoading(false);
+                }
             };
             document.getElementById("refreshBtn").onclick = loadAdminData;
             document.getElementById("exportCsvBtn").onclick = () => {
@@ -740,8 +801,9 @@
                 }
                 let content = csv.map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
                 let blob = new Blob(["\uFEFF" + content], { type: "text/csv" });
+                let url = URL.createObjectURL(blob);
                 let a = document.createElement("a");
-                a.href = URL.createObjectURL(blob);
+                a.href = url;
                 a.download = `wedding_guests_${new Date().toISOString().slice(0,10)}.csv`;
                 a.click();
                 URL.revokeObjectURL(url);
@@ -753,20 +815,30 @@
                 let newPhone = document.getElementById("editGuestPhone").value.trim();
                 let newType = document.getElementById("editCodeType").value;
                 let newMax = parseInt(document.getElementById("editMaxGuests").value);
-                await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone, codeType: newType, maxGuests: newMax });
-                document.getElementById("editModal").style.display = "none";
-                loadAdminData();
+                showLoading(true, "Saving changes...");
+                try {
+                    await updateDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId), { name: newName, phone: newPhone, codeType: newType, maxGuests: newMax });
+                    document.getElementById("editModal").style.display = "none";
+                    await loadAdminData();
+                } finally {
+                    showLoading(false);
+                }
             };
             document.getElementById("deleteGuestBtn").onclick = async () => {
                 if (!confirm("Delete this guest?")) return;
                 let guest = allGuests.find(g => g.id === currentEditGuestId);
-                if (guest) {
-                    let resp = allResponses.find(r => r.guestCode === guest.code);
-                    if (resp) await deleteDoc(doc(db, RESPONSES_COLLECTION, resp.id));
+                showLoading(true, "Deleting guest...");
+                try {
+                    if (guest) {
+                        let resp = allResponses.find(r => r.guestCode === guest.code);
+                        if (resp) await deleteDoc(doc(db, RESPONSES_COLLECTION, resp.id));
+                    }
+                    await deleteDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId));
+                    document.getElementById("editModal").style.display = "none";
+                    await loadAdminData();
+                } finally {
+                    showLoading(false);
                 }
-                await deleteDoc(doc(db, GUESTS_COLLECTION, currentEditGuestId));
-                document.getElementById("editModal").style.display = "none";
-                loadAdminData();
             };
             document.getElementById("copySmsBtn").onclick = () => { navigator.clipboard.writeText(document.getElementById("smsMessage").value); alert("Copied!"); };
             document.getElementById("sendDirectSmsBtn").onclick = () => { let p = document.getElementById("smsPhone").innerText; let m = document.getElementById("smsMessage").value; window.location.href = "sms:" + p + "?body=" + encodeURIComponent(m); };
