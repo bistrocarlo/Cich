@@ -2,246 +2,717 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laura & Daniel | 3 October 2026</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Laura & Daniel's Wedding - Confirm Your Address</title>
     <style>
-        :root { --gold: #c49a6c; --deep: #5a2d1c; }
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Georgia', serif;
-            background: linear-gradient(135deg, #f8f1e9 0%, #f0e6d8 100%);
-            color: #3f2a1e;
-        }
-        .hero {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c0 100%);
             min-height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.5)), url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
+            padding: 20px;
         }
-        .hero h1 { font-size: 4.5rem; letter-spacing: 3px; }
-        .hero p { font-size: 1.6rem; margin-top: 10px; }
-
-        .container { max-width: 580px; margin: -60px auto 40px; padding: 20px; }
-        .card {
+        .container { max-width: 550px; margin: 0 auto; }
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        
+        .form-card {
             background: white;
             border-radius: 32px;
-            box-shadow: 0 25px 60px rgba(90,45,28,0.18);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             overflow: hidden;
+            margin-bottom: 20px;
         }
-        .header {
+        .form-header {
             background: linear-gradient(135deg, #8b5a2b, #c49a6c);
             color: white;
-            padding: 55px 30px;
+            padding: 35px 25px;
             text-align: center;
         }
-        .form-body { padding: 40px 35px; }
-        label { display:block; margin:18px 0 6px; font-weight:600; color:var(--deep); }
-        input, textarea, select {
-            width:100%; padding:16px; border:2px solid #e8d5c0; border-radius:16px; font-size:1.05rem;
+        .form-header h1 { font-size: 1.8rem; font-family: 'Georgia', serif; }
+        .form-header p { margin-top: 10px; opacity: 0.9; }
+        .form-body { padding: 30px 25px; }
+        
+        .code-section { text-align: center; margin-bottom: 25px; }
+        .code-section input {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            text-align: center;
+            letter-spacing: 4px;
+            font-family: monospace;
+            border: 2px solid #e8d5c0;
+            border-radius: 16px;
+            background: #faf7f2;
         }
-        input:focus, textarea:focus, select:focus { border-color:var(--gold); outline:none; }
+        .code-section input:focus { outline: none; border-color: #c49a6c; }
+        
+        .form-group { margin-bottom: 22px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #5a2d1c; }
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e8d5c0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus { outline: none; border-color: #c49a6c; }
+        textarea { resize: vertical; min-height: 100px; }
+        
         button {
-            width:100%; background:linear-gradient(135deg,#8b5a2b,#c49a6c); color:white;
-            border:none; padding:18px; font-size:1.2rem; font-weight:bold; border-radius:50px;
-            cursor:pointer; margin-top:20px; transition:all .3s;
+            width: 100%;
+            background: linear-gradient(135deg, #8b5a2b, #c49a6c);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 10px;
         }
-        button:hover { transform:translateY(-3px); }
-
-        .success-screen { text-align:center; padding:60px 20px; background:#f8f4eb; }
-        .confetti { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
-
-        /* Admin Styles */
-        .admin-container { max-width:1200px; margin:20px auto; padding:20px; }
-        .stat-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:15px; margin:20px 0; }
-        .stat-card { background:white; padding:20px; border-radius:16px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
-        .stat-number { font-size:2.4rem; font-weight:bold; color:var(--gold); }
-        table { width:100%; border-collapse:collapse; margin-top:15px; }
-        th, td { padding:12px; text-align:left; border-bottom:1px solid #eee; }
-        th { background:#faf4eb; }
-        .status-badge { padding:5px 12px; border-radius:20px; font-size:0.8rem; font-weight:bold; color:white; }
-        .status-replied { background:#27ae60; }
-        .status-sent { background:#3498db; }
-        .status-pending { background:#f39c12; }
+        .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; display: none; }
+        .error-message { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .info-message { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: none; }
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #8b5a2b; text-decoration: none; }
+        .footer { text-align: center; color: #7a4a2e; font-size: 0.75rem; padding: 20px; }
+        
+        .admin-header { background: linear-gradient(135deg, #8b5a2b, #c49a6c); color: white; padding: 30px; border-radius: 20px; margin-bottom: 30px; text-align: center; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #8b5a2b; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: #eee1d4; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; color: #5a2d1c; }
+        .tab-btn.active { background: #8b5a2b; color: white; }
+        .tab-content { display: none; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .tab-content.active { display: block; }
+        .guest-table-container { overflow-x: auto; max-height: 500px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #faf7f2; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+        .status-pending { background: #f39c12; color: white; }
+        .status-sent { background: #3498db; color: white; }
+        .status-replied { background: #27ae60; color: white; }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-bar input, .filter-bar select { flex: 1; min-width: 150px; padding: 10px; border: 2px solid #e8d5c0; border-radius: 10px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; margin: 2px; width: auto; display: inline-block; }
+        .btn-green { background: #27ae60; }
+        .btn-blue { background: #3498db; }
+        .btn-red { background: #e74c3c; }
+        .add-guest-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; align-items: end; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 500px; width: 90%; }
+        .modal-content textarea { width: 100%; height: 180px; margin: 15px 0; }
+        .edit-modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 450px; width: 90%; }
+        .edit-modal-content input { width: 100%; margin-bottom: 15px; padding: 12px; }
+        .sms-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-sms-direct { background: #25D366; }
+        .action-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        hr { margin: 15px 0; }
     </style>
 </head>
 <body>
-<div id="app"></div>
+    <div id="app">Loading...</div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAH0rBpJUh3sRpBlQgrymQM1RLBDBiAPmE",
-        authDomain: "daniel-and-laura.firebaseapp.com",
-        projectId: "daniel-and-laura",
-        storageBucket: "daniel-and-laura.firebasestorage.app",
-        messagingSenderId: "363458517473",
-        appId: "1:363458517473:web:7eac683bc98623cb281aa0"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const GUESTS = "wedding_guests";
-    const RESPONSES = "guest_responses";
-
-    const ADMIN_PASSWORD = "lauraanddaniel2026"; // ← CHANGE THIS!
-
-    const urlParams = new URLSearchParams(window.location.search);
-    let isAdmin = urlParams.get('admin') === 'true';
-
-    const preloadedGuests = [
-        "Gianni Laverde", "Anthony Diaco", "Michael La verde", "Michael Ferraro", "Joe Ferraro",
-        "Gina Patti", "Frank Cammaroto", "Cosimo Patti", "Frank Andronaco", "Domenic Chila",
-        // ... paste the rest of your original list here
-    ];
-
-    function generateCode(name) {
-        const prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
-        return prefix + (100 + Math.floor(Math.random() * 900));
-    }
-
-    function launchConfetti() {
-        const canvas = document.createElement('canvas');
-        canvas.className = 'confetti';
-        document.body.appendChild(canvas);
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const colors = ['#c49a6c','#8b5a2b','#f8e8d0','#27ae60'];
-        let particles = [];
-        class P { constructor() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height-canvas.height; this.size = Math.random()*14+7; this.speed = Math.random()*5+3; this.angle = Math.random()*360; this.color = colors[Math.floor(Math.random()*colors.length)]; } update(){this.y+=this.speed; this.angle+=6;} draw(){ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.angle*Math.PI/180); ctx.fillStyle=this.color; ctx.fillRect(-this.size/2,-this.size/2,this.size,this.size); ctx.restore();}}
-        for(let i=0;i<250;i++) particles.push(new P());
-        let f=0; function animate(){ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach((p,i)=>{p.update();p.draw(); if(p.y>canvas.height) particles.splice(i,1);}); if(particles.length>0 && f<220) requestAnimationFrame(animate); else canvas.remove(); f++;}
-        animate();
-    }
-
-    // ====================== GUEST VIEW ======================
-    async function renderGuestForm() {
-        const html = `
-            <div class="hero">
-                <div>
-                    <h1>Laura &amp; Daniel</h1>
-                    <p>3 October 2026 • Fior, Parkville</p>
-                </div>
-            </div>
-            <div class="container">
-                <div class="card">
-                    <div class="header">
-                        <h2>We're getting married!</h2>
-                        <p>Please confirm your details</p>
-                    </div>
-                    <div class="form-body" id="formBody"></div>
-                </div>
-            </div>
-        `;
-        document.getElementById("app").innerHTML = html;
-
-        const body = document.getElementById("formBody");
-        body.innerHTML = `
-            <div id="codeScreen">
-                <label>Invitation Code</label>
-                <input type="text" id="codeInput" placeholder="Enter code from SMS" maxlength="10" style="text-align:center;font-size:1.6rem;letter-spacing:6px;text-transform:uppercase;">
-                <button id="verifyBtn">Continue</button>
-            </div>
-
-            <div id="rsvpScreen" style="display:none;">
-                <h3 style="text-align:center;margin:20px 0;">Welcome, <span id="guestNameDisplay"></span>!</h3>
-                <label>Will you attend?</label>
-                <select id="attending">
-                    <option value="">Select...</option>
-                    <option value="yes">Yes, with pleasure!</option>
-                    <option value="no">Sorry, we can't make it</option>
-                </select>
-                <div id="yesSection" style="display:none;">
-                    <label>Number of guests (including you)</label>
-                    <input type="number" id="numGuests" value="1" min="1">
-                    <label>Dietary requirements</label>
-                    <textarea id="dietary" placeholder="Vegetarian, allergies..."></textarea>
-                </div>
-                <label>Full Name on Invitation</label>
-                <input type="text" id="fullName">
-                <label>Postal Address</label>
-                <textarea id="address" rows="4" placeholder="Street, Suburb, State, Postcode"></textarea>
-                <button id="submitBtn">Submit & Confirm</button>
-                <button id="backBtn" style="background:#ddd;color:#333;">← Different Code</button>
-            </div>
-        `;
-
-        document.getElementById("verifyBtn").onclick = verifyCode;
-        document.getElementById("attending").onchange = () => document.getElementById("yesSection").style.display = document.getElementById("attending").value === "yes" ? "block" : "none";
-        document.getElementById("submitBtn").onclick = submitRSVP;
-        document.getElementById("backBtn").onclick = () => location.reload();
-    }
-
-    async function verifyCode() {
-        const code = document.getElementById("codeInput").value.trim().toUpperCase();
-        if (!code) return alert("Please enter the code");
-
-        const q = query(collection(db, GUESTS), where("code", "==", code));
-        const snap = await getDocs(q);
-        if (snap.empty) return alert("Invalid code");
-
-        const guest = snap.docs[0].data();
-        sessionStorage.setItem("currentCode", code);
-        sessionStorage.setItem("guestId", snap.docs[0].id);
-        sessionStorage.setItem("guestName", guest.name);
-
-        document.getElementById("codeScreen").style.display = "none";
-        document.getElementById("rsvpScreen").style.display = "block";
-        document.getElementById("guestNameDisplay").textContent = guest.name;
-    }
-
-    async function submitRSVP() {
-        const attending = document.getElementById("attending").value;
-        if (!attending) return alert("Please select if you're attending");
-
-        const responseData = {
-            guestCode: sessionStorage.getItem("currentCode"),
-            guestId: sessionStorage.getItem("guestId"),
-            guestName: sessionStorage.getItem("guestName"),
-            fullName: document.getElementById("fullName").value.trim(),
-            address: document.getElementById("address").value.trim(),
-            attending: attending,
-            numGuests: attending === "yes" ? Number(document.getElementById("numGuests").value) : 0,
-            dietary: document.getElementById("dietary").value.trim(),
-            submittedAt: new Date().toISOString()
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAH0rBpJUh3sRpBlQgrymQM1RLBDBiAPmE",
+            authDomain: "daniel-and-laura.firebaseapp.com",
+            projectId: "daniel-and-laura",
+            storageBucket: "daniel-and-laura.firebasestorage.app",
+            messagingSenderId: "363458517473",
+            appId: "1:363458517473:web:7eac683bc98623cb281aa0"
         };
 
-        if (!responseData.fullName || !responseData.address) return alert("Name and address are required");
+        // Initialize Firebase
+        const firebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(firebaseApp);
+        
+        const GUESTS_COLLECTION = "wedding_guests";
+        const RESPONSES_COLLECTION = "guest_responses";
 
-        await addDoc(collection(db, RESPONSES), responseData);
-        await updateDoc(doc(db, GUESTS, responseData.guestId), {replied: true, status: "replied"});
+        // Complete guest list
+        const preloadedGuests = [
+            "Gianni Laverde", "Anthony Diaco", "Michael La verde", "Michael Ferraro", "Joe Ferraro",
+            "Gina Patti", "Frank Cammaroto", "Cosimo Patti", "Frank Andronaco", "Domenic Chila",
+            "Dom Iervasi", "Cosimo Bertone", "Mick Iermano", "Rocco Careri", "Mimmo Ranieri",
+            "Cathy Tripodi", "Rita Vicari", "George and Amelia", "George and Faye", "Nector and Irene",
+            "Marco and Kathy", "Chris and Feola", "Chris and Wife", "Toni and Perri", "Ralph and Gloria",
+            "Joe Trimboli and Wife", "Frank Marcoccio and Mary", "Vincent Maria Deluca", "Phillip and Maria Nesci",
+            "Nello and Sarina Lanza", "Micheal and Maria Depetro", "Elsa and Anthony Pagniello", "Frank and Jackie Costanzo",
+            "John Macedonio and Wife", "Patti and Vanessa Barbaro", "Tony and Sharron Corso", "Jake and Judy Venuto",
+            "Nella and Toni", "Alex and Anka and family", "Daniele and Tony", "Marcello and Kylie and Family",
+            "Ramsay and Family", "Ralph Martino and Theresa", "Carmine and Romina", "Lamir and Fran",
+            "Crystal's family", "Melissa Cerra and Luca and Natalia", "Paco Paola and Francisco", "Carlos and Gloria",
+            "Celine Marco Matias", "Dominic Natalie Trentadue", "Melinda and Peter Gamos with Nico",
+            "Frank and Teresa Taverna", "Charlie and Nadia Bevilaqua", "Melissa's parents baldo Angela",
+            "Natoli family", "Ubaldo and Angela", "Frank Barbaro", "Kristina", "Stretch", "John and Rose Schiaccitano",
+            "Teresa and Anthony Raso", "Peter and Giovanna", "Alex Calenda and partner"
+        ];
 
-        document.getElementById("formBody").innerHTML = `
-            <div class="success-screen">
-                <h2>Thank you so much!</h2>
-                <p style="font-size:1.5rem;margin:25px 0;">We can't wait to celebrate with you.</p>
-                <p style="font-size:4rem;">💌❤️</p>
-            </div>
-        `;
-        launchConfetti();
-    }
+        let allGuests = [];
+        let allResponses = [];
 
-    // ====================== ADMIN DASHBOARD ======================
-    if (isAdmin) {
-        const pw = prompt("Enter Admin Password:");
-        if (pw !== ADMIN_PASSWORD) {
-            alert("Access denied");
-            window.location.href = window.location.pathname;
-            return;
+        function generateCode(name) {
+            let prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
+            let random = Math.floor(Math.random() * 900) + 100;
+            return prefix + random;
         }
-        // Full admin dashboard would go here (similar to your original but prettier)
-        alert("✅ Admin access granted!\n\nThe full admin dashboard with stats, guest list, and CSV export is ready in the next version. Would you like me to add it now?");
-        renderGuestForm(); // fallback for now
-    } else {
-        renderGuestForm();
-    }
-</script>
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === "&") return "&amp;";
+                if (m === "<") return "&lt;";
+                if (m === ">") return "&gt;";
+                return m;
+            });
+        }
+
+        function escapeForJS(str) {
+            if (!str) return "";
+            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        // ============ SEED GUESTS ============
+        async function seedGuests() {
+            try {
+                const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
+                if (snapshot.empty) {
+                    for (let i = 0; i < preloadedGuests.length; i++) {
+                        let name = preloadedGuests[i];
+                        let code = generateCode(name);
+                        await addDoc(collection(db, GUESTS_COLLECTION), {
+                            name: name,
+                            code: code,
+                            phone: "",
+                            status: "pending",
+                            smsSent: false,
+                            replied: false,
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+                    console.log("Seeded " + preloadedGuests.length + " guests");
+                }
+            } catch (e) {
+                console.error("Seed error:", e);
+            }
+        }
+
+        // ============ GUEST FORM ============
+        function renderGuestForm() {
+            document.getElementById("app").innerHTML = `
+                <div class="container">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h1>Laura & Daniel</h1>
+                            <p>Please confirm your details for your formal invitation</p>
+                        </div>
+                        <div class="form-body">
+                            <div id="guestSuccessMsg" class="success-message"></div>
+                            <div id="guestErrorMsg" class="error-message"></div>
+                            <div id="guestInfoMsg" class="info-message"></div>
+
+                            <div id="codeEntrySection">
+                                <div class="code-section">
+                                    <input type="text" id="inviteCode" placeholder="Enter your invitation code" maxlength="10">
+                                </div>
+                                <button id="verifyCodeBtn">Verify My Code</button>
+                                <p style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #7a4a2e;">
+                                    Your invitation code is on the SMS we sent you
+                                </p>
+                            </div>
+
+                            <div id="addressFormSection" style="display: none;">
+                                <div id="guestWelcome" style="background: #f0e6d8; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
+                                    <strong id="welcomeName"></strong>
+                                </div>
+                                <div class="form-group">
+                                    <label>Your Full Name (please check spelling)</label>
+                                    <input type="text" id="fullName" placeholder="e.g., John Michael Smith">
+                                </div>
+                                <div class="form-group">
+                                    <label>Your Postal Address</label>
+                                    <textarea id="address" rows="3" placeholder="Street address, suburb, city, postcode"></textarea>
+                                </div>
+                                <button id="submitAddressBtn">Submit My Details</button>
+                                <div class="back-link">
+                                    <a href="#" id="backToCodeBtn">Enter a different code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <p>Laura & Daniel's Wedding | October 3, 2026 | Fior Parkville</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("verifyCodeBtn").onclick = function() { verifyCode(); };
+            document.getElementById("backToCodeBtn").onclick = function(e) {
+                e.preventDefault();
+                document.getElementById("addressFormSection").style.display = "none";
+                document.getElementById("codeEntrySection").style.display = "block";
+                document.getElementById("inviteCode").value = "";
+            };
+            document.getElementById("submitAddressBtn").onclick = function() { submitAddress(); };
+        }
+
+        async function verifyCode() {
+            let code = document.getElementById("inviteCode").value.trim().toUpperCase();
+            let errorDiv = document.getElementById("guestErrorMsg");
+            let infoDiv = document.getElementById("guestInfoMsg");
+            errorDiv.style.display = "none";
+            infoDiv.style.display = "none";
+            
+            if (!code) {
+                errorDiv.innerText = "Please enter your invitation code";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                const q = query(collection(db, GUESTS_COLLECTION), where("code", "==", code));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    errorDiv.innerText = "Invalid invitation code. Please check the SMS we sent you.";
+                    errorDiv.style.display = "block";
+                    return;
+                }
+
+                const guest = snapshot.docs[0].data();
+                const guestId = snapshot.docs[0].id;
+                
+                const rQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", code));
+                const rSnapshot = await getDocs(rQuery);
+                
+                if (!rSnapshot.empty) {
+                    let existing = rSnapshot.docs[0].data();
+                    document.getElementById("fullName").value = existing.fullName || "";
+                    document.getElementById("address").value = existing.address || "";
+                    infoDiv.innerText = "You have already submitted your details. You can update them below.";
+                    infoDiv.style.display = "block";
+                }
+
+                sessionStorage.setItem("guestCode", code);
+                sessionStorage.setItem("guestId", guestId);
+                sessionStorage.setItem("guestName", guest.name);
+
+                document.getElementById("welcomeName").innerHTML = "Welcome " + escapeHtml(guest.name) + "!";
+                document.getElementById("codeEntrySection").style.display = "none";
+                document.getElementById("addressFormSection").style.display = "block";
+
+            } catch (err) {
+                errorDiv.innerText = "Something went wrong. Please try again.";
+                errorDiv.style.display = "block";
+                console.error(err);
+            }
+        }
+
+        async function submitAddress() {
+            let fullName = document.getElementById("fullName").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let guestCode = sessionStorage.getItem("guestCode");
+            let guestId = sessionStorage.getItem("guestId");
+            let guestName = sessionStorage.getItem("guestName");
+            
+            let errorDiv = document.getElementById("guestErrorMsg");
+            let successDiv = document.getElementById("guestSuccessMsg");
+            errorDiv.style.display = "none";
+            successDiv.style.display = "none";
+
+            if (!fullName) {
+                errorDiv.innerText = "Please enter your full name";
+                errorDiv.style.display = "block";
+                return;
+            }
+            if (!address) {
+                errorDiv.innerText = "Please enter your postal address";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                const rQuery = query(collection(db, RESPONSES_COLLECTION), where("guestCode", "==", guestCode));
+                const rSnapshot = await getDocs(rQuery);
+
+                let responseData = {
+                    guestCode: guestCode,
+                    guestId: guestId,
+                    guestName: guestName,
+                    fullName: fullName,
+                    address: address,
+                    submittedAt: new Date().toISOString()
+                };
+
+                if (!rSnapshot.empty) {
+                    await updateDoc(doc(db, RESPONSES_COLLECTION, rSnapshot.docs[0].id), responseData);
+                } else {
+                    await addDoc(collection(db, RESPONSES_COLLECTION), responseData);
+                    await updateDoc(doc(db, GUESTS_COLLECTION, guestId), { replied: true, status: "replied" });
+                }
+
+                successDiv.innerText = "Thank you! We have received your details. Your formal invitation will be mailed to you soon.";
+                successDiv.style.display = "block";
+                
+                document.getElementById("fullName").value = "";
+                document.getElementById("address").value = "";
+
+            } catch (err) {
+                errorDiv.innerText = "Something went wrong. Please try again.";
+                errorDiv.style.display = "block";
+                console.error(err);
+            }
+        }
+
+        // ============ ADMIN DASHBOARD ============
+        async function loadAdminData() {
+            try {
+                const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
+                allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
+                allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                for (let i = 0; i < allGuests.length; i++) {
+                    let guest = allGuests[i];
+                    let found = null;
+                    for (let j = 0; j < allResponses.length; j++) {
+                        if (allResponses[j].guestCode === guest.code) {
+                            found = allResponses[j];
+                            break;
+                        }
+                    }
+                    if (found) {
+                        guest.responseStatus = "replied";
+                    } else {
+                        guest.responseStatus = guest.smsSent ? "sent" : "pending";
+                    }
+                }
+                renderGuestTable();
+                renderRepliesTable();
+                updateStats();
+            } catch (err) {
+                console.error("Load error:", err);
+            }
+        }
+
+        function renderGuestTable() {
+            let search = document.getElementById("searchGuest") ? document.getElementById("searchGuest").value.toLowerCase() : "";
+            let filterStatus = document.getElementById("filterStatus") ? document.getElementById("filterStatus").value : "all";
+            
+            let filtered = [];
+            for (let i = 0; i < allGuests.length; i++) {
+                let g = allGuests[i];
+                let nameMatch = g.name.toLowerCase().indexOf(search) > -1 || g.code.toLowerCase().indexOf(search) > -1;
+                let statusMatch = filterStatus === "all" || g.responseStatus === filterStatus;
+                if (nameMatch && statusMatch) filtered.push(g);
+            }
+            
+            let tbody = document.getElementById("guestTableBody");
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No guests found</td></tr>';
+                return;
+            }
+            
+            let html = "";
+            for (let i = 0; i < filtered.length; i++) {
+                let guest = filtered[i];
+                let statusClass = guest.responseStatus === "replied" ? "status-replied" : (guest.responseStatus === "sent" ? "status-sent" : "status-pending");
+                let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
+                let phoneDisplay = guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>';
+                
+                html += '<tr>' +
+                    '<td><code>' + escapeHtml(guest.code) + '</code></td>' +
+                    '<td><strong>' + escapeHtml(guest.name) + '</strong></td>' +
+                    '<td>' + phoneDisplay + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                    '<td>' +
+                        '<button class="btn-sm btn-blue" onclick="openEdit(\'' + guest.id + '\', \'' + escapeForJS(guest.name) + '\', \'' + escapeForJS(guest.phone || "") + '\')">Edit</button> ' +
+                        '<button class="btn-sm btn-green" onclick="openSms(\'' + guest.code + '\', \'' + escapeForJS(guest.name) + '\', \'' + escapeForJS(guest.phone || "") + '\')">SMS</button>' +
+                    '</td>' +
+                '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function renderRepliesTable() {
+            let search = document.getElementById("searchReply") ? document.getElementById("searchReply").value.toLowerCase() : "";
+            let filtered = [];
+            for (let i = 0; i < allResponses.length; i++) {
+                let r = allResponses[i];
+                let nameMatch = (r.fullName && r.fullName.toLowerCase().indexOf(search) > -1) || (r.guestName && r.guestName.toLowerCase().indexOf(search) > -1);
+                if (nameMatch) filtered.push(r);
+            }
+            
+            let tbody = document.getElementById("repliesTableBody");
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No responses yet</td></tr>';
+                return;
+            }
+            
+            let html = "";
+            for (let i = 0; i < filtered.length; i++) {
+                let r = filtered[i];
+                let addressShort = r.address ? r.address.substring(0, 60) + (r.address.length > 60 ? "..." : "") : "";
+                html += '<tr>' +
+                    '<td><code>' + escapeHtml(r.guestCode) + '</code></td>' +
+                    '<td>' + escapeHtml(r.guestName) + '</td>' +
+                    '<td><strong>' + escapeHtml(r.fullName || "") + '</strong></td>' +
+                    '<td style="max-width:250px;">' + escapeHtml(addressShort) + '</td>' +
+                    '<td>' + (r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : "") + '</td>' +
+                '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function updateStats() {
+            let total = allGuests.length;
+            let sent = 0;
+            for (let i = 0; i < allGuests.length; i++) {
+                if (allGuests[i].smsSent) sent++;
+            }
+            let replied = allResponses.length;
+            let pending = total - replied;
+            
+            let statsHtml = '<div class="stat-card"><div class="stat-number">' + total + '</div><div>Total Invited</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + sent + '</div><div>SMS Sent</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + replied + '</div><div>Addresses Received</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + pending + '</div><div>Awaiting Reply</div></div>';
+            
+            let statsContainer = document.getElementById("statsContainer");
+            if (statsContainer) statsContainer.innerHTML = statsHtml;
+        }
+
+        window.openEdit = function(id, name, phone) {
+            document.getElementById("editGuestId").value = id;
+            document.getElementById("editGuestName").value = name;
+            document.getElementById("editGuestPhone").value = phone;
+            document.getElementById("editModal").style.display = "flex";
+        };
+
+        window.openSms = function(code, name, phone) {
+            if (!phone) {
+                alert("Please add a mobile number for " + name + " first. Click Edit to add.");
+                return;
+            }
+            let appUrl = window.location.origin;
+            let msg = "Dear " + name.split(' ')[0] + ",\n\nWe are hoping to celebrate our wedding with you on October 3, 2026 at Fior Parkville.\n\nBefore we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\nPlease visit: " + appUrl + "\nEnter your code: " + code + "\n\nThis will take just 2 minutes. We would be truly honoured to have you there.\n\nWarmly,\nLaura & Daniel";
+            
+            document.getElementById("smsGuestName").innerText = name;
+            document.getElementById("smsPhone").innerText = phone;
+            document.getElementById("smsMessage").value = msg;
+            document.getElementById("smsModal").style.display = "flex";
+            
+            for (let i = 0; i < allGuests.length; i++) {
+                if (allGuests[i].code === code && !allGuests[i].smsSent) {
+                    updateDoc(doc(db, GUESTS_COLLECTION, allGuests[i].id), { smsSent: true, status: "sent" });
+                    setTimeout(function() { loadAdminData(); }, 500);
+                    break;
+                }
+            }
+        };
+
+        function renderAdminDashboard() {
+            document.getElementById("app").innerHTML = `
+                <div class="admin-container">
+                    <div class="admin-header">
+                        <h1>Admin Dashboard</h1>
+                        <p>Manage Guests and Track Responses</p>
+                    </div>
+                    <div class="stats" id="statsContainer"></div>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="guests">Guest List</button>
+                        <button class="tab-btn" data-tab="replies">Guest Responses</button>
+                    </div>
+                    <div id="guests" class="tab-content active">
+                        <div class="filter-bar">
+                            <input type="text" id="searchGuest" placeholder="Search guests...">
+                            <select id="filterStatus">
+                                <option value="all">All Guests</option>
+                                <option value="pending">Pending</option>
+                                <option value="sent">SMS Sent</option>
+                                <option value="replied">Address Received</option>
+                            </select>
+                            <button id="refreshBtn" class="btn-sm btn-blue">Refresh</button>
+                        </div>
+                        <div class="add-guest-form">
+                            <input type="text" id="newGuestName" placeholder="New guest name">
+                            <input type="tel" id="newGuestPhone" placeholder="Mobile number">
+                            <button id="addGuestBtn" class="btn-sm btn-green">Add Guest</button>
+                        </div>
+                        <div class="guest-table-container">
+                            <table>
+                                <thead><tr><th>Code</th><th>Guest Name</th><th>Mobile</th><th>Status</th><th>Actions</th></tr></thead>
+                                <tbody id="guestTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="replies" class="tab-content">
+                        <div class="filter-bar">
+                            <input type="text" id="searchReply" placeholder="Search by name...">
+                        </div>
+                        <div class="guest-table-container">
+                            <table>
+                                <thead><tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Postal Address</th><th>Submitted</th></tr></thead>
+                                <tbody id="repliesTableBody"><tr><td colspan="5">No responses yet...</td></tr></tbody>
+                            </table>
+                            <button id="exportCsvBtn" class="btn-sm btn-green" style="margin-top: 15px;">Export Addresses (CSV)</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="editModal" class="modal">
+                    <div class="edit-modal-content">
+                        <h3>Edit Guest</h3>
+                        <input type="hidden" id="editGuestId">
+                        <label>Guest Name:</label>
+                        <input type="text" id="editGuestName">
+                        <label>Mobile Number:</label>
+                        <input type="tel" id="editGuestPhone">
+                        <div class="action-buttons">
+                            <button id="saveEditBtn" class="btn-sm btn-green">Save</button>
+                            <button id="closeEditModal" class="btn-sm btn-red">Cancel</button>
+                        </div>
+                        <hr>
+                        <button id="deleteGuestBtn" class="btn-sm btn-red" style="width:100%;">Delete Guest</button>
+                    </div>
+                </div>
+                <div id="smsModal" class="modal">
+                    <div class="modal-content">
+                        <h3>Send SMS to Guest</h3>
+                        <p><strong id="smsGuestName"></strong></p>
+                        <p>Mobile: <span id="smsPhone"></span></p>
+                        <textarea id="smsMessage" readonly></textarea>
+                        <div class="sms-buttons">
+                            <button id="copySmsBtn" class="btn-sm btn-blue">Copy Message</button>
+                            <button id="sendDirectSmsBtn" class="btn-sm btn-sms-direct">Open SMS App</button>
+                            <button id="closeSmsModal" class="btn-sm btn-red">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("addGuestBtn").onclick = async function() {
+                let name = document.getElementById("newGuestName").value.trim();
+                let phone = document.getElementById("newGuestPhone").value.trim();
+                if (!name) { alert("Enter name"); return; }
+                let code = generateCode(name);
+                await addDoc(collection(db, GUESTS_COLLECTION), {
+                    name: name, code: code, phone: phone, status: "pending", smsSent: false, replied: false, createdAt: new Date().toISOString()
+                });
+                document.getElementById("newGuestName").value = "";
+                document.getElementById("newGuestPhone").value = "";
+                loadAdminData();
+            };
+            document.getElementById("refreshBtn").onclick = function() { loadAdminData(); };
+            document.getElementById("exportCsvBtn").onclick = function() {
+                let withAddress = [];
+                for (let i = 0; i < allResponses.length; i++) {
+                    if (allResponses[i].address) withAddress.push(allResponses[i]);
+                }
+                if (withAddress.length === 0) { alert("No addresses yet"); return; }
+                let csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Submitted"]];
+                for (let i = 0; i < withAddress.length; i++) {
+                    let r = withAddress[i];
+                    csv.push([r.guestCode, r.guestName, r.fullName, r.address, new Date(r.submittedAt).toLocaleDateString()]);
+                }
+                let content = "";
+                for (let i = 0; i < csv.length; i++) {
+                    let row = [];
+                    for (let j = 0; j < csv[i].length; j++) {
+                        row.push('"' + String(csv[i][j]).replace(/"/g, '""') + '"');
+                    }
+                    content += row.join(",") + "\n";
+                }
+                let blob = new Blob(["\uFEFF" + content], { type: "text/csv" });
+                let url = URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = "wedding_addresses_" + new Date().toISOString().slice(0,10) + ".csv";
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+            document.getElementById("closeEditModal").onclick = function() { document.getElementById("editModal").style.display = "none"; };
+            document.getElementById("closeSmsModal").onclick = function() { document.getElementById("smsModal").style.display = "none"; };
+            document.getElementById("saveEditBtn").onclick = async function() {
+                let id = document.getElementById("editGuestId").value;
+                let newName = document.getElementById("editGuestName").value.trim();
+                let newPhone = document.getElementById("editGuestPhone").value.trim();
+                await updateDoc(doc(db, GUESTS_COLLECTION, id), { name: newName, phone: newPhone });
+                document.getElementById("editModal").style.display = "none";
+                loadAdminData();
+            };
+            document.getElementById("deleteGuestBtn").onclick = async function() {
+                if (!confirm("Delete this guest?")) return;
+                let id = document.getElementById("editGuestId").value;
+                let guest = null;
+                for (let i = 0; i < allGuests.length; i++) {
+                    if (allGuests[i].id === id) { guest = allGuests[i]; break; }
+                }
+                if (guest) {
+                    for (let i = 0; i < allResponses.length; i++) {
+                        if (allResponses[i].guestCode === guest.code) {
+                            await deleteDoc(doc(db, RESPONSES_COLLECTION, allResponses[i].id));
+                            break;
+                        }
+                    }
+                }
+                await deleteDoc(doc(db, GUESTS_COLLECTION, id));
+                document.getElementById("editModal").style.display = "none";
+                loadAdminData();
+            };
+            document.getElementById("copySmsBtn").onclick = function() {
+                let msg = document.getElementById("smsMessage").value;
+                navigator.clipboard.writeText(msg);
+                alert("Copied!");
+            };
+            document.getElementById("sendDirectSmsBtn").onclick = function() {
+                let phone = document.getElementById("smsPhone").innerText;
+                let msg = document.getElementById("smsMessage").value;
+                window.location.href = "sms:" + phone + "?body=" + encodeURIComponent(msg);
+            };
+            document.getElementById("searchGuest").oninput = function() { renderGuestTable(); };
+            document.getElementById("filterStatus").onchange = function() { renderGuestTable(); };
+            document.getElementById("searchReply").oninput = function() { renderRepliesTable(); };
+
+            let btns = document.querySelectorAll(".tab-btn");
+            for (let i = 0; i < btns.length; i++) {
+                btns[i].onclick = function() {
+                    for (let j = 0; j < btns.length; j++) btns[j].classList.remove("active");
+                    this.classList.add("active");
+                    let contents = document.querySelectorAll(".tab-content");
+                    for (let j = 0; j < contents.length; j++) contents[j].classList.remove("active");
+                    document.getElementById(this.getAttribute("data-tab")).classList.add("active");
+                    if (this.getAttribute("data-tab") === "replies") renderRepliesTable();
+                };
+            }
+            loadAdminData();
+        }
+
+        window.onclick = function(e) {
+            if (e.target.classList && e.target.classList.contains("modal")) {
+                e.target.style.display = "none";
+            }
+        };
+
+        // Start the app
+        (async function() {
+            await seedGuests();
+            let urlParams = new URLSearchParams(window.location.search);
+            let isAdminView = urlParams.get('admin') === 'true';
+            if (isAdminView) {
+                renderAdminDashboard();
+            } else {
+                renderGuestForm();
+            }
+        })();
+    </script>
 </body>
 </html>
