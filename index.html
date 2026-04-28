@@ -178,10 +178,6 @@
             background: #e74c3c;
         }
 
-        .btn-send {
-            background: #27ae60;
-        }
-
         .filter-bar {
             display: flex;
             gap: 15px;
@@ -212,7 +208,7 @@
             align-items: end;
         }
 
-        .sms-modal {
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -225,20 +221,29 @@
             align-items: center;
         }
 
-        .sms-modal-content {
+        .modal-content {
             background: white;
             border-radius: 20px;
             padding: 25px;
-            max-width: 550px;
+            max-width: 500px;
             width: 90%;
         }
 
-        .sms-modal-content textarea {
+        .modal-content textarea {
             width: 100%;
             height: 200px;
             margin: 15px 0;
-            font-size: 0.9rem;
-            line-height: 1.4;
+        }
+
+        .modal-content input, .modal-content select {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
         }
 
         .note-box {
@@ -250,37 +255,8 @@
             font-size: 0.8rem;
         }
 
-        .edit-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .edit-modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 450px;
-            width: 90%;
-        }
-
-        .edit-modal-content input, 
-        .edit-modal-content select {
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        hr {
+            margin: 15px 0;
         }
 
         @media (max-width: 700px) {
@@ -297,7 +273,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>💍 Laura & Daniel's Wedding</h1>
+            <h1>Laura & Daniel's Wedding</h1>
             <p>Fior Parkville | October 3, 2026 | 6:00 PM - 11:45 PM</p>
             <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">Guest Address Collection Portal</p>
         </div>
@@ -305,9 +281,9 @@
         <div class="stats" id="statsContainer"></div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="guests">📋 Guest List & Send SMS</button>
-            <button class="tab-btn" data-tab="replies">💬 Guest Responses</button>
-            <button class="tab-btn" data-tab="export">📄 Export Addresses</button>
+            <button class="tab-btn active" data-tab="guests">Guest List & Send SMS</button>
+            <button class="tab-btn" data-tab="replies">Guest Responses</button>
+            <button class="tab-btn" data-tab="export">Export Addresses</button>
         </div>
 
         <!-- Guest List Tab -->
@@ -325,37 +301,30 @@
                 </select>
                 <select id="filterParty">
                     <option value="all">All Party Types</option>
-                    <option value="single">👤 Single</option>
-                    <option value="couple">💑 Couple</option>
-                    <option value="family">👨‍👩‍👧‍👦 Family</option>
-                    <option value="extended">👥 Extended Family</option>
+                    <option value="single">Single</option>
+                    <option value="couple">Couple</option>
+                    <option value="family">Family</option>
+                    <option value="extended">Extended Family</option>
                 </select>
-                <button id="refreshBtn" class="btn btn-blue">🔄 Refresh</button>
+                <button id="refreshBtn" class="btn btn-blue">Refresh</button>
             </div>
 
             <div class="add-guest-form">
                 <input type="text" id="newGuestName" placeholder="New guest name">
                 <input type="tel" id="newGuestPhone" placeholder="Mobile number">
                 <select id="newGuestParty">
-                    <option value="single">👤 Single</option>
-                    <option value="couple">💑 Couple</option>
-                    <option value="family">👨‍👩‍👧‍👦 Family</option>
-                    <option value="extended">👥 Extended Family</option>
+                    <option value="single">Single</option>
+                    <option value="couple">Couple</option>
+                    <option value="family">Family</option>
+                    <option value="extended">Extended Family</option>
                 </select>
-                <button id="addGuestBtn" class="btn btn-green">➕ Add Guest</button>
+                <button id="addGuestBtn" class="btn btn-green">Add Guest</button>
             </div>
 
             <div class="guest-table-container">
                 <table id="guestTable">
                     <thead>
-                        <tr>
-                            <th>Code</th>
-                            <th>Guest Name</th>
-                            <th>Mobile</th>
-                            <th>Party Type</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
+                        <tr><th>Code</th><th>Guest Name</th><th>Mobile</th><th>Party Type</th><th>Status</th><th>Actions</th></tr>
                     </thead>
                     <tbody id="guestTableBody">
                         <tr><td colspan="6" style="text-align:center;">Loading guests...</td></tr>
@@ -372,16 +341,7 @@
             <div class="guest-table-container">
                 <table id="repliesTable">
                     <thead>
-                        <tr>
-                            <th>Code</th>
-                            <th>Guest Name</th>
-                            <th>Verified Name</th>
-                            <th>Postal Address</th>
-                            <th>Party Type</th>
-                            <th>Guests</th>
-                            <th>Status</th>
-                            <th>Submitted</th>
-                        </tr>
+                        <tr><th>Code</th><th>Guest Name</th><th>Verified Name</th><th>Postal Address</th><th>Party Type</th><th>Guests</th><th>Status</th><th>Submitted</th></tr>
                     </thead>
                     <tbody id="repliesTableBody">
                         <tr><td colspan="8" style="text-align:center;">No responses yet...</td></tr>
@@ -392,56 +352,56 @@
 
         <!-- Export Tab -->
         <div id="export" class="tab-content">
-            <h3>📮 Export Addresses for Formal Invitation Mailing</h3>
-            <button id="exportCsvBtn" class="btn btn-green" style="margin: 15px 0;">📄 Download CSV Report</button>
+            <h3>Export Addresses for Formal Invitation Mailing</h3>
+            <button id="exportCsvBtn" class="btn btn-green" style="margin: 15px 0;">Download CSV Report</button>
             <div id="exportPreview"></div>
         </div>
     </div>
 
     <!-- SMS Modal -->
-    <div id="smsModal" class="sms-modal">
-        <div class="sms-modal-content">
-            <h3>📱 SMS to Send to Guest</h3>
+    <div id="smsModal" class="modal">
+        <div class="modal-content">
+            <h3>SMS to Send to Guest</h3>
             <p><strong id="smsGuestName"></strong></p>
             <p>Mobile: <span id="smsPhone"></span></p>
             <label>Message (copy and paste into your SMS app):</label>
             <textarea id="smsMessage" readonly></textarea>
-            <button id="copySmsBtn" class="btn btn-blue">📋 Copy Message</button>
+            <button id="copySmsBtn" class="btn btn-blue">Copy Message</button>
             <button id="closeSmsModal" class="btn btn-red">Close</button>
             <div class="note-box">
-                ℹ️ <strong>Note:</strong> This is NOT the formal invitation. We're simply collecting postal addresses so we can mail the formal invitation later.
+                Note: This is NOT the formal invitation. We're collecting postal addresses to mail the formal invitation later.
             </div>
         </div>
     </div>
 
     <!-- Edit Guest Modal -->
-    <div id="editModal" class="edit-modal">
-        <div class="edit-modal-content">
-            <h3>✏️ Edit Guest</h3>
-            <input type="text" id="editGuestId" style="display:none;">
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Guest</h3>
+            <input type="hidden" id="editGuestId">
             <label>Guest Name:</label>
             <input type="text" id="editGuestName" placeholder="Full name">
             <label>Mobile Number:</label>
             <input type="tel" id="editGuestPhone" placeholder="Mobile number">
             <label>Party Type:</label>
             <select id="editGuestParty">
-                <option value="single">👤 Single</option>
-                <option value="couple">💑 Couple</option>
-                <option value="family">👨‍👩‍👧‍👦 Family</option>
-                <option value="extended">👥 Extended Family</option>
+                <option value="single">Single</option>
+                <option value="couple">Couple</option>
+                <option value="family">Family</option>
+                <option value="extended">Extended Family</option>
             </select>
             <div class="action-buttons">
-                <button id="saveEditBtn" class="btn btn-green">💾 Save Changes</button>
+                <button id="saveEditBtn" class="btn btn-green">Save Changes</button>
                 <button id="closeEditModal" class="btn btn-blue">Cancel</button>
             </div>
-            <hr style="margin: 15px 0;">
-            <button id="deleteGuestBtn" class="btn btn-red" style="width:100%;">🗑️ Delete Guest Permanently</button>
+            <hr>
+            <button id="deleteGuestBtn" class="btn btn-red" style="width:100%;">Delete Guest Permanently</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAH0rBpJUh3sRpBlQgrymQM1RLBDBiAPmE",
@@ -479,21 +439,26 @@
         let allResponses = [];
 
         function generateCode(name) {
-            const prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
-            const random = Math.floor(Math.random() * 900) + 100;
-            return `${prefix}${random}`;
+            var prefix = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
+            var random = Math.floor(Math.random() * 900) + 100;
+            return prefix + random;
         }
 
         async function seedGuests() {
-            const snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
+            var snapshot = await getDocs(collection(db, GUESTS_COLLECTION));
             if (snapshot.empty) {
-                for (const name of preloadedGuests) {
-                    const code = generateCode(name);
+                for (var i = 0; i < preloadedGuests.length; i++) {
+                    var name = preloadedGuests[i];
+                    var code = generateCode(name);
+                    var partyType = "single";
+                    if (name.toLowerCase().indexOf("and") > -1 || name.toLowerCase().indexOf("family") > -1) {
+                        partyType = "family";
+                    }
                     await addDoc(collection(db, GUESTS_COLLECTION), {
                         name: name,
                         code: code,
                         phone: "",
-                        partyType: name.toLowerCase().includes("and") || name.toLowerCase().includes("family") ? "family" : "single",
+                        partyType: partyType,
                         status: "pending",
                         smsSent: false,
                         createdAt: new Date().toISOString()
@@ -503,14 +468,27 @@
         }
 
         async function loadData() {
-            const guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
-            allGuests = guestsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            var guestsSnap = await getDocs(collection(db, GUESTS_COLLECTION));
+            allGuests = [];
+            guestsSnap.forEach(function(docSnap) {
+                allGuests.push({ id: docSnap.id, ...docSnap.data() });
+            });
             
-            const responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
-            allResponses = responsesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            var responsesSnap = await getDocs(collection(db, RESPONSES_COLLECTION));
+            allResponses = [];
+            responsesSnap.forEach(function(docSnap) {
+                allResponses.push({ id: docSnap.id, ...docSnap.data() });
+            });
             
-            for (const guest of allGuests) {
-                const response = allResponses.find(r => r.guestCode === guest.code);
+            for (var i = 0; i < allGuests.length; i++) {
+                var guest = allGuests[i];
+                var response = null;
+                for (var j = 0; j < allResponses.length; j++) {
+                    if (allResponses[j].guestCode === guest.code) {
+                        response = allResponses[j];
+                        break;
+                    }
+                }
                 if (response) {
                     guest.responseStatus = response.willAttend ? "replied" : "declined";
                     guest.responseData = response;
@@ -525,105 +503,173 @@
         }
 
         function renderGuestTable() {
-            const search = document.getElementById("searchGuest")?.value.toLowerCase() || "";
-            const filterStatus = document.getElementById("filterStatus")?.value || "all";
-            const filterParty = document.getElementById("filterParty")?.value || "all";
+            var searchInput = document.getElementById("searchGuest");
+            var filterStatusSelect = document.getElementById("filterStatus");
+            var filterPartySelect = document.getElementById("filterParty");
             
-            let filtered = allGuests.filter(g => 
-                (g.name?.toLowerCase().includes(search) || g.code?.toLowerCase().includes(search)) &&
-                (filterParty === "all" || g.partyType === filterParty) &&
-                (filterStatus === "all" || g.responseStatus === filterStatus)
-            );
+            var search = searchInput ? searchInput.value.toLowerCase() : "";
+            var filterStatus = filterStatusSelect ? filterStatusSelect.value : "all";
+            var filterParty = filterPartySelect ? filterPartySelect.value : "all";
             
-            const tbody = document.getElementById("guestTableBody");
+            var filtered = [];
+            for (var i = 0; i < allGuests.length; i++) {
+                var g = allGuests[i];
+                var nameMatch = g.name.toLowerCase().indexOf(search) > -1 || g.code.toLowerCase().indexOf(search) > -1;
+                var partyMatch = filterParty === "all" || g.partyType === filterParty;
+                var statusMatch = filterStatus === "all" || g.responseStatus === filterStatus;
+                if (nameMatch && partyMatch && statusMatch) {
+                    filtered.push(g);
+                }
+            }
+            
+            var tbody = document.getElementById("guestTableBody");
             if (filtered.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No guests found</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = filtered.map(guest => {
-                const statusClass = guest.responseStatus === "replied" ? "status-replied" : 
-                                   guest.responseStatus === "declined" ? "status-declined" :
-                                   guest.responseStatus === "sent" ? "status-sent" : "status-pending";
-                const statusText = guest.responseStatus === "replied" ? "✅ Address Received" :
-                                  guest.responseStatus === "declined" ? "❌ Unable to Attend" :
-                                  guest.responseStatus === "sent" ? "📨 SMS Sent" : "⏳ Pending";
-                const partyIcon = { single: "👤", couple: "💑", family: "👨‍👩‍👧‍👦", extended: "👥" }[guest.partyType] || "👤";
+            var html = "";
+            for (var i = 0; i < filtered.length; i++) {
+                var guest = filtered[i];
+                var statusClass = "";
+                var statusText = "";
+                if (guest.responseStatus === "replied") {
+                    statusClass = "status-replied";
+                    statusText = "Address Received";
+                } else if (guest.responseStatus === "declined") {
+                    statusClass = "status-declined";
+                    statusText = "Unable to Attend";
+                } else if (guest.responseStatus === "sent") {
+                    statusClass = "status-sent";
+                    statusText = "SMS Sent";
+                } else {
+                    statusClass = "status-pending";
+                    statusText = "Pending";
+                }
                 
-                return `
-                    <tr>
-                        <td><code>${escapeHtml(guest.code)}</code></td>
-                        <td><strong>${escapeHtml(guest.name)}</strong></td>
-                        <td>${guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>'}</td>
-                        <td>${partyIcon} ${guest.partyType}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-blue" onclick="openEditModal('${guest.id}', '${escapeHtml(guest.name)}', '${escapeHtml(guest.phone || '')}', '${guest.partyType}')">✏️ Edit</button>
-                            <button class="btn btn-sm btn-send" onclick="showSmsModal('${guest.code}', '${escapeHtml(guest.name)}', '${escapeHtml(guest.phone || '')}')">📱 Send SMS</button>
-                            ${guest.responseData ? `<button class="btn btn-sm" style="background:#27ae60;" onclick="viewReply('${guest.code}')">📨 View</button>` : ''}
-                        </td>
-                    </tr>
-                `;
-            }).join("");
+                var partyIcon = "";
+                if (guest.partyType === "single") partyIcon = "Single";
+                else if (guest.partyType === "couple") partyIcon = "Couple";
+                else if (guest.partyType === "family") partyIcon = "Family";
+                else partyIcon = "Extended Family";
+                
+                var phoneDisplay = guest.phone ? escapeHtml(guest.phone) : '<span style="color:#999;">Not set</span>';
+                var viewButton = "";
+                if (guest.responseData) {
+                    viewButton = '<button class="btn btn-sm" style="background:#27ae60;" onclick="viewReply(\'' + guest.code + '\')">View</button>';
+                }
+                
+                html += '<tr>' +
+                    '<td><code>' + escapeHtml(guest.code) + '</code></td>' +
+                    '<td><strong>' + escapeHtml(guest.name) + '</strong></td>' +
+                    '<td>' + phoneDisplay + '</td>' +
+                    '<td>' + partyIcon + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                    '<td>' +
+                        '<button class="btn btn-sm btn-blue" onclick="openEditModal(\'' + guest.id + '\', \'' + escapeHtml(guest.name) + '\', \'' + escapeHtml(guest.phone || '') + '\', \'' + guest.partyType + '\')">Edit</button> ' +
+                        '<button class="btn btn-sm btn-send" onclick="showSmsModal(\'' + guest.code + '\', \'' + escapeHtml(guest.name) + '\', \'' + escapeHtml(guest.phone || '') + '\')">Send SMS</button> ' +
+                        viewButton +
+                    '</td>' +
+                '</tr>';
+            }
+            tbody.innerHTML = html;
         }
 
         function renderRepliesTable() {
-            const search = document.getElementById("searchReply")?.value.toLowerCase() || "";
-            let filtered = allResponses.filter(r => 
-                r.fullName?.toLowerCase().includes(search) || r.guestName?.toLowerCase().includes(search)
-            );
+            var searchInput = document.getElementById("searchReply");
+            var search = searchInput ? searchInput.value.toLowerCase() : "";
             
-            const tbody = document.getElementById("repliesTableBody");
+            var filtered = [];
+            for (var i = 0; i < allResponses.length; i++) {
+                var r = allResponses[i];
+                var nameMatch = (r.fullName && r.fullName.toLowerCase().indexOf(search) > -1) || (r.guestName && r.guestName.toLowerCase().indexOf(search) > -1);
+                if (nameMatch) {
+                    filtered.push(r);
+                }
+            }
+            
+            var tbody = document.getElementById("repliesTableBody");
             if (filtered.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No responses yet. Send SMS to guests!</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = filtered.map(r => {
-                const partyIcons = { single: "👤", couple: "💑", family: "👨‍👩‍👧‍👦", extended: "👥" };
-                return `
-                    <tr>
-                        <td><code>${escapeHtml(r.guestCode)}</code></td>
-                        <td>${escapeHtml(r.guestName)}</td>
-                        <td><strong>${escapeHtml(r.fullName)}</strong></td>
-                        <td style="max-width: 250px;">${escapeHtml(r.address?.substring(0, 60))}${r.address?.length > 60 ? '...' : ''}</td>
-                        <td>${partyIcons[r.partyType]} ${r.partyType}</td>
-                        <td>${r.totalPeople || 1}</td>
-                        <td><span class="status-badge ${r.willAttend ? 'status-replied' : 'status-declined'}">${r.willAttend ? '✅ Attending' : '❌ Unable to Attend'}</span></td>
-                        <td>${new Date(r.submittedAt).toLocaleDateString()}</td>
-                    </tr>
-                `;
-            }).join("");
+            var html = "";
+            for (var i = 0; i < filtered.length; i++) {
+                var r = filtered[i];
+                var partyIcon = "";
+                if (r.partyType === "single") partyIcon = "Single";
+                else if (r.partyType === "couple") partyIcon = "Couple";
+                else if (r.partyType === "family") partyIcon = "Family";
+                else partyIcon = "Extended Family";
+                
+                var statusClass = r.willAttend ? "status-replied" : "status-declined";
+                var statusText = r.willAttend ? "Attending" : "Unable to Attend";
+                var addressShort = r.address ? (r.address.substring(0, 60) + (r.address.length > 60 ? "..." : "")) : "";
+                var submittedDate = r.submittedAt ? new Date(r.submittedAt).toLocaleDateString() : "";
+                
+                html += '<tr>' +
+                    '<td><code>' + escapeHtml(r.guestCode) + '</code></td>' +
+                    '<td>' + escapeHtml(r.guestName) + '</td>' +
+                    '<td><strong>' + escapeHtml(r.fullName || '') + '</strong></td>' +
+                    '<td style="max-width:250px;">' + escapeHtml(addressShort) + '</td>' +
+                    '<td>' + partyIcon + '</td>' +
+                    '<td>' + (r.totalPeople || 1) + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                    '<td>' + submittedDate + '</td>' +
+                '</tr>';
+            }
+            tbody.innerHTML = html;
         }
 
         function updateStats() {
-            const total = allGuests.length;
-            const sent = allGuests.filter(g => g.smsSent === true || g.responseStatus === "sent").length;
-            const replied = allResponses.filter(r => r.willAttend === true).length;
-            const declined = allResponses.filter(r => r.willAttend === false).length;
-            const totalPeople = allResponses.reduce((sum, r) => sum + (r.totalPeople || 0), 0);
+            var total = allGuests.length;
+            var sent = 0;
+            var replied = 0;
+            var declined = 0;
+            var totalPeople = 0;
             
-            document.getElementById("statsContainer").innerHTML = `
-                <div class="stat-card"><div class="stat-number">${total}</div><div>Total Invited</div></div>
-                <div class="stat-card"><div class="stat-number">${sent}</div><div>SMS Sent</div></div>
-                <div class="stat-card"><div class="stat-number">${replied}</div><div>Addresses Received</div></div>
-                <div class="stat-card"><div class="stat-number">${declined}</div><div>Unable to Attend</div></div>
-                <div class="stat-card"><div class="stat-number">${totalPeople}</div><div>Total Guests</div></div>
-            `;
+            for (var i = 0; i < allGuests.length; i++) {
+                if (allGuests[i].smsSent === true || allGuests[i].responseStatus === "sent") sent++;
+            }
+            for (var i = 0; i < allResponses.length; i++) {
+                if (allResponses[i].willAttend === true) {
+                    replied++;
+                    totalPeople += (allResponses[i].totalPeople || 0);
+                } else {
+                    declined++;
+                }
+            }
+            
+            var statsHtml = '<div class="stat-card"><div class="stat-number">' + total + '</div><div>Total Invited</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + sent + '</div><div>SMS Sent</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + replied + '</div><div>Addresses Received</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + declined + '</div><div>Unable to Attend</div></div>' +
+                '<div class="stat-card"><div class="stat-number">' + totalPeople + '</div><div>Total Guests</div></div>';
+            
+            var statsContainer = document.getElementById("statsContainer");
+            if (statsContainer) statsContainer.innerHTML = statsHtml;
         }
 
-        // Add new guest
-        document.getElementById("addGuestBtn")?.addEventListener("click", async () => {
-            const name = document.getElementById("newGuestName").value.trim();
-            const phone = document.getElementById("newGuestPhone").value.trim();
-            const partyType = document.getElementById("newGuestParty").value;
+        document.getElementById("addGuestBtn")?.addEventListener("click", async function() {
+            var name = document.getElementById("newGuestName").value.trim();
+            var phone = document.getElementById("newGuestPhone").value.trim();
+            var partyType = document.getElementById("newGuestParty").value;
             
-            if (!name) { alert("Please enter a guest name"); return; }
+            if (!name) {
+                alert("Please enter a guest name");
+                return;
+            }
             
-            const code = generateCode(name);
+            var code = generateCode(name);
             await addDoc(collection(db, GUESTS_COLLECTION), {
-                name: name, code: code, phone: phone, partyType: partyType,
-                status: "pending", smsSent: false, createdAt: new Date().toISOString()
+                name: name,
+                code: code,
+                phone: phone,
+                partyType: partyType,
+                status: "pending",
+                smsSent: false,
+                createdAt: new Date().toISOString()
             });
             
             document.getElementById("newGuestName").value = "";
@@ -631,8 +677,7 @@
             loadData();
         });
 
-        // Open Edit Modal
-        window.openEditModal = (id, name, phone, partyType) => {
+        window.openEditModal = function(id, name, phone, partyType) {
             document.getElementById("editGuestId").value = id;
             document.getElementById("editGuestName").value = name;
             document.getElementById("editGuestPhone").value = phone;
@@ -640,14 +685,16 @@
             document.getElementById("editModal").style.display = "flex";
         };
 
-        // Save Edit
-        document.getElementById("saveEditBtn")?.addEventListener("click", async () => {
-            const id = document.getElementById("editGuestId").value;
-            const newName = document.getElementById("editGuestName").value.trim();
-            const newPhone = document.getElementById("editGuestPhone").value.trim();
-            const newPartyType = document.getElementById("editGuestParty").value;
+        document.getElementById("saveEditBtn")?.addEventListener("click", async function() {
+            var id = document.getElementById("editGuestId").value;
+            var newName = document.getElementById("editGuestName").value.trim();
+            var newPhone = document.getElementById("editGuestPhone").value.trim();
+            var newPartyType = document.getElementById("editGuestParty").value;
             
-            if (!newName) { alert("Guest name cannot be empty"); return; }
+            if (!newName) {
+                alert("Guest name cannot be empty");
+                return;
+            }
             
             await updateDoc(doc(db, GUESTS_COLLECTION, id), {
                 name: newName,
@@ -659,18 +706,24 @@
             loadData();
         });
 
-        // Delete Guest
-        document.getElementById("deleteGuestBtn")?.addEventListener("click", async () => {
-            const id = document.getElementById("editGuestId").value;
-            const guestName = document.getElementById("editGuestName").value;
+        document.getElementById("deleteGuestBtn")?.addEventListener("click", async function() {
+            var id = document.getElementById("editGuestId").value;
+            var guestName = document.getElementById("editGuestName").value;
             
-            if (confirm(`Are you sure you want to permanently delete ${guestName} from the guest list? This cannot be undone.`)) {
-                // Delete any responses from this guest too
-                const guest = allGuests.find(g => g.id === id);
+            if (confirm("Are you sure you want to permanently delete " + guestName + " from the guest list? This cannot be undone.")) {
+                var guest = null;
+                for (var i = 0; i < allGuests.length; i++) {
+                    if (allGuests[i].id === id) {
+                        guest = allGuests[i];
+                        break;
+                    }
+                }
                 if (guest) {
-                    const responseToDelete = allResponses.find(r => r.guestCode === guest.code);
-                    if (responseToDelete) {
-                        await deleteDoc(doc(db, RESPONSES_COLLECTION, responseToDelete.id));
+                    for (var i = 0; i < allResponses.length; i++) {
+                        if (allResponses[i].guestCode === guest.code) {
+                            await deleteDoc(doc(db, RESPONSES_COLLECTION, allResponses[i].id));
+                            break;
+                        }
                     }
                 }
                 await deleteDoc(doc(db, GUESTS_COLLECTION, id));
@@ -679,120 +732,150 @@
             }
         });
 
-        // Close Edit Modal
-        document.getElementById("closeEditModal")?.addEventListener("click", () => {
+        document.getElementById("closeEditModal")?.addEventListener("click", function() {
             document.getElementById("editModal").style.display = "none";
         });
 
-        // Close modal when clicking outside
-        window.addEventListener("click", (e) => {
-            const editModal = document.getElementById("editModal");
-            const smsModal = document.getElementById("smsModal");
-            if (e.target === editModal) editModal.style.display = "none";
-            if (e.target === smsModal) smsModal.style.display = "none";
+        document.getElementById("closeSmsModal")?.addEventListener("click", function() {
+            document.getElementById("smsModal").style.display = "none";
         });
 
-        // Show SMS modal
-        window.showSmsModal = (code, name, phone) => {
+        window.showSmsModal = function(code, name, phone) {
             if (!phone) {
-                alert(`Please add a mobile number for ${name} first. Click Edit to add.`);
+                alert("Please add a mobile number for " + name + " first. Click Edit to add.");
                 return;
             }
             
-            const appUrl = window.location.origin;
-            const smsMessage = `Dear ${name.split(' ')[0]},
-
-We are hoping to celebrate our wedding with you on October 3, 2026 at Fior Parkville.
-
-Before we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?
-
-Please visit: ${appUrl}
-Enter your code: ${code}
-
-This will take just 2 minutes. We would be truly honoured to have you there.
-
-Warmly,
-Laura & Daniel`;
+            var appUrl = window.location.origin;
+            var firstName = name.split(' ')[0];
+            var smsMessage = "Dear " + firstName + ",\n\n";
+            smsMessage += "We are hoping to celebrate our wedding with you on October 3, 2026 at Fior Parkville.\n\n";
+            smsMessage += "Before we send the formal invitation by mail, could you please confirm your postal address and the correct spelling of your name?\n\n";
+            smsMessage += "Please visit: " + appUrl + "\n";
+            smsMessage += "Enter your code: " + code + "\n\n";
+            smsMessage += "This will take just 2 minutes. We would be truly honoured to have you there.\n\n";
+            smsMessage += "Warmly,\nLaura & Daniel";
             
             document.getElementById("smsGuestName").innerText = name;
             document.getElementById("smsPhone").innerText = phone;
             document.getElementById("smsMessage").value = smsMessage;
             document.getElementById("smsModal").style.display = "flex";
             
-            const guest = allGuests.find(g => g.code === code);
-            if (guest && !guest.smsSent) {
-                updateDoc(doc(db, GUESTS_COLLECTION, guest.id), { smsSent: true, status: "sent" });
-                setTimeout(() => loadData(), 1000);
+            for (var i = 0; i < allGuests.length; i++) {
+                if (allGuests[i].code === code && !allGuests[i].smsSent) {
+                    updateDoc(doc(db, GUESTS_COLLECTION, allGuests[i].id), { smsSent: true, status: "sent" });
+                    setTimeout(function() { loadData(); }, 1000);
+                    break;
+                }
             }
         };
 
-        document.getElementById("copySmsBtn")?.addEventListener("click", () => {
-            const message = document.getElementById("smsMessage").value;
+        document.getElementById("copySmsBtn")?.addEventListener("click", function() {
+            var message = document.getElementById("smsMessage").value;
             navigator.clipboard.writeText(message);
             alert("SMS copied! Paste into your messaging app to send.");
         });
 
-        document.getElementById("closeSmsModal")?.addEventListener("click", () => {
-            document.getElementById("smsModal").style.display = "none";
-        });
-
-        window.viewReply = (code) => {
-            const response = allResponses.find(r => r.guestCode === code);
+        window.viewReply = function(code) {
+            var response = null;
+            for (var i = 0; i < allResponses.length; i++) {
+                if (allResponses[i].guestCode === code) {
+                    response = allResponses[i];
+                    break;
+                }
+            }
             if (response) {
-                let familyInfo = "";
-                if (response.partnerName) familyInfo = `Partner: ${response.partnerName}\n`;
-                if (response.familyMembers) familyInfo = `Family: ${response.familyMembers.join(", ")}\n`;
-                if (response.extendedNames) familyInfo = `Extended: ${response.extendedNames}\n`;
+                var familyInfo = "";
+                if (response.partnerName) familyInfo = "Partner: " + response.partnerName + "\n";
+                if (response.familyMembers) familyInfo = "Family: " + response.familyMembers.join(", ") + "\n";
+                if (response.extendedNames) familyInfo = "Extended: " + response.extendedNames + "\n";
                 
-                alert(`📨 Response from ${response.guestName}\n\nVerified Name: ${response.fullName}\nAddress: ${response.address}\n${familyInfo}\nTotal People: ${response.totalPeople}\nWill Attend: ${response.willAttend ? "Yes" : "No"}`);
+                alert("Response from " + response.guestName + "\n\nVerified Name: " + response.fullName + "\nAddress: " + response.address + "\n" + familyInfo + "Total People: " + (response.totalPeople || 1) + "\nWill Attend: " + (response.willAttend ? "Yes" : "No"));
             }
         };
 
-        document.getElementById("exportCsvBtn")?.addEventListener("click", () => {
-            const withAddress = allResponses.filter(r => r.address && r.willAttend);
+        document.getElementById("exportCsvBtn")?.addEventListener("click", function() {
+            var withAddress = [];
+            for (var i = 0; i < allResponses.length; i++) {
+                if (allResponses[i].address && allResponses[i].willAttend) {
+                    withAddress.push(allResponses[i]);
+                }
+            }
             if (withAddress.length === 0) {
                 alert("No addresses collected yet. Wait for guests to respond.");
                 return;
             }
             
-            let csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Party Type", "Family/Partner", "Total People"]];
-            withAddress.forEach(r => {
-                let familyInfo = "";
+            var csv = [["Code", "Guest Name", "Verified Name", "Postal Address", "Party Type", "Family/Partner", "Total People"]];
+            for (var i = 0; i < withAddress.length; i++) {
+                var r = withAddress[i];
+                var familyInfo = "";
                 if (r.partnerName) familyInfo = r.partnerName;
                 if (r.familyMembers) familyInfo = r.familyMembers.join("; ");
                 if (r.extendedNames) familyInfo = r.extendedNames;
                 csv.push([r.guestCode, r.guestName, r.fullName, r.address, r.partyType, familyInfo, r.totalPeople]);
-            });
+            }
             
-            const csvContent = csv.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-            const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
+            var csvContent = "";
+            for (var i = 0; i < csv.length; i++) {
+                var row = [];
+                for (var j = 0; j < csv[i].length; j++) {
+                    row.push('"' + String(csv[i][j]).replace(/"/g, '""') + '"');
+                }
+                csvContent += row.join(",") + "\n";
+            }
+            
+            var blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv" });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
             a.href = url;
-            a.download = `wedding_addresses_for_mailing_${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = "wedding_addresses_for_mailing_" + new Date().toISOString().slice(0,10) + ".csv";
             a.click();
             URL.revokeObjectURL(url);
             
-            document.getElementById("exportPreview").innerHTML = `<p>✅ Exported ${withAddress.length} addresses for formal invitation mailing.</p>`;
+            var previewDiv = document.getElementById("exportPreview");
+            if (previewDiv) previewDiv.innerHTML = "<p>Exported " + withAddress.length + " addresses for formal invitation mailing.</p>";
         });
 
-        document.getElementById("searchGuest")?.addEventListener("input", () => renderGuestTable());
-        document.getElementById("filterStatus")?.addEventListener("change", () => renderGuestTable());
-        document.getElementById("filterParty")?.addEventListener("change", () => renderGuestTable());
-        document.getElementById("searchReply")?.addEventListener("input", () => renderRepliesTable());
-        document.getElementById("refreshBtn")?.addEventListener("click", () => loadData());
+        document.getElementById("searchGuest")?.addEventListener("input", function() { renderGuestTable(); });
+        document.getElementById("filterStatus")?.addEventListener("change", function() { renderGuestTable(); });
+        document.getElementById("filterParty")?.addEventListener("change", function() { renderGuestTable(); });
+        document.getElementById("searchReply")?.addEventListener("input", function() { renderRepliesTable(); });
+        document.getElementById("refreshBtn")?.addEventListener("click", function() { loadData(); });
 
-        document.querySelectorAll(".tab-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-                document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-                btn.classList.add("active");
-                document.getElementById(btn.dataset.tab).classList.add("active");
-                if (btn.dataset.tab === "replies") renderRepliesTable();
+        var tabBtns = document.querySelectorAll(".tab-btn");
+        for (var i = 0; i < tabBtns.length; i++) {
+            tabBtns[i].addEventListener("click", function() {
+                var targetTab = this.getAttribute("data-tab");
+                for (var j = 0; j < tabBtns.length; j++) {
+                    tabBtns[j].classList.remove("active");
+                }
+                this.classList.add("active");
+                var tabContents = document.querySelectorAll(".tab-content");
+                for (var j = 0; j < tabContents.length; j++) {
+                    tabContents[j].classList.remove("active");
+                }
+                document.getElementById(targetTab).classList.add("active");
+                if (targetTab === "replies") renderRepliesTable();
             });
-        });
+        }
 
-        function escapeHtml(str) { if (!str) return ""; return str.replace(/[&<>]/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;" }[m])); }
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === "&") return "&amp;";
+                if (m === "<") return "&lt;";
+                if (m === ">") return "&gt;";
+                return m;
+            });
+        }
+        
+        window.addEventListener("click", function(e) {
+            var editModal = document.getElementById("editModal");
+            var smsModal = document.getElementById("smsModal");
+            if (e.target === editModal) editModal.style.display = "none";
+            if (e.target === smsModal) smsModal.style.display = "none";
+        });
         
         await seedGuests();
         await loadData();
