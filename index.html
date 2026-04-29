@@ -133,6 +133,7 @@
         .code-couple { background: #27ae60; color: white; }
         .code-family { background: #f39c12; color: white; }
         .code-extended { background: #9b59b6; color: white; }
+        .guest-code-display { font-family: monospace; font-weight: bold; background: #f0e6d8; padding: 2px 6px; border-radius: 4px; }
         @media (max-width: 600px) { .address-row, .address-row-3 { grid-template-columns: 1fr; gap: 10px; } }
     </style>
 </head>
@@ -162,7 +163,7 @@
         
         const submissionTracker = new Map();
 
-        // Complete guest list with PRE-ASSIGNED CODES
+        // Complete guest list with PRE-ASSIGNED CODES (visible in admin)
         const preloadedGuests = [
             { name: "Rossi Mel", type: "couple", maxGuests: 2, code: "CRO102" },
             { name: "Gianni Laverde", type: "single", maxGuests: 1, code: "SGL103" },
@@ -669,6 +670,8 @@
                 for (let guest of allGuests) {
                     guest.responseStatus = allResponses.some(r => r.guestCode === guest.code) ? "replied" : (guest.smsSent ? "sent" : "pending");
                 }
+                // Sort guests alphabetically by name
+                allGuests.sort((a, b) => a.name.localeCompare(b.name));
                 renderAdminTables();
                 updateAdminStats();
             } finally {
@@ -682,13 +685,22 @@
             let statusFilter = document.getElementById("filterStatus")?.value || "all";
             let typeFilter = document.getElementById("filterType")?.value || "all";
             
-            // Filter guests
-            let filteredGuests = allGuests.filter(guest => {
-                let matchesSearch = guest.name.toLowerCase().includes(searchValue) || guest.code.toLowerCase().includes(searchValue);
+            // Filter guests - SIMPLE WORKING SEARCH
+            let filteredGuests = [];
+            for (let guest of allGuests) {
+                let matchesSearch = false;
+                if (searchValue === "") {
+                    matchesSearch = true;
+                } else {
+                    matchesSearch = guest.name.toLowerCase().indexOf(searchValue) !== -1 || 
+                                 guest.code.toLowerCase().indexOf(searchValue) !== -1;
+                }
                 let matchesStatus = statusFilter === "all" || guest.responseStatus === statusFilter;
                 let matchesType = typeFilter === "all" || guest.codeType === typeFilter;
-                return matchesSearch && matchesStatus && matchesType;
-            });
+                if (matchesSearch && matchesStatus && matchesType) {
+                    filteredGuests.push(guest);
+                }
+            }
             
             // Render guest table
             let tbody = document.getElementById("guestTableBody");
@@ -700,23 +712,32 @@
                 let statusClass = guest.responseStatus === "replied" ? "status-replied" : (guest.responseStatus === "sent" ? "status-sent" : "status-pending");
                 let statusText = guest.responseStatus === "replied" ? "Address Received" : (guest.responseStatus === "sent" ? "SMS Sent" : "Pending");
                 html += `<tr>
-                    <td><code>${escapeHtml(guest.code)}</code> <span class="code-type-badge code-${guest.codeType}">${typeInfo.icon} ${typeInfo.name}</span></td>
+                    <td><code class="guest-code-display">${escapeHtml(guest.code)}</code> <span class="code-type-badge code-${guest.codeType}">${typeInfo.icon} ${typeInfo.name}</span></td>
                     <td><strong>${escapeHtml(guest.name)}</strong> (${typeInfo.desc})</td>
                     <td>${guest.phone || '<span style="color:#999;">Not set</span>'}</td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td><button class="btn-sm btn-blue" onclick="openEdit('${guest.id}')">Edit</button>
                         <button class="btn-sm btn-green" onclick="openSms('${guest.code}', '${escapeForJS(guest.name)}', '${escapeForJS(guest.phone || "")}')">SMS</button>
-                    </td>
-                </tr>`;
+                     </td>
+                 </tr>`;
             }
             tbody.innerHTML = html || '<tr><td colspan="5">No guests found</td></tr>';
             
             // Filter responses
             let searchReply = document.getElementById("searchReply")?.value.toLowerCase() || "";
-            let filteredResponses = allResponses.filter(r => 
-                r.guestName.toLowerCase().includes(searchReply) || 
-                (r.fullName && r.fullName.toLowerCase().includes(searchReply))
-            );
+            let filteredResponses = [];
+            for (let r of allResponses) {
+                let matchesReply = false;
+                if (searchReply === "") {
+                    matchesReply = true;
+                } else {
+                    matchesReply = (r.guestName && r.guestName.toLowerCase().indexOf(searchReply) !== -1) || 
+                                 (r.fullName && r.fullName.toLowerCase().indexOf(searchReply) !== -1);
+                }
+                if (matchesReply) {
+                    filteredResponses.push(r);
+                }
+            }
             
             // Render replies table
             let repliesBody = document.getElementById("repliesTableBody");
@@ -726,10 +747,11 @@
             for (let r of filteredResponses) {
                 repliesHtml += `<tr>
                     <td><code>${escapeHtml(r.guestCode)}</code></td>
-                    <td>${escapeHtml(r.guestName)}</td></td>
+                    <td>${escapeHtml(r.guestName)}</td>
                     <td><strong>${escapeHtml(r.fullName || "")}</strong></td>
                     <td style="max-width:250px;">${escapeHtml(r.fullAddress || "")}</td>
-                    <td>${r.guestCount || 1} guests</td></tr>`;
+                    <td>${r.guestCount || 1} guests</td>
+                 </tr>`;
             }
             repliesBody.innerHTML = repliesHtml || '<tr><td colspan="5">No responses yet</td></tr>';
         }
@@ -846,7 +868,7 @@
                 <a href="?admin=false" class="admin-link">Exit Admin</a>
             `;
 
-            // Search functionality for Guests - FIXED
+            // SIMPLE WORKING SEARCH FUNCTION
             const searchBtn = document.getElementById("searchBtn");
             const searchInput = document.getElementById("searchGuest");
             const filterStatus = document.getElementById("filterStatus");
@@ -866,11 +888,11 @@
             
             if (searchBtn) searchBtn.onclick = performSearch;
             if (resetBtn) resetBtn.onclick = performReset;
-            if (searchInput) searchInput.onkeypress = (e) => { if (e.key === "Enter") performSearch(); };
+            if (searchInput) searchInput.onkeyup = performSearch;
             if (filterStatus) filterStatus.onchange = performSearch;
             if (filterType) filterType.onchange = performSearch;
             
-            // Search functionality for Replies - FIXED
+            // Search for replies
             const searchReplyBtn = document.getElementById("searchReplyBtn");
             const searchReplyInput = document.getElementById("searchReply");
             const resetReplyBtn = document.getElementById("resetReplyBtn");
@@ -886,7 +908,7 @@
             
             if (searchReplyBtn) searchReplyBtn.onclick = performReplySearch;
             if (resetReplyBtn) resetReplyBtn.onclick = performReplyReset;
-            if (searchReplyInput) searchReplyInput.onkeypress = (e) => { if (e.key === "Enter") performReplySearch(); };
+            if (searchReplyInput) searchReplyInput.onkeyup = performReplySearch;
             
             // Refresh button
             const refreshBtn = document.getElementById("refreshBtn");
